@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>طوطی آرا | ثبت سفارش پرندگان</title>
+<meta name="description" content="سالن پرورش طوطی آرا در قزوین، مینودر؛ معرفی و ثبت سفارش گرین‌چیک، خورشیدی و راهب.">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="hero">
+  <nav class="nav container">
+    <div class="brand">🦜 طوطی آرا</div>
+    <div class="links">
+      <a href="#birds">پرندگان</a><a href="#order">ثبت سفارش</a><a href="#contact">تماس</a>
+    </div>
+    <a class="call" href="tel:09107488013">تماس سریع</a>
+  </nav>
+  <div class="hero-content container">
+    <div>
+      <span class="badge">قزوین • محله مینودر</span>
+      <h1>سالن پرورش <strong>طوطی آرا</strong></h1>
+      <p>پرورش و معرفی گرین‌چیک، خورشیدی و راهب؛ برای استعلام موجودی و ثبت سفارش با ما در ارتباط باشید.</p>
+      <div class="actions">
+        <a class="primary" href="#order">ثبت سفارش آنلاین</a>
+        <a class="secondary" href="tel:09107488013">📞 09107488013</a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main>
+<section id="birds" class="section container">
+  <div class="title"><span>محصولات</span><h2>پرندگان مجموعه</h2><p>پرنده موردنظر خود را انتخاب کنید و فرم سفارش را تکمیل کنید.</p></div>
+  <div class="cards">
+    <article class="card"><img src="birds.jpg" alt="پرندگان طوطی آرا"><h3>گرین‌چیک</h3><p>برای استعلام موجودی و ثبت سفارش.</p><button onclick="chooseBird('گرین‌چیک')">انتخاب</button></article>
+    <article class="card"><img src="birds.jpg" alt="طوطی خورشیدی"><h3>خورشیدی</h3><p>برای استعلام موجودی و ثبت سفارش.</p><button onclick="chooseBird('خورشیدی')">انتخاب</button></article>
+    <article class="card"><img src="birds.jpg" alt="طوطی راهب"><h3>راهب</h3><p>برای استعلام موجودی و ثبت سفارش.</p><button onclick="chooseBird('راهب')">انتخاب</button></article>
+  </div>
+</section>
+
+<section id="order" class="order-section">
+<div class="container">
+  <div class="title"><span>فرم سفارش</span><h2>ثبت سفارش طوطی</h2><p>اطلاعات زیر را وارد کنید؛ پس از ثبت، جزئیات سفارش در واتساپ برای سالن ارسال می‌شود.</p></div>
+  <form id="orderForm" class="order-form">
+    <div class="field"><label>نام و نام خانوادگی *</label><input id="name" required placeholder="مثلاً علی رضایی"></div>
+    <div class="field"><label>شماره تماس *</label><input id="phone" type="tel" required placeholder="مثلاً 0912..."></div>
+    <div class="field"><label>نوع پرنده *</label>
+      <select id="bird" required><option value="">انتخاب کنید</option><option>گرین‌چیک</option><option>خورشیدی</option><option>راهب</option></select>
+    </div>
+    <div class="field"><label>تعداد موردنظر</label><input id="count" type="number" min="1" value="1"></div>
+    <div class="field full"><label>توضیحات / درخواست شما</label><textarea id="note" rows="4" placeholder="مثلاً رنگ موردنظر یا زمان مناسب برای هماهنگی"></textarea></div>
+    <div class="notice">ثبت فرم به معنی ارسال درخواست سفارش است؛ تأیید موجودی، قیمت و نهایی‌شدن سفارش با هماهنگی سالن انجام می‌شود.</div>
+    <button class="submit" type="submit">🟢 ارسال درخواست در واتساپ</button>
+  </form>
+</div>
+</section>
+
+<section id="contact" class="contact container">
+  <div><span>ارتباط</span><h2>طوطی آرا</h2><p>قزوین، محله مینودر</p></div>
+  <a class="primary big" href="tel:09107488013">📞 09107488013</a>
+</section>
+</main>
+
+<footer><div class="container">© سالن پرورش طوطی آرا • قزوین، مینودر</div></footer>
+
+<script>
+function chooseBird(name){
+  document.getElementById('bird').value=name;
+  document.getElementById('order').scrollIntoView({behavior:'smooth'});
+}
+document.getElementById('orderForm').addEventListener('submit', function(e){
+  e.preventDefault();
+  const name=document.getElementById('name').value.trim();
+  const phone=document.getElementById('phone').value.trim();
+  const bird=document.getElementById('bird').value;
+  const count=document.getElementById('count').value;
+  const note=document.getElementById('note').value.trim();
+  const text=`سلام، از سایت طوطی آرا درخواست ثبت سفارش دارم.%0A%0Aنام: ${encodeURIComponent(name)}%0Aشماره تماس: ${encodeURIComponent(phone)}%0Aنوع پرنده: ${encodeURIComponent(bird)}%0Aتعداد: ${encodeURIComponent(count)}%0Aتوضیحات: ${encodeURIComponent(note || 'ندارم')}`;
+  window.open('https://wa.me/989107488013?text='+text,'_blank');
+});
+</script>
+</body>
+</html>
