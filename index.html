@@ -1,35 +1,127 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>طوطی آرا | سالن پرورش طوطی</title>
-<style>
-*{box-sizing:border-box}body{margin:0;font-family:Tahoma,Arial;background:#050d14;color:#fff}a{text-decoration:none;color:inherit}.wrap{max-width:1180px;margin:auto;padding:0 16px}
-header{position:fixed;top:12px;left:0;right:0;z-index:5}.nav{height:62px;border:2px solid #ffc51b;border-radius:38px;background:#061b30ee;display:flex;align-items:center;padding:7px 12px;gap:20px}.logo{color:#ffc51b;font-weight:900}.links{display:flex;justify-content:center;gap:25px;flex:1;font-size:14px;font-weight:700}.call{background:#ffc51b;color:#061b30;padding:11px 18px;border-radius:25px;font-weight:900}
-.hero{padding-top:85px}.hero img{display:block;width:100%;max-height:760px;object-fit:cover;border-radius:0 0 40px 40px;border-bottom:5px solid #ffc51b}
-.trust,.products{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;padding:30px 0}.trust div{background:#f3f5f3;color:#0b263d;text-align:center;border-radius:18px;padding:18px;border:2px solid #d7d9d4}.trust b{display:block;margin:6px}.section{padding:18px 0 38px}.title{text-align:center}.title h2{display:inline-block;background:#092a45;border-bottom:3px solid #ffc51b;padding:10px 25px;border-radius:13px}.products{grid-template-columns:repeat(3,1fr)}.card{background:#f5f6f2;color:#10283c;border:3px solid #ffc51b;border-radius:23px;overflow:hidden}.photo{height:210px;background:linear-gradient(135deg,#174c2e,#d8ef37,#ff7d00);display:flex;align-items:center;justify-content:center;font-size:90px}.body{padding:18px}.tag{display:inline-block;background:#ffc51b;padding:8px 18px;border-radius:20px;font-weight:900}.body p{line-height:1.9}.btn{display:block;width:100%;border:0;border-radius:22px;background:#ffc51b;color:#082039;padding:12px;font-weight:900;cursor:pointer}
-.about{background:#092844;border:2px solid #ffc51b;border-radius:24px;padding:25px;line-height:2}.order{background:#092844;border:2px solid #ffc51b;border-radius:24px;padding:24px}.form{display:grid;grid-template-columns:1fr 1fr;gap:12px}.field{display:flex;flex-direction:column;gap:6px}.full{grid-column:1/-1}input,select,textarea{padding:12px;border-radius:10px;border:1px solid #638096;font:inherit}textarea{min-height:90px}.wa{background:#19a95b;color:#fff;border:0;border-radius:12px;padding:13px;font-weight:900}
-footer{background:#061a2d;border-top:4px solid #ffc51b;padding:25px 0}.phone{font-size:23px;color:#ffc51b;font-weight:900}
-@media(max-width:750px){.links{display:none}.call{margin-right:auto}.trust,.products{grid-template-columns:1fr}.form{grid-template-columns:1fr}.full{grid-column:auto}}
-</style>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="supabase-config.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>طوطی آرا | سالن پرورش تخصصی</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase-config.js"></script>
+    <style>
+        :root {
+            --primary: #FFD700; /* طلایی */
+            --dark: #001F3F;    /* سرمه‌ای تیره */
+            --light: #f4f4f4;
+        }
+        body {
+            font-family: Tahoma, Arial, sans-serif;
+            background-color: var(--dark);
+            color: white;
+            margin: 0;
+            line-height: 1.6;
+        }
+        /* هدر مطابق تصویر */
+        header {
+            background: linear-gradient(rgba(0,31,63,0.8), rgba(0,31,63,0.8)), url('assets/hero.png');
+            background-size: cover;
+            background-position: center;
+            padding: 50px 20px;
+            text-align: center;
+            border-bottom: 5px solid var(--primary);
+        }
+        .nav-bar {
+            display: flex;
+            justify-content: space-around;
+            background: rgba(0,0,0,0.5);
+            padding: 10px;
+            border-radius: 50px;
+            margin-bottom: 30px;
+        }
+        .hero-title {
+            font-size: 3rem;
+            color: var(--primary);
+            text-shadow: 2px 2px 10px black;
+        }
+        /* بخش ویژگی‌ها با آیکون */
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            padding: 40px;
+            background: #002d5a;
+        }
+        .feature-card {
+            text-align: center;
+            padding: 20px;
+            border: 1px solid #333;
+            border-radius: 15px;
+        }
+        /* بخش محصولات (پرندگان) */
+        #birds {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            padding: 40px;
+        }
+        .bird-card {
+            background: white;
+            color: #333;
+            border-radius: 20px;
+            overflow: hidden;
+            transition: 0.3s;
+            border: 3px solid var(--primary);
+        }
+        .bird-card img { width: 100%; height: 200px; object-fit: cover; }
+        .bird-card-content { padding: 15px; }
+        .btn-order {
+            background: var(--primary);
+            color: var(--dark);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            width: 100%;
+        }
+    </style>
 </head>
 <body>
-<header><div class="wrap"><nav class="nav"><div class="logo">🦜 طوطی آرا</div><div class="links"><a href="#home">صفحه اصلی</a><a href="#about">درباره ما</a><a href="#birds">پرندگان</a><a href="#contact">تماس</a><a href="admin.html">مدیریت</a></div><a class="call" href="tel:09107488013">📞 تماس سریع</a></nav></div></header>
-<main id="home" class="hero"><div class="wrap"><img src="assets/hero.png" alt="طوطی آرا"></div>
-<section><div class="wrap"><div class="trust"><div>🛡️<b>سلامت تضمینی</b><small>پرندگان سالم و واکسینه</small></div><div>🥚<b>تخم و جوجه</b><small>تولید و پرورش حرفه‌ای</small></div><div>🤲<b>تغذیه اصولی</b><small>غذای باکیفیت و تخصصی</small></div><div>🏠<b>محیط استاندارد</b><small>سالن مجهز و بهداشتی</small></div></div></div></section>
-<section id="birds" class="section"><div class="wrap"><div class="title"><h2>🪶 معرفی پرندگان ما</h2></div><div id="products" class="products"></div></div></section>
-<section id="about" class="section"><div class="wrap"><div class="about"><h2>🪶 درباره سالن طوطی آرا</h2><p>در سالن پرورش طوطی آرا، با عشق و تخصص به پرورش پرندگان زیبا، سالم و باکیفیت می‌پردازیم. هدف ما ارائه پرندگانی با شرایط مناسب نگهداری و پاسخ‌گویی قبل و بعد از سفارش است.</p><p>📍 قزوین، محله مینودر</p></div></div></section>
-<section id="contact" class="section"><div class="wrap"><div class="order"><h2>📝 ثبت درخواست سفارش</h2><form id="form" class="form"><div class="field"><label>نام *</label><input id="name" required></div><div class="field"><label>شماره تماس *</label><input id="phone" required></div><div class="field"><label>پرنده</label><select id="bird"></select></div><div class="field"><label>تعداد</label><input id="qty" type="number" value="1" min="1"></div><div class="field full"><label>توضیحات</label><textarea id="note"></textarea></div><div class="field full"><button class="wa">🟢 ارسال درخواست در واتساپ</button></div></form></div></div></section>
-</main><footer><div class="wrap"><b>🦜 طوطی آرا</b> — قزوین، مینودر — <span class="phone">09107488013</span></div></footer>
+
+<header id="home">
+    <div class="nav-bar">
+        <span>صفحه اصلی</span>
+        <span>درباره ما</span>
+        <span>پرندگان</span>
+        <span>تماس با ما</span>
+    </div>
+    <h1 class="hero-title">سالن پرورش طوطی آرا</h1>
+    <p>پرورش حرفه‌ای • عشق به پرندگان</p>
+    <p>📍 قزوین، محله مینودر</p>
+</header>
+
+<div class="features">
+    <div class="feature-card">🛡️ سلامت تضمینی</div>
+    <div class="feature-card">🥚 تخم و جوجه</div>
+    <div class="feature-card">🤲 تغذیه اصولی</div>
+    <div class="feature-card">🏠 محیط استاندارد</div>
+</div>
+
+<div id="birds">
+    <!-- محصولات از دیتابیس اینجا لود می‌شوند -->
+</div>
+
+<!-- فرم سفارش واتساپ مشابه کد قبلی شما -->
+
 <script>
-const client=supabase.createClient(window.SUPABASE_URL,window.SUPABASE_ANON_KEY);
-let products=[];
-async function load(){const {data,error}=await client.from("products").select("*").eq("available",true).order("created_at",{ascending:false});if(error){document.getElementById("products").innerHTML="<p>در حال آماده‌سازی محصولات...</p>";return}products=data||[];render()}
-function render(){productsEl.innerHTML=products.map((p,i)=>`<article class="card"><div class="photo">${p.image_url?`<img src="${p.image_url}" style="width:100%;height:100%;object-fit:cover">`:(p.emoji||"🦜")}</div><div class="body"><span class="tag">${esc(p.name)}</span><p>${esc(p.description||"")}</p>${p.price?`<p>💰 ${esc(p.price)}</p>`:""}<button class="btn" onclick="pick(${i})">انتخاب و سفارش</button></div></article>`).join("");bird.innerHTML=products.map((p,i)=>`<option value="${i}">${esc(p.name)}</option>`).join("")}
-function pick(i){bird.value=i;contact.scrollIntoView({behavior:"smooth"})}
-form.addEventListener("submit",e=>{e.preventDefault();let p=products[+bird.value]?.name||"";let t=`سلام، برای سفارش از طوطی آرا درخواست دارم.\nنام: ${name.value}\nتلفن: ${phone.value}\nپرنده: ${p}\nتعداد: ${qty.value}\nتوضیحات: ${note.value}`;location.href="https://wa.me/989107488013?text="+encodeURIComponent(t)});
-function esc(s){return String(s).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
-const productsEl=document.getElementById("products");load();
-</script></body></html>
+    const client = supabase.createClient(window.SUPABASE_URL, window.SUPABASE_ANON_KEY);
+    
+    async function loadBirds() {
+        const { data: products } = await client.from('products').select('*').eq('available', true);
+        const container = document.getElementById('birds');
+        container.innerHTML = products.map(p => `
+            <div class="bird-card">
+                <div style="font-size:50px; text-align:center">${p.emoji}</div>
+                <div class="bird-card-content">
+                    <h3>${p.name}</h3>
+                    <p>${p.description}</p>
+                    <p><strong>قیمت: ${p.price || 'تماس بگیرید'}</strong></p>
+                    <button class="btn-order" onclick="
