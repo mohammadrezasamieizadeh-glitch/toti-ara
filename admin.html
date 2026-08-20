@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>مدیریت طوطی آرا</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Tahoma,Arial;background:#061522;color:#fff}.wrap{max-width:900px;margin:auto;padding:25px 16px}
+.box{background:#0b2942;border:2px solid #ffc51b;border-radius:24px;padding:24px;box-shadow:0 15px 45px #0008;margin:25px 0}
+h1,h2{color:#ffc51b}.muted{color:#c2d0d9;line-height:1.9}.form{display:grid;gap:12px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+input,textarea{width:100%;padding:13px;border-radius:11px;border:1px solid #5c788d;font:inherit}textarea{min-height:90px}
+button{border:0;border-radius:12px;padding:12px 16px;font-weight:900;cursor:pointer}.gold{background:#ffc51b;color:#071d2e}.red{background:#c83a3a;color:#fff}.green{background:#18a85b;color:#fff}.ghost{background:#173a54;color:#fff}
+.hidden{display:none}.row{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}.product{background:#071b2b;border:1px solid #3e5e73;border-radius:16px;padding:15px;margin-top:10px}
+.status{color:#7be3a3}.err{color:#ff8c8c}.ok{color:#7be3a3}
+@media(max-width:650px){.grid{grid-template-columns:1fr}}
+</style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-config.js"></script>
+</head>
+<body><div class="wrap">
+<div class="box">
+<div class="row"><h1>🦜 پنل مدیریت طوطی آرا</h1><a href="index.html"><button class="ghost">مشاهده سایت</button></a></div>
+<p class="muted">با ایمیل و رمز حساب مدیر وارد شو. رمز داخل کد سایت ذخیره نمی‌شود.</p>
+<div id="login">
+<form id="loginForm" class="form">
+<input id="email" type="email" placeholder="ایمیل مدیر" required>
+<input id="password" type="password" placeholder="رمز عبور" required>
+<button class="gold">🔐 ورود به پنل</button>
+<div id="loginMsg"></div>
+</form></div>
+<div id="panel" class="hidden">
+<div class="row"><p>وضعیت: <span class="status">● وارد شده‌اید</span></p><button class="red" onclick="logout()">خروج</button></div>
+<hr style="border-color:#29485d">
+<h2>➕ افزودن محصول</h2>
+<form id="productForm" class="form">
+<div class="grid"><input id="pname" placeholder="نام محصول *" required><input id="pprice" placeholder="قیمت (اختیاری)"></div>
+<div class="grid"><input id="pemoji" placeholder="ایموجی مثل 🦜" value="🦜"><input id="pimage" placeholder="آدرس عکس (اختیاری)"></div>
+<textarea id="pdesc" placeholder="توضیح محصول"></textarea>
+<button class="green">ذخیره محصول</button>
+<div id="saveMsg"></div>
+</form>
+<h2>📦 محصولات فعلی</h2><div id="list"></div>
+</div></div>
+</div>
+<script>
+const {createClient}=supabase;
+const client=createClient(window.SUPABASE_URL,window.SUPABASE_ANON_KEY);
+
+async function init(){
+ if(window.SUPABASE_URL.includes("PASTE_")) return;
+ const {data:{session}}=await client.auth.getSession();
+ show(session);
+}
+function show(session){
+ document.getElementById("login").classList.toggle("hidden",!!session);
+ document.getElementById("panel").classList.toggle("hidden",!session);
+ if(session) loadProducts();
+}
+client.auth.onAuthStateChange((_e,s)=>show(s));
+
+loginForm.addEventListener("submit",async e=>{
+ e.preventDefault(); loginMsg.textContent="در حال ورود...";
+ const {error}=await client.auth.signInWithPassword({email:email.value,password:password.value});
+ loginMsg.innerHTML=error?`<span class="err">${error.message}</span>`:`<span class="ok">ورود موفق بود.</span>`;
+});
+async function logout(){await client.auth.signOut()}
+productForm.addEventListener("submit",async e=>{
+ e.preventDefault(); saveMsg.textContent="در حال ذخیره...";
+ const {error}=await client.from("products").insert({name:pname.value,price:pprice.value,emoji:pemoji.value, image_url:pimage.value, description:pdesc.value});
+ saveMsg.innerHTML=error?`<span class="err">${error.message}</span>`:`<span class="ok">محصول ذخیره شد.</span>`;
+ if(!error){productForm.reset();pemoji.value="🦜";loadProducts()}
+});
+async function loadProducts(){
+ const {data,error}=await client.from("products").select("*").order("created_at",{ascending:false});
+ if(error){list.innerHTML=`<p class="err">${error.message}</p>`;return}
+ list.innerHTML=data.map(p=>`<div class="product"><div class="row"><div><b>${p.emoji||"🦜"} ${esc(p.name)}</b><br><small>${esc(p.description||"")}</small>${p.price?`<br>💰 ${esc(p.price)}`:""}</div><button class="red" onclick="del(${p.id})">🗑 حذف</button></div></div>`).join("")||"<p>هنوز محصولی ثبت نشده.</p>";
+}
+async function del(id){if(!confirm("این محصول حذف شود؟"))return;const {error}=await client.from("products").delete().eq("id",id);if(error)alert(error.message);else loadProducts()}
+function esc(s){return String(s).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
+init();
+</script></body></html>
