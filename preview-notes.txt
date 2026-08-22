@@ -1,0 +1,3 @@
+Preview notes
+- Package assembled from the latest files in /mnt/data.
+- Top-level archive entries: index.html, admin.html, supabase-config.js, supabase.sql, README.txt, hero.png, preview-notes.txt.
