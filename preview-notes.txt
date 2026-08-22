@@ -1,0 +1,9 @@
+یادداشت پیش‌نمایش و اعتبارسنجی
+- مرجع canonical: Tq5SZwm...-(5).png، کپی‌شده به hero.png؛ ابعاد intrinsic: 1536x1024.
+- بسته باید دقیقاً ۷ فایل top-level داشته باشد: index.html, admin.html, supabase-config.js, supabase.sql, README.txt, preview-notes.txt, hero.png.
+- index.html فقط stage پوستر، hotspotهای نامرئی و modal مسیرها را دارد؛ header/nav/card/footer قدیمی در markup قابل مشاهده ندارد.
+- مسیرهای بررسی: #home، #about، #birds، #gallery، #care، #contact، #quick-contact، #gallery/green-cheek، #gallery/monk، #gallery/sun.
+- کلیک backdrop، دکمهٔ ۴۴ پیکسلی بستن و Escape modal را می‌بندند؛ تغییر hash و browser back پشتیبانی شده است.
+- hotspot تماس سریع لینک تلفنی مستقیم دارد؛ ورود دستی #quick-contact modal کوچک را باز می‌کند.
+- gallery بدون Supabase یا بدون رکورد، کارت بزرگ جعلی نشان نمی‌دهد و پیام خالی کوچک می‌دهد.
+- ZIP با فهرست top-level دقیقاً ۷ مورد تولید شده است.
