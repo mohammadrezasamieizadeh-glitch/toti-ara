@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>پنل مدیریت | سالن طوطی آرا</title>
+  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-config.js"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Vazirmatn', sans-serif;
+      background: #081a15;
+      color: #e2f0ea;
+      padding: 20px;
+    }
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      background: #0c231c;
+      border: 1px solid #1f4e3e;
+      border-radius: 16px;
+      padding: 24px;
+    }
+    h1 { color: #ffd15c; font-size: 1.5rem; margin-bottom: 20px; text-align: center; }
+    .card { background: #081a15; border: 1px solid #1a3d31; border-radius: 12px; padding: 18px; margin-bottom: 20px; }
+    label { display: block; margin-bottom: 6px; font-weight: 600; font-size: 0.9rem; color: #a3c9bb; }
+    input, textarea, select {
+      width: 100%; padding: 10px 14px; background: #05120e; border: 1px solid #1f4e3e;
+      border-radius: 8px; color: #fff; font-family: inherit; margin-bottom: 14px;
+    }
+    button {
+      background: linear-gradient(135deg, #ffd15c, #f39c12); color: #0c231c; border: none;
+      padding: 12px 20px; border-radius: 8px; font-weight: 800; font-family: inherit;
+      cursor: pointer; width: 100%; transition: opacity 0.2s;
+    }
+    button:hover { opacity: 0.9; }
+    .product-list { margin-top: 20px; }
+    .product-row {
+      display: flex; justify-content: space-between; align-items: center;
+      background: #05120e; padding: 12px; border-radius: 8px; margin-bottom: 8px; border: 1px solid #1a3d31;
+    }
+    .del-btn { width: auto; background: #e74c3c; color: #fff; padding: 6px 12px; font-size: 0.8rem; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>پنل مدیریت پرندگان و محصولات طوطی آرا</h1>
+    <div id="authSection" class="card">
+      <h2 style="font-size:1.1rem;margin-bottom:12px;color:#ffd15c;">ورود مدیر</h2>
+      <label>ایمیل مدیر:</label>
+      <input type="email" id="adminEmail" placeholder="admin@totiara.ir">
+      <label>رمز عبور:</label>
+      <input type="password" id="adminPassword" placeholder="••••••••">
+      <button onclick="login()">ورود به پنل</button>
+    </div>
+
+    <div id="dashboardSection" style="display:none;">
+      <div class="card">
+        <h2 style="font-size:1.1rem;margin-bottom:12px;color:#ffd15c;">افزودن پرنده جدید</h2>
+        <label>نام پرنده و نژاد:</label>
+        <input type="text" id="pName" placeholder="مثال: جوجه گرین چیک آناناسی">
+        <label>قیمت / وضعیت:</label>
+        <input type="text" id="pPrice" placeholder="مثال: توافقی / موجود">
+        <label>آدرس عکس (URL):</label>
+        <input type="text" id="pImg" placeholder="https://...">
+        <label>توضیحات کوتاه:</label>
+        <textarea id="pDesc" rows="3" placeholder="توضیحات سن، دستی بودن، سلامت..."></textarea>
+        <button onclick="addProduct()">➕ ثبت در پایگاه داده</button>
+      </div>
+
+      <div class="card">
+        <h2 style="font-size:1.1rem;margin-bottom:12px;color:#ffd15c;">لیست پرندگان ثبت‌شده</h2>
+        <div id="productList" class="product-list">در حال دریافت لیست...</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let client = window.supabaseClient;
+    async function login() {
+      const email = document.getElementById('adminEmail').value;
+      const password = document.getElementById('adminPassword').value;
+      if (!client) { alert('خطا در بارگذاری تنظیمات Supabase'); return; }
+      const { data, error } = await client.auth.signInWithPassword({ email, password });
+      if (error) { alert('ورود ناموفق: ' + error.message); }
+      else {
+        document.getElementById('authSection').style.display = 'none';
+        document.getElementById('dashboardSection').style.display = 'block';
+        loadAdminProducts();
+      }
+    }
+
+    async function loadAdminProducts() {
+      const { data, error } = await client.from('products').select('*').order('id', { ascending: false });
+      const list = document.getElementById('productList');
+      if (error) { list.innerHTML = 'خطا در دریافت لیست.'; return; }
+      if (!data || data.length === 0) { list.innerHTML = 'هیچ محصولی ثبت نشده است.'; return; }
+      list.innerHTML = data.map(p => `
+        <div class="product-row">
+          <div><strong>${p.name}</strong> - <span>${p.price || 'بدون قیمت'}</span></div>
+          <button class="del-btn" onclick="deleteProduct(${p.id})">حذف</button>
+        </div>
+      `).join('');
+    }
+
+    async function addProduct() {
+      const name = document.getElementById('pName').value;
+      const price = document.getElementById('pPrice').value;
+      const image_url = document.getElementById('pImg').value;
+      const description = document.getElementById('pDesc').value;
+      if (!name) { alert('نام پرنده الزامی است'); return; }
+      const { error } = await client.from('products').insert([{ name, price, image_url, description, available: true }]);
+      if (error) alert('خطا در ثبت: ' + error.message);
+      else {
+        alert('با موفقیت ثبت شد!');
+        document.getElementById('pName').value = '';
+        document.getElementById('pPrice').value = '';
+        document.getElementById('pImg').value = '';
+        document.getElementById('pDesc').value = '';
+        loadAdminProducts();
+      }
+    }
+
+    async function deleteProduct(id) {
+      if (!confirm('آیا از حذف این مورد اطمینان دارید؟')) return;
+      const { error } = await client.from('products').delete().eq('id', id);
+      if (error) alert('خطا در حذف: ' + error.message);
+      else loadAdminProducts();
+    }
+  </script>
+</body>
+</html>
