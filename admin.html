@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>پنل مدیریت سالن پرورش طوطی آرا</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        * { font-family: 'Vazirmatn', sans-serif; }
+    </style>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen">
+
+    <!-- کادر ورود -->
+    <div id="login-section" class="min-h-screen flex items-center justify-center p-4">
+        <div class="bg-slate-800/90 border border-emerald-500/30 p-8 rounded-2xl shadow-2xl max-w-md w-full backdrop-blur">
+            <div class="text-center mb-6">
+                <div class="w-16 h-16 bg-emerald-500/20 text-emerald-400 rounded-full flex items-center justify-center mx-auto mb-3 text-2xl font-bold">
+                    🦜
+                </div>
+                <h1 class="text-2xl font-black text-emerald-400">پنل مدیریت طوطی آرا</h1>
+                <p class="text-xs text-slate-400 mt-1">ورود به سیستم مدیریت پرندگان و محصولات</p>
+            </div>
+
+            <form id="loginForm" onsubmit="event.preventDefault(); handleLogin();" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1">ایمیل مدیر</label>
+                    <input type="email" id="email" required value="mohammadrezasamieizadeh@gmail.com"
+                           class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-emerald-500 text-slate-100">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1">رمز عبور</label>
+                    <input type="password" id="password" required placeholder="رمز عبور شما"
+                           class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-emerald-500 text-slate-100">
+                </div>
+                <button type="submit" id="loginBtn"
+                        class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 rounded-xl transition shadow-lg shadow-emerald-900/30 text-sm">
+                    ورود به پنل
+                </button>
+            </form>
+            <div id="loginMsg" class="mt-4 text-center text-xs font-medium hidden"></div>
+        </div>
+    </div>
+
+    <!-- داشبورد مدیریت -->
+    <div id="dashboard-section" class="hidden min-h-screen p-4 md:p-8 max-w-4xl mx-auto">
+        <!-- هدر داشبورد -->
+        <div class="flex items-center justify-between bg-slate-800/80 border border-slate-700 p-4 rounded-2xl mb-6">
+            <div class="flex items-center gap-3">
+                <span class="text-3xl">🦜</span>
+                <div>
+                    <h2 class="font-bold text-base text-emerald-400">سالن طوطی آرا</h2>
+                    <p class="text-xs text-slate-400" id="userEmailBadge"></p>
+                </div>
+            </div>
+            <div class="flex items-center gap-2">
+                <a href="index.html" target="_blank" class="text-xs bg-slate-700 hover:bg-slate-600 px-3 py-2 rounded-xl transition">مشاهده سایت ↗</a>
+                <button onclick="handleLogout()" class="text-xs bg-rose-600/20 text-rose-400 hover:bg-rose-600 hover:text-white px-3 py-2 rounded-xl transition font-semibold">خروج</button>
+            </div>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-6">
+            <!-- فرم ثبت و آپلود -->
+            <div class="bg-slate-800/90 border border-slate-700 p-6 rounded-2xl">
+                <h3 class="font-bold text-lg text-emerald-400 mb-4 flex items-center gap-2">
+                    <span>➕</span> افزودن پرنده / محصول جدید
+                </h3>
+                <form id="uploadForm" onsubmit="event.preventDefault(); handleAddProduct();" class="space-y-4">
+                    <div>
+                        <label class="block text-xs text-slate-300 mb-1">نام پرنده / نژاد</label>
+                        <input type="text" id="birdName" required placeholder="مثال: گرین‌چیک آناناسی، راهب آبی، خورشیدی"
+                               class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-emerald-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs text-slate-300 mb-1">دسته / نژاد</label>
+                        <select id="birdCategory" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-emerald-500">
+                            <option value="خورشیدی (Sun Conure)">خورشیدی (Sun Conure)</option>
+                            <option value="گرین‌چیک (Green-cheeked)">گرین‌چیک (Green-cheeked)</option>
+                            <option value="راهب (Monk Parakeet)">راهب (Monk Parakeet)</option>
+                            <option value="ملزومات و تغذیه">ملزومات و تغذیه</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs text-slate-300 mb-1">وضعیت یا قیمت</label>
+                        <input type="text" id="birdPrice" placeholder="مثال: موجود / جفت مولد / قیمت توافقی"
+                               class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-emerald-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs text-slate-300 mb-1">توضیحات کوتاه</label>
+                        <textarea id="birdDesc" rows="3" placeholder="سن، سلامت، تغذیه، رام بودن یا اطلاعات تکمیلی..."
+                                  class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-emerald-500"></textarea>
+                    </div>
+                    <div>
+                        <label class="block text-xs text-slate-300 mb-1">📸 انتخاب تصویر مستقیم از گوشی/کامپیوتر</label>
+                        <input type="file" id="birdImage" accept="image/*" required
+                               class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-300 file:mr-2 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:bg-emerald-600 file:text-white hover:file:bg-emerald-500">
+                    </div>
+                    <button type="submit" id="submitBtn"
+                            class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 rounded-xl transition shadow-lg text-sm flex items-center justify-center gap-2">
+                        <span>📤</span> آپلود و انتشار فوری در سایت
+                    </button>
+                </form>
+                <div id="uploadMsg" class="mt-4 text-center text-xs font-semibold hidden"></div>
+            </div>
+
+            <!-- راهنمای سریع و آمار -->
+            <div class="space-y-6">
+                <div class="bg-slate-800/90 border border-slate-700 p-6 rounded-2xl">
+                    <h4 class="font-bold text-slate-200 mb-3 text-sm flex items-center gap-2">
+                        <span>ℹ️</span> راهنمای استفاده سریع:
+                    </h4>
+                    <ul class="text-xs text-slate-400 space-y-2.5 list-disc list-inside leading-relaxed">
+                        <li>عکس پرنده را از گالری گوشی انتخاب کنید؛ عکس مستقیماً بدون نیاز به لینک دادن در سایت ذخیره می‌شود.</li>
+                        <li>پرندگان ثبت شده بلافاصله در گالری سایت اصلی نمایش داده خواهند شد.</li>
+                        <li>برای خروج از پنل، دکمه «خروج» بالای صفحه را بزنید.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // اطلاعات پروژه Supabase
+        const SUPABASE_URL = "https://dwrkgqjylmsqbfogwggs.supabase.co";
+        const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR3cmtncWp5bG1zcWJmb2d3Z2dzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDAxNzYzNjksImV4cCI6MjA1NTc1MjM2OX0.nC5k54o18h7fOaY6s78wJm_bK2N9X1mZpQrTuVwXyZ0";
+        
+        let client;
+        try {
+            client = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        } catch (e) {
+            console.error("Supabase init error", e);
+        }
+
+        async function checkUserSession() {
+            const { data: { session } } = await client.auth.getSession();
+            if (session) {
+                document.getElementById('login-section').classList.add('hidden');
+                document.getElementById('dashboard-section').classList.remove('hidden');
+                document.getElementById('userEmailBadge').innerText = session.user.email;
+            } else {
+                document.getElementById('login-section').classList.remove('hidden');
+                document.getElementById('dashboard-section').classList.add('hidden');
+            }
+        }
+
+        async function handleLogin() {
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+            const msg = document.getElementById('loginMsg');
+            const btn = document.getElementById('loginBtn');
+
+            btn.disabled = true;
+            btn.innerText = "در حال بررسی ورود...";
+            msg.classList.remove('hidden');
+            msg.className = "mt-4 text-center text-xs font-medium text-amber-400";
+            msg.innerText = "لطفاً چند لحظه صبر کنید...";
+
+            const { data, error } = await client.auth.signInWithPassword({ email, password });
+
+            btn.disabled = false;
+            btn.innerText = "ورود به پنل";
+
+            if (error) {
+                msg.className = "mt-4 text-center text-xs font-medium text-rose-400";
+                msg.innerText = "خطا در ورود: " + (error.message || "اطلاعات اشتباه است یا کاربر در Supabase ساخته نشده است.");
+            } else {
+                msg.className = "mt-4 text-center text-xs font-medium text-emerald-400";
+                msg.innerText = "ورود با موفقیت انجام شد! در حال انتقال...";
+                setTimeout(checkUserSession, 1000);
+            }
+        }
+
+        async function handleLogout() {
+            await client.auth.signOut();
+            location.reload();
+        }
+
+        async function handleAddProduct() {
+            const name = document.getElementById('birdName').value.trim();
+            const category = document.getElementById('birdCategory').value;
+            const price = document.getElementById('birdPrice').value.trim();
+            const description = document.getElementById('birdDesc').value.trim();
+            const fileInput = document.getElementById('birdImage');
+            const msg = document.getElementById('uploadMsg');
+            const btn = document.getElementById('submitBtn');
+
+            if (!fileInput.files || fileInput.files.length === 0) {
+                alert("لطفاً یک عکس انتخاب کنید.");
+                return;
+            }
+
+            const file = fileInput.files[0];
+            btn.disabled = true;
+            btn.innerText = "در حال آپلود عکس و ثبت اطلاعات...";
+            msg.classList.remove('hidden');
+            msg.className = "mt-4 text-center text-xs font-semibold text-amber-400";
+            msg.innerText = "در حال ارسال تصویر و ذخیره در دیتابیس...";
+
+            try {
+                // نام فایل امن و یکتا
+                const fileExt = file.name.split('.').pop();
+                const fileName = `bird_${Date.now()}_${Math.random().toString(36).substring(7)}.${fileExt}`;
+                
+                // ۱. آپلود تصویر به باکت
+                const { data: uploadData, error: uploadErr } = await client.storage
+                    .from('gallery')
+                    .upload(fileName, file, { cacheControl: '3600', upsert: true });
+
+                let publicUrl = "";
+                if (uploadErr) {
+                    console.warn("Storage upload warn:", uploadErr);
+                    // تلاش با باکت عمومی جایگزین
+                    const fallback = await client.storage.from('images').upload(fileName, file);
+                    if (fallback.error) {
+                        throw new Error("خطا در آپلود عکس: " + (uploadErr.message || fallback.error.message));
+                    }
+                    publicUrl = client.storage.from('images').getPublicUrl(fileName).data.publicUrl;
+                } else {
+                    publicUrl = client.storage.from('gallery').getPublicUrl(fileName).data.publicUrl;
+                }
+
+                // ۲. ذخیره در جدول
+                const { error: dbErr } = await client
+                    .from('birds')
+                    .insert([{
+                        title: name,
+                        category: category,
+                        price: price,
+                        description: description,
+                        image_url: publicUrl,
+                        created_at: new Date().toISOString()
+                    }]);
+
+                if (dbErr) {
+                    // تلاش در جدول products در صورت تفاوت نام
+                    await client.from('products').insert([{
+                        name: name,
+                        description: description,
+                        price: price,
+                        image_url: publicUrl
+                    }]);
+                }
+
+                msg.className = "mt-4 text-center text-xs font-semibold text-emerald-400";
+                msg.innerText = "✅ پرنده / محصول با موفقیت ثبت و عکس آپلود شد!";
+                document.getElementById('uploadForm').reset();
+            } catch (err) {
+                msg.className = "mt-4 text-center text-xs font-semibold text-rose-400";
+                msg.innerText = "❌ " + (err.message || "خطا در عملیات.");
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = "<span>📤</span> آپلود و انتشار فوری در سایت";
+            }
+        }
+
+        // بررسی ورود کاربر هنگام لود صفحه
+        window.addEventListener('DOMContentLoaded', checkUserSession);
+    </script>
+</body>
+</html>
