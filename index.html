@@ -1,0 +1,910 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>سالن پرورش طوطی سانان آرا | قزوین</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    :root {
+      --primary: #15803d;
+      --primary-dark: #166534;
+      --primary-light: #22c55e;
+      --accent-yellow: #eab308;
+      --accent-orange: #f97316;
+      --accent-teal: #0d9488;
+      --bg-light: #f8fafc;
+      --bg-card: #ffffff;
+      --text-dark: #1e293b;
+      --text-muted: #64748b;
+      --border-color: #e2e8f0;
+      --shadow-sm: 0 2px 4px rgba(0,0,0,0.05);
+      --shadow-md: 0 6px 16px rgba(0,0,0,0.08);
+      --shadow-lg: 0 12px 28px rgba(0,0,0,0.12);
+      --radius: 16px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Vazirmatn', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-light);
+      color: var(--text-dark);
+      line-height: 1.65;
+      padding-bottom: 75px;
+      overflow-x: hidden;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    /* Container */
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 1.25rem;
+    }
+
+    /* Top Navigation Header */
+    header.site-header {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+      border-bottom: 1px solid #f1f5f9;
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.85rem 0;
+    }
+
+    .brand-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .brand-logo .logo-icon {
+      width: 44px;
+      height: 44px;
+      background: linear-gradient(135deg, #15803d, #22c55e);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1.4rem;
+      box-shadow: 0 4px 10px rgba(34, 197, 94, 0.35);
+    }
+
+    .brand-logo h1 {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: #14532d;
+    }
+
+    .brand-logo span {
+      display: block;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .nav-cta-btn {
+      background: linear-gradient(135deg, #16a34a, #15803d);
+      color: white;
+      padding: 0.55rem 1.1rem;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      box-shadow: 0 4px 12px rgba(22, 163, 74, 0.25);
+      transition: all 0.25s ease;
+    }
+
+    .nav-cta-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(22, 163, 74, 0.35);
+    }
+
+    /* Hero Section */
+    .hero {
+      background: linear-gradient(145deg, #14532d 0%, #166534 60%, #15803d 100%);
+      color: white;
+      padding: 3rem 1.25rem 4rem;
+      border-radius: 0 0 32px 32px;
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 2rem;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -50px;
+      left: -50px;
+      width: 250px;
+      height: 250px;
+      background: radial-gradient(circle, rgba(234, 179, 8, 0.25), transparent 70%);
+      border-radius: 50%;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      max-width: 650px;
+      margin: 0 auto;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      padding: 0.35rem 0.9rem;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #fef08a;
+      margin-bottom: 1.2rem;
+    }
+
+    .hero-title {
+      font-size: 1.9rem;
+      font-weight: 900;
+      line-height: 1.35;
+      margin-bottom: 0.9rem;
+      color: #ffffff;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+
+    .hero-subtitle {
+      font-size: 0.95rem;
+      color: #e2e8f0;
+      font-weight: 400;
+      margin-bottom: 1.8rem;
+    }
+
+    .hero-actions {
+      display: flex;
+      justify-content: center;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    .btn-hero-primary {
+      background: #f59e0b;
+      color: #1f2937;
+      padding: 0.7rem 1.4rem;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 0.95rem;
+      box-shadow: 0 4px 14px rgba(245, 158, 11, 0.35);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: all 0.2s;
+    }
+
+    .btn-hero-primary:hover {
+      background: #fbbf24;
+      transform: translateY(-2px);
+    }
+
+    .btn-hero-secondary {
+      background: rgba(255, 255, 255, 0.15);
+      color: #ffffff;
+      padding: 0.7rem 1.4rem;
+      border-radius: 12px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: all 0.2s;
+    }
+
+    .btn-hero-secondary:hover {
+      background: rgba(255, 255, 255, 0.25);
+    }
+
+    /* 4 Benefits Badges Grid */
+    .benefits-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+      margin-top: -2rem;
+      position: relative;
+      z-index: 10;
+      margin-bottom: 2.5rem;
+    }
+
+    @media (min-width: 768px) {
+      .benefits-grid {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
+
+    .benefit-card {
+      background: white;
+      padding: 1.1rem 0.9rem;
+      border-radius: 16px;
+      text-align: center;
+      box-shadow: var(--shadow-md);
+      border: 1px solid #f1f5f9;
+      transition: transform 0.2s ease;
+    }
+
+    .benefit-card:hover {
+      transform: translateY(-4px);
+    }
+
+    .benefit-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 0.7rem;
+      font-size: 1.3rem;
+    }
+
+    .icon-health { background: #dcfce7; color: #16a34a; }
+    .icon-cert { background: #fef3c7; color: #d97706; }
+    .icon-support { background: #e0e7ff; color: #4f46e5; }
+    .icon-delivery { background: #fee2e2; color: #dc2626; }
+
+    .benefit-title {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: 0.25rem;
+    }
+
+    .benefit-desc {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+    }
+
+    /* Section Headers */
+    .section-head {
+      text-align: center;
+      margin-bottom: 1.75rem;
+    }
+
+    .section-subtitle {
+      font-size: 0.8rem;
+      color: var(--primary);
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      margin-bottom: 0.25rem;
+    }
+
+    .section-title {
+      font-size: 1.45rem;
+      font-weight: 800;
+      color: #0f172a;
+    }
+
+    /* Birds Grid Section */
+    .birds-section {
+      margin-bottom: 3rem;
+    }
+
+    .birds-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.25rem;
+    }
+
+    @media (min-width: 640px) {
+      .birds-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    .bird-card {
+      background: white;
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid #edf2f7;
+      transition: all 0.25s ease;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .bird-card:hover {
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-5px);
+    }
+
+    .bird-img-wrap {
+      height: 200px;
+      position: relative;
+      overflow: hidden;
+      background: #f1f5f9;
+    }
+
+    .bird-img-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.4s ease;
+    }
+
+    .bird-card:hover .bird-img-wrap img {
+      transform: scale(1.06);
+    }
+
+    .bird-tag {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: rgba(15, 23, 42, 0.75);
+      backdrop-filter: blur(4px);
+      color: white;
+      font-size: 0.7rem;
+      padding: 0.25rem 0.6rem;
+      border-radius: 999px;
+      font-weight: 600;
+    }
+
+    .bird-status {
+      position: absolute;
+      bottom: 12px;
+      left: 12px;
+      background: #22c55e;
+      color: white;
+      font-size: 0.7rem;
+      padding: 0.2rem 0.55rem;
+      border-radius: 6px;
+      font-weight: 700;
+    }
+
+    .bird-body {
+      padding: 1.1rem;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .bird-name {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: #0f172a;
+      margin-bottom: 0.35rem;
+    }
+
+    .bird-features {
+      list-style: none;
+      margin: 0.6rem 0 1rem;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .bird-features li {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      margin-bottom: 0.3rem;
+    }
+
+    .bird-features li i {
+      color: var(--primary);
+      font-size: 0.75rem;
+    }
+
+    .bird-order-btn {
+      width: 100%;
+      background: #f8fafc;
+      color: #0f172a;
+      border: 1px solid #e2e8f0;
+      padding: 0.65rem;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .bird-order-btn:hover {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    /* About Section */
+    .about-section {
+      background: white;
+      border-radius: 24px;
+      padding: 2rem 1.5rem;
+      margin-bottom: 3rem;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid #f1f5f9;
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+      align-items: center;
+    }
+
+    @media (min-width: 768px) {
+      .about-grid {
+        grid-template-columns: 1.2fr 0.8fr;
+      }
+    }
+
+    .about-text h3 {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: #14532d;
+      margin-bottom: 0.8rem;
+    }
+
+    .about-text p {
+      font-size: 0.88rem;
+      color: #475569;
+      line-height: 1.8;
+      margin-bottom: 1rem;
+    }
+
+    .about-stats {
+      display: flex;
+      gap: 1.2rem;
+      margin-top: 1.2rem;
+    }
+
+    .stat-item {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      padding: 0.75rem 1rem;
+      border-radius: 12px;
+      text-align: center;
+      flex: 1;
+    }
+
+    .stat-num {
+      font-size: 1.3rem;
+      font-weight: 900;
+      color: #15803d;
+    }
+
+    .stat-label {
+      font-size: 0.7rem;
+      color: #166534;
+      font-weight: 600;
+    }
+
+    .about-image {
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: var(--shadow-md);
+      height: 240px;
+    }
+
+    .about-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* Gallery Grid */
+    .gallery-section {
+      margin-bottom: 3rem;
+    }
+
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.75rem;
+    }
+
+    @media (min-width: 640px) {
+      .gallery-grid {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
+
+    .gallery-item {
+      position: relative;
+      border-radius: 14px;
+      overflow: hidden;
+      height: 150px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .gallery-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.35s ease;
+    }
+
+    .gallery-item:hover img {
+      transform: scale(1.08);
+    }
+
+    /* Contact / Location Box */
+    .location-card {
+      background: linear-gradient(135deg, #0f172a, #1e293b);
+      color: white;
+      border-radius: 24px;
+      padding: 1.8rem;
+      margin-bottom: 2.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+    }
+
+    @media (min-width: 640px) {
+      .location-card {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+      }
+    }
+
+    .loc-info h4 {
+      font-size: 1.2rem;
+      font-weight: 800;
+      margin-bottom: 0.4rem;
+      color: #f8fafc;
+    }
+
+    .loc-info p {
+      font-size: 0.85rem;
+      color: #94a3b8;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .loc-btn {
+      background: #22c55e;
+      color: white;
+      padding: 0.75rem 1.4rem;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 0.9rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      white-space: nowrap;
+      transition: background 0.2s;
+    }
+
+    .loc-btn:hover {
+      background: #16a34a;
+    }
+
+    /* Bottom Sticky Navigation / Bar */
+    .bottom-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(255, 255, 255, 0.96);
+      backdrop-filter: blur(12px);
+      box-shadow: 0 -4px 20px rgba(0,0,0,0.08);
+      border-top: 1px solid #e2e8f0;
+      padding: 0.65rem 1rem;
+      z-index: 999;
+    }
+
+    .bottom-bar-inner {
+      max-width: 600px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+    }
+
+    .quick-call-btn {
+      flex: 1;
+      background: linear-gradient(135deg, #16a34a, #15803d);
+      color: white;
+      padding: 0.7rem 1rem;
+      border-radius: 12px;
+      font-weight: 800;
+      font-size: 0.95rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      box-shadow: 0 4px 12px rgba(22, 163, 74, 0.3);
+    }
+
+    .quick-loc-btn {
+      flex: 1;
+      background: #f1f5f9;
+      color: #334155;
+      padding: 0.7rem 1rem;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      border: 1px solid #cbd5e1;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Site Header -->
+  <header class="site-header">
+    <div class="container">
+      <div class="header-inner">
+        <div class="brand-logo">
+          <div class="logo-icon">
+            <i class="fa-solid fa-dove"></i>
+          </div>
+          <div>
+            <h1>سالن طوطی آرا</h1>
+            <span>پرورش تخصصی طوطی سانان قزوین</span>
+          </div>
+        </div>
+        <a href="tel:09107488013" class="nav-cta-btn">
+          <i class="fa-solid fa-phone"></i>
+          <span>تماس مستقیم</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero-content">
+        <div class="hero-badge">
+          <i class="fa-solid fa-award"></i>
+          <span>بزرگترین سالن تخصصی پرورش در قزوین</span>
+        </div>
+        <h2 class="hero-title">زیباترین و سالم‌ترین طوطی‌های دستی و سخنگو</h2>
+        <p class="hero-subtitle">پرورش خانگی با تغذیه سوپر پرمیوم، چکاپ دوره‌ای دامپزشکی و تضمین سلامت ۱۰۰٪</p>
+        <div class="hero-actions">
+          <a href="tel:09107488013" class="btn-hero-primary">
+            <i class="fa-solid fa-phone-volume"></i>
+            <span>مشاوره و استعلام موجودی</span>
+          </a>
+          <a href="#birds" class="btn-hero-secondary">
+            <i class="fa-solid fa-feather"></i>
+            <span>مشاهده نژادها</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Container for Main Body -->
+  <main class="container">
+    
+    <!-- 4 Benefits Badges -->
+    <div class="benefits-grid">
+      <div class="benefit-card">
+        <div class="benefit-icon icon-health">
+          <i class="fa-solid fa-heart-pulse"></i>
+        </div>
+        <h4 class="benefit-title">تضمین سلامت</h4>
+        <p class="benefit-desc">چکاپ کامل دامپزشکی</p>
+      </div>
+
+      <div class="benefit-card">
+        <div class="benefit-icon icon-cert">
+          <i class="fa-solid fa-hand-holding-heart"></i>
+        </div>
+        <h4 class="benefit-title">کاملاً دستی و رام</h4>
+        <p class="benefit-desc">پرورش یافته با سرلاک ویژه</p>
+      </div>
+
+      <div class="benefit-card">
+        <div class="benefit-icon icon-support">
+          <i class="fa-solid fa-comments"></i>
+        </div>
+        <h4 class="benefit-title">مشاوره دائمی</h4>
+        <p class="benefit-desc">پشتیبانی و راهنمایی نگهداری</p>
+      </div>
+
+      <div class="benefit-card">
+        <div class="benefit-icon icon-delivery">
+          <i class="fa-solid fa-truck-fast"></i>
+        </div>
+        <h4 class="benefit-title">ارسال به سراسر کشور</h4>
+        <p class="benefit-desc">با بارنامه و بیمه معتبر</p>
+      </div>
+    </div>
+
+    <!-- Bird Cards Section -->
+    <section id="birds" class="birds-section">
+      <div class="section-head">
+        <span class="section-subtitle">نژادهای محبوب و موجود</span>
+        <h3 class="section-title">طوطی‌های منتخب سالن آرا</h3>
+      </div>
+
+      <div class="birds-grid">
+        <!-- 1: خورشیدی -->
+        <div class="bird-card">
+          <div class="bird-img-wrap">
+            <img src="https://images.unsplash.com/photo-1552728089-57bdde30beb3?w=600&auto=format&fit=crop&q=80" alt="طوطی کانور خورشیدی" />
+            <span class="bird-tag">پرانرژی و جذاب</span>
+            <span class="bird-status">آماده تحویل</span>
+          </div>
+          <div class="bird-body">
+            <div>
+              <h4 class="bird-name">کانور خورشیدی (Sun Conure)</h4>
+              <ul class="bird-features">
+                <li><i class="fa-solid fa-circle-check"></i> رنگ‌آمیزی بی‌نظیر زرد، نارنجی و سبز</li>
+                <li><i class="fa-solid fa-circle-check"></i> فوق‌العاده باهوش، مهربان و دستی</li>
+                <li><i class="fa-solid fa-circle-check"></i> سن مناسب برای آموزش و یادگیری کلمات</li>
+              </ul>
+            </div>
+            <a href="tel:09107488013" class="bird-order-btn">
+              <i class="fa-solid fa-phone"></i>
+              <span>استعلام قیمت و رزرو</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- 2: راهب -->
+        <div class="bird-card">
+          <div class="bird-img-wrap">
+            <img src="https://images.unsplash.com/photo-1544717305-2782549b5136?w=600&auto=format&fit=crop&q=80" alt="طوطی راهب کواکر" />
+            <span class="bird-tag">سخنگو و باهوش</span>
+            <span class="bird-status">موجود در سالن</span>
+          </div>
+          <div class="bird-body">
+            <div>
+              <h4 class="bird-name">طوطی راهب (Quaker Monk)</h4>
+              <ul class="bird-features">
+                <li><i class="fa-solid fa-circle-check"></i> استعداد فوق‌العاده در صحبت کردن</li>
+                <li><i class="fa-solid fa-circle-check"></i> موجود در جهش‌های سبز، آبی و زرد</li>
+                <li><i class="fa-solid fa-circle-check"></i> سرلاکی دون‌خور شده و حلقه پا</li>
+              </ul>
+            </div>
+            <a href="tel:09107488013" class="bird-order-btn">
+              <i class="fa-solid fa-phone"></i>
+              <span>استعلام قیمت و رزرو</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- 3: گرین‌چیک -->
+        <div class="bird-card">
+          <div class="bird-img-wrap">
+            <img src="https://images.unsplash.com/photo-1588880331179-bc9b93a8cb5e?w=600&auto=format&fit=crop&q=80" alt="طوطی گرین چیک" />
+            <span class="bird-tag">بسیار آرام و بی‌صدا</span>
+            <span class="bird-status">آماده تحویل</span>
+          </div>
+          <div class="bird-body">
+            <div>
+              <h4 class="bird-name">طوطی گرین‌چیک (Green-Cheek)</h4>
+              <ul class="bird-features">
+                <li><i class="fa-solid fa-circle-check"></i> مناسب‌ترین گزینه برای آپارتمان (کم‌صدا)</li>
+                <li><i class="fa-solid fa-circle-check"></i> ریدساید، یلوفول، پایناب و نرمال</li>
+                <li><i class="fa-solid fa-circle-check"></i> تغذیه شده با سرلاک خارجی معتبر</li>
+              </ul>
+            </div>
+            <a href="tel:09107488013" class="bird-order-btn">
+              <i class="fa-solid fa-phone"></i>
+              <span>استعلام قیمت و رزرو</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about-section">
+      <div class="about-grid">
+        <div class="about-text">
+          <h3>درباره سالن تخصصی طوطی آرا</h3>
+          <p>
+            سالن طوطی آرا با چندین سال سابقه درخشان در زمینه تکثیر اصولی و پرورش استاندارد طوطی‌سانان در شهر قزوین فعالیت می‌کند. ما محیطی کاملاً بهداشتی، با کنترل دما و رطوبت استاندارد و تغذیه ارگانیک و غنی شده فراهم آورده‌ایم تا پرندگانی پرانرژی، شاداب و سالم تقدیم نگاه پرمهر شما عزیزان کنیم.
+          </p>
+          <div class="about-stats">
+            <div class="stat-item">
+              <div class="stat-num">+۵۰۰</div>
+              <div class="stat-label">پرورش موفق</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-num">۱۰۰٪</div>
+              <div class="stat-label">رضایت مشتریان</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-num">۷+</div>
+              <div class="stat-label">سال تجربه</div>
+            </div>
+          </div>
+        </div>
+        <div class="about-image">
+          <img src="https://images.unsplash.com/photo-1534567153574-2b12153a87f0?w=600&auto=format&fit=crop&q=80" alt="محیط سالن تکثیر آرا" />
+        </div>
+      </div>
+    </section>
+
+    <!-- Gallery Section -->
+    <section class="gallery-section">
+      <div class="section-head">
+        <span class="section-subtitle">گالری تصاویر</span>
+        <h3 class="section-title">جوجه‌های دوست‌داشتنی آرا</h3>
+      </div>
+      <div class="gallery-grid">
+        <div class="gallery-item">
+          <img src="https://images.unsplash.com/photo-1552728089-57bdde30beb3?w=500&auto=format&fit=crop&q=80" alt="جوجه طوطی خورشیدی" />
+        </div>
+        <div class="gallery-item">
+          <img src="https://images.unsplash.com/photo-1544717305-2782549b5136?w=500&auto=format&fit=crop&q=80" alt="طوطی کواکر راهب" />
+        </div>
+        <div class="gallery-item">
+          <img src="https://images.unsplash.com/photo-1588880331179-bc9b93a8cb5e?w=500&auto=format&fit=crop&q=80" alt="طوطی گرینچیک" />
+        </div>
+        <div class="gallery-item">
+          <img src="https://images.unsplash.com/photo-1518992028580-6d97bdca06c3?w=500&auto=format&fit=crop&q=80" alt="طوطی کاسکو و عروس هلندی" />
+        </div>
+      </div>
+    </section>
+
+    <!-- Location & Contact Info Box -->
+    <div class="location-card">
+      <div class="loc-info">
+        <h4><i class="fa-solid fa-map-location-dot" style="color: #22c55e; margin-left: 0.5rem;"></i> موقعیت و آدرس سالن</h4>
+        <p><i class="fa-solid fa-location-dot"></i> قزوین، محله مینودر (جهت بازدید حضوری لطفاً هماهنگ نمایید)</p>
+        <p style="margin-top: 0.35rem;"><i class="fa-solid fa-phone"></i> شماره تماس و پشتیبانی: ۰۹۱۰۷۴۸۸۰۱۳</p>
+      </div>
+      <a href="tel:09107488013" class="loc-btn">
+        <i class="fa-solid fa-phone"></i>
+        <span>تماس و هماهنگی بازدید</span>
+      </a>
+    </div>
+
+  </main>
+
+  <!-- Fixed Bottom Contact Bar -->
+  <aside class="bottom-bar">
+    <div class="bottom-bar-inner">
+      <a href="tel:09107488013" class="quick-call-btn">
+        <i class="fa-solid fa-phone"></i>
+        <span>تماس: ۰۹۱۰۷۴۸۸۰۱۳</span>
+      </a>
+      <a href="sms:09107488013" class="quick-loc-btn">
+        <i class="fa-solid fa-message"></i>
+        <span>ارسال پیامک</span>
+      </a>
+    </div>
+  </aside>
+
+</body>
+</html>
