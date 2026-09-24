@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>مدیریت | پرنده‌های آرا</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+  <div class="logo">🦜 پنل مدیریت آرا</div>
+  <nav><a href="index.html">بازگشت به سایت</a></nav>
+</header>
+<main>
+  <h2>افزودن / ویرایش پرنده</h2>
+  <form id="bird-form" class="admin-form">
+    <input type="hidden" id="bird-id">
+    <input type="text" id="bird-name" placeholder="نام پرنده" required>
+    <input type="text" id="bird-price" placeholder="قیمت (تومان)" required>
+    <input type="url" id="bird-image" placeholder="آدرس تصویر" required>
+    <textarea id="bird-desc" rows="3" placeholder="توضیحات"></textarea>
+    <button type="submit" class="btn-sm">ذخیره</button>
+    <button type="button" id="reset-btn" class="btn-sm">پاک کردن فرم</button>
+  </form>
+
+  <h2 style="margin-top:2rem">پرنده‌های ثبت‌شده</h2>
+  <div id="admin-list"></div>
+</main>
+<script src="admin.js"></script>
+</body>
+</html>
