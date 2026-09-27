@@ -3,455 +3,270 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>پنل مدیریت | طوطی آرا</title>
-  <!-- فونت و آیکون‌ها -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;600;700;800&display=swap" rel="stylesheet">
-  
-  <!-- کتابخانه Supabase -->
+  <title>پنل مدیریت | سالن طوطی آرا</title>
+  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700;800&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <!-- فایل تنظیمات اتصال به Supabase -->
   <script src="supabase-config.js"></script>
-
   <style>
-    :root {
-      --primary: #0f5132;
-      --primary-light: #198754;
-      --gold: #d4af37;
-      --gold-dark: #b89628;
-      --dark: #1e293b;
-      --light-bg: #f8fafc;
-      --card-bg: #ffffff;
-      --border: #e2e8f0;
-      --text: #334155;
-      --danger: #ef4444;
-      --radius: 14px;
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: 'Vazirmatn', sans-serif;
-    }
-
+    * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      background-color: var(--light-bg);
-      color: var(--text);
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
+      font-family: 'Vazirmatn', sans-serif;
+      background: #081a15;
+      color: #e2f0ea;
+      padding: 20px;
     }
-
-    /* هدر */
-    header {
-      background: linear-gradient(135deg, var(--primary), #0a3622);
-      color: white;
-      padding: 1rem 1.5rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-bottom: 3px solid var(--gold);
-      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-    }
-
-    header h1 {
-      font-size: 1.25rem;
-      font-weight: 700;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .btn-logout {
-      background: rgba(255,255,255,0.15);
-      border: 1px solid rgba(255,255,255,0.3);
-      color: white;
-      padding: 6px 14px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 0.85rem;
-      transition: 0.2s;
-    }
-
-    .btn-logout:hover {
-      background: var(--danger);
-      border-color: var(--danger);
-    }
-
-    /* محفظه اصلی */
     .container {
-      max-width: 900px;
-      width: 100%;
-      margin: 2rem auto;
-      padding: 0 1rem;
+      max-width: 650px;
+      margin: 0 auto;
+      background: #0c231c;
+      border: 1px solid #1f4e3e;
+      border-radius: 16px;
+      padding: 24px;
     }
-
-    /* کارت‌ها */
-    .card {
-      background: var(--card-bg);
-      border-radius: var(--radius);
-      padding: 1.5rem;
-      border: 1px solid var(--border);
-      box-shadow: 0 6px 20px rgba(0,0,0,0.03);
-      margin-bottom: 2rem;
+    h1 { color: #ffd15c; font-size: 1.4rem; margin-bottom: 20px; text-align: center; }
+    .card { background: #081a15; border: 1px solid #1a3d31; border-radius: 12px; padding: 18px; margin-bottom: 20px; }
+    label { display: block; margin-bottom: 6px; font-weight: 600; font-size: 0.9rem; color: #a3c9bb; }
+    input, textarea, select {
+      width: 100%; padding: 12px 14px; background: #05120e; border: 1px solid #1f4e3e;
+      border-radius: 8px; color: #fff; font-family: inherit; margin-bottom: 14px;
     }
-
-    .card-title {
-      font-size: 1.15rem;
-      font-weight: 700;
-      color: var(--primary);
-      margin-bottom: 1.25rem;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      border-bottom: 2px solid #f1f5f9;
-      padding-bottom: 0.75rem;
+    input[type="file"] {
+      padding: 10px;
+      background: #0d2820;
+      cursor: pointer;
     }
-
-    /* فرم ورود */
-    #loginSection {
-      max-width: 420px;
-      margin: 4rem auto;
+    button {
+      background: linear-gradient(135deg, #ffd15c, #f39c12); color: #0c231c; border: none;
+      padding: 12px 20px; border-radius: 8px; font-weight: 800; font-family: inherit;
+      cursor: pointer; width: 100%; font-size: 1rem; transition: opacity 0.2s;
     }
-
-    .form-group {
-      margin-bottom: 1.2rem;
-    }
-
-    label {
-      display: block;
-      font-size: 0.9rem;
-      font-weight: 600;
-      margin-bottom: 6px;
-      color: var(--dark);
-    }
-
-    input[type="text"],
-    input[type="password"],
-    input[type="number"],
-    select,
-    textarea {
-      width: 100%;
-      padding: 10px 14px;
-      border: 1.5px solid var(--border);
-      border-radius: 10px;
-      font-size: 0.95rem;
-      outline: none;
-      transition: 0.2s;
-      background: #fafafa;
-    }
-
-    input:focus, select:focus, textarea:focus {
-      border-color: var(--gold);
-      background: #fff;
-      box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.15);
-    }
-
-    /* دکمه آپلود فایل اختصاصی برای موبایل و دسکتاپ */
-    .file-drop-area {
-      border: 2px dashed var(--gold);
-      background: #fffdf5;
-      padding: 1.5rem 1rem;
-      border-radius: 12px;
+    button:hover { opacity: 0.9; }
+    button:disabled { opacity: 0.6; cursor: not-allowed; }
+    .preview-container {
       text-align: center;
-      cursor: pointer;
-      position: relative;
-      transition: 0.2s;
-    }
-
-    .file-drop-area:hover {
-      background: #fbf6e6;
-    }
-
-    .file-drop-area input[type="file"] {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      opacity: 0;
-      cursor: pointer;
-    }
-
-    .file-label {
-      font-size: 0.95rem;
-      color: var(--dark);
-      font-weight: 600;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .file-subtext {
-      font-size: 0.8rem;
-      color: #64748b;
-      font-weight: 400;
-    }
-
-    /* پیش‌نمایش تصویر */
-    .preview-box {
-      margin-top: 12px;
-      display: none;
-      position: relative;
-      width: 140px;
-      height: 140px;
-      border-radius: 10px;
-      overflow: hidden;
-      border: 2px solid var(--border);
-    }
-
-    .preview-box img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    /* دکمه‌های اصلی */
-    .btn-submit {
-      width: 100%;
-      background: linear-gradient(135deg, var(--gold), var(--gold-dark));
-      color: #fff;
-      padding: 12px;
-      border: none;
-      border-radius: 10px;
-      font-size: 1rem;
-      font-weight: 700;
-      cursor: pointer;
-      box-shadow: 0 4px 12px rgba(212, 175, 55, 0.3);
-      transition: 0.2s;
-    }
-
-    .btn-submit:hover {
-      filter: brightness(1.05);
-      transform: translateY(-1px);
-    }
-
-    .btn-submit:disabled {
-      background: #cbd5e1;
-      cursor: not-allowed;
-      box-shadow: none;
-      transform: none;
-    }
-
-    /* جدول / لیست محصولات */
-    .product-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-      gap: 1rem;
-    }
-
-    .prod-item {
-      background: #fff;
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.02);
-    }
-
-    .prod-thumb {
-      width: 100%;
-      height: 160px;
-      object-fit: cover;
-      background: #f1f5f9;
-    }
-
-    .prod-info {
-      padding: 12px;
-      flex-grow: 1;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
-
-    .prod-title {
-      font-weight: 700;
-      font-size: 1rem;
-      color: var(--dark);
-      margin-bottom: 4px;
-    }
-
-    .prod-cat {
-      font-size: 0.8rem;
-      color: var(--primary-light);
-      background: #e8f5e9;
-      display: inline-block;
-      padding: 2px 8px;
-      border-radius: 6px;
-      margin-bottom: 8px;
-      width: fit-content;
-    }
-
-    .prod-price {
-      font-weight: 800;
-      color: var(--gold-dark);
-      font-size: 1.05rem;
-      margin-bottom: 12px;
-    }
-
-    .btn-delete {
-      background: #fee2e2;
-      color: var(--danger);
-      border: 1px solid #fca5a5;
-      padding: 8px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 0.85rem;
-      font-weight: 600;
-      transition: 0.2s;
-      width: 100%;
-    }
-
-    .btn-delete:hover {
-      background: var(--danger);
-      color: #fff;
-    }
-
-    .status-msg {
-      padding: 10px 14px;
-      border-radius: 8px;
-      margin-bottom: 1rem;
-      font-size: 0.9rem;
+      margin-bottom: 14px;
       display: none;
     }
-
-    .status-msg.error {
-      background: #fee2e2;
-      color: #b91c1c;
-      border: 1px solid #f87171;
+    .preview-img {
+      max-width: 100%;
+      max-height: 220px;
+      border-radius: 8px;
+      border: 1px solid #ffd15c;
     }
-
-    .status-msg.success {
-      background: #dcfce7;
-      color: #15803d;
-      border: 1px solid #86efac;
+    .product-list { margin-top: 15px; }
+    .product-row {
+      display: flex; justify-content: space-between; align-items: center;
+      background: #05120e; padding: 12px; border-radius: 8px; margin-bottom: 8px; border: 1px solid #1a3d31;
     }
+    .del-btn { width: auto; background: #e74c3c; color: #fff; padding: 6px 14px; font-size: 0.85rem; }
   </style>
 </head>
 <body>
-
-  <!-- هدر -->
-  <header>
-    <h1>🦜 پنل مدیریت طوطی آرا</h1>
-    <button id="logoutBtn" class="btn-logout" style="display: none;" onclick="logout()">خروج از حساب</button>
-  </header>
-
   <div class="container">
+    <h1>پنل مدیریت سالن طوطی آرا</h1>
+    
+    <!-- فرم ورود با رمز عبور -->
+    <div id="authSection" class="card">
+      <h2 style="font-size:1.1rem;margin-bottom:12px;color:#ffd15c;">ورود مدیر</h2>
+      <label>رمز عبور پنل:</label>
+      <input type="password" id="adminPassword" placeholder="رمز عبور را وارد کنید...">
+      <button onclick="login()">ورود به پنل</button>
+    </div>
 
-    <!-- بخش ورود (رمز عبور ساده) -->
-    <div id="loginSection" class="card">
-      <h2 class="card-title">🔐 ورود به پنل مدیریت</h2>
-      <div id="loginError" class="status-msg error"></div>
-      <form id="loginForm" onsubmit="handleLogin(event)">
-        <div class="form-group">
-          <label for="adminPass">رمز عبور ادمین:</label>
-          <input type="password" id="adminPass" placeholder="رمز عبور را وارد کنید" required autocomplete="current-password">
+    <!-- داشبورد مدیریت -->
+    <div id="dashboardSection" style="display:none;">
+      <div class="card">
+        <h2 style="font-size:1.1rem;margin-bottom:14px;color:#ffd15c;">➕ افزودن پرنده جدید</h2>
+        
+        <label>نام پرنده و مشخصات:</label>
+        <input type="text" id="pName" placeholder="مثال: جوجه گرین چیک یلو ساید">
+        
+        <label>دسته‌بندی نژاد:</label>
+        <select id="pCategory">
+          <option value="green-cheek" selected>🦜 گرین‌چیک</option>
+          <option value="monk">🦜 راهب</option>
+          <option value="sun">🦜 خورشیدی</option>
+        </select>
+        
+        <label>قیمت / وضعیت:</label>
+        <input type="text" id="pPrice" placeholder="مثال: توافقی / دون‌خور / پرورشی">
+
+        <label>انتخاب عکس پرنده از گالری:</label>
+        <input type="file" id="pImageFile" accept="image/*" onchange="handleImagePreview(event)">
+        
+        <div id="imagePreviewContainer" class="preview-container">
+          <img id="previewImage" class="preview-img" src="" alt="پیش‌نمایش">
         </div>
-        <button type="submit" class="btn-submit">ورود به پنل</button>
-      </form>
-    </div>
 
-    <!-- بخش مدیریت (فقط بعد از ورود نمایش داده می‌شود) -->
-    <div id="adminPanel" style="display: none;">
-
-      <!-- پیام وضعیت عمومی -->
-      <div id="panelMsg" class="status-msg"></div>
-
-      <!-- کارت افزودن پرنده جدید -->
-      <div class="card">
-        <h2 class="card-title">➕ افزودن پرنده جدید</h2>
-        <form id="addBirdForm" onsubmit="handleAddBird(event)">
-          
-          <div class="form-group">
-            <label for="bName">نام پرنده / عنوان آگهی:</label>
-            <input type="text" id="bName" placeholder="مثال: جوجه گرین‌چیک آناناسی دونخور" required>
-          </div>
-
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-            <div class="form-group">
-              <label for="bCategory">نژاد پرنده:</label>
-              <select id="bCategory">
-                <option value="گرین‌چیک">گرین‌چیک</option>
-                <option value="راهب">راهب</option>
-                <option value="خورشیدی">خورشیدی (سان کانور)</option>
-                <option value="سایر">سایر پرندگان</option>
-              </select>
-            </div>
-
-            <div class="form-group">
-              <label for="bPrice">قیمت (تومان):</label>
-              <input type="number" id="bPrice" placeholder="مثال: 3500000" required>
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label for="bDesc">توضیحات کوتاه:</label>
-            <textarea id="bDesc" rows="3" placeholder="توضیحات سن، دستی بودن، سلامت و ..."></textarea>
-          </div>
-
-          <!-- بخش انتخاب عکس از گالری -->
-          <div class="form-group">
-            <label>تصویر پرنده:</label>
-            <div class="file-drop-area">
-              <input type="file" id="bImageFile" accept="image/*" onchange="previewImage(event)" required>
-              <div class="file-label">
-                <span>📁 انتخاب عکس از گالری گوشی</span>
-                <span class="file-subtext">یا عکس را اینجا بکشید و رها کنید (JPG, PNG)</span>
-              </div>
-            </div>
-
-            <!-- کادر پیش‌نمایش تصویر انتخابی -->
-            <div id="previewBox" class="preview-box">
-              <img id="previewImg" src="" alt="پیش‌نمایش">
-            </div>
-          </div>
-
-          <button type="submit" id="submitBtn" class="btn-submit">
-            ثبت و بارگذاری پرنده
-          </button>
-        </form>
+        <label>توضیحات تکمیلی:</label>
+        <textarea id="pDesc" rows="3" placeholder="سن، میزان رام بودن، رژیم غذایی و سلامت..."></textarea>
+        
+        <button id="submitBtn" onclick="addProduct()">➕ ذخیره و ارسال به سایت</button>
       </div>
 
-      <!-- کارت فهرست پرندگان ثبت‌شده -->
       <div class="card">
-        <h2 class="card-title">📋 پرندگان ثبت‌شده در سایت</h2>
-        <div id="loadingProducts" style="text-align: center; padding: 1.5rem; color: #64748b;">در حال دریافت اطلاعات...</div>
-        <div id="productsList" class="product-grid"></div>
+        <h2 style="font-size:1.1rem;margin-bottom:12px;color:#ffd15c;">📋 لیست پرندگان ثبت‌شده</h2>
+        <div id="productList" class="product-list">در حال بارگذاری لیست...</div>
       </div>
-
     </div>
-
   </div>
 
   <script>
-    // کلید رمز عبور ثابت
-    const ADMIN_PASSWORD = "ara123";
+    const ADMIN_PASS = 'ara123';
+    let selectedFile = null;
 
-    // بررسی اولیه و اتصال
-    let client = null;
-
-    function getClient() {
-      if (window.supabaseClient) {
-        return window.supabaseClient;
+    function login() {
+      const enteredPass = document.getElementById('adminPassword').value;
+      if (enteredPass === ADMIN_PASS) {
+        document.getElementById('authSection').style.display = 'none';
+        document.getElementById('dashboardSection').style.display = 'block';
+        loadAdminProducts();
+      } else {
+        alert('رمز عبور وارد شده نادرست است!');
       }
-      if (window.supabase && window.SUPABASE_URL && window.SUPABASE_ANON_KEY) {
-        window.supabaseClient = window.supabase.createClient(window.SUPABASE_URL, window.SUPABASE_ANON_KEY);
-        return window.supabaseClient;
-      }
-      return null;
     }
 
-    // بررسی ورود
-    window.addEventListener('DOMContentLoaded', () => {
-      client = getClient();
-      if (!client) {
-        showMsg("فایل supabase-config.js لود نشد یا اطلاعات اتصال ناقص است.", "error");
+    function handleImagePreview(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      selectedFile = file;
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const preview = document.getElementById('previewImage');
+        preview.src = e.target.result;
+        document.getElementById('imagePreviewContainer').style.display = 'block';
+      };
+      reader.readAsDataURL(file);
+    }
+
+    async function addProduct() {
+      const name = document.getElementById('pName').value.trim();
+      const price = document.getElementById('pPrice').value.trim();
+      const description = document.getElementById('pDesc').value.trim();
+      const submitBtn = document.getElementById('submitBtn');
+
+      if (!name) {
+        alert('لطفاً نام پرنده را وارد کنید.');
+        return;
       }
 
-      const isAuth = sessionStorage.getItem('ara_admin_auth');
-      if (isAuth === 'true') {
-        showPanel
+      if (!window.supabaseClient) {
+        alert('اتصال به سرور برقرار نشد؛ لطفاً اینترنت و تنظیمات Supabase را بررسی فرمایید.');
+        return;
+      }
+
+      submitBtn.disabled = true;
+      submitBtn.innerText = 'در حال آپلود و ذخیره...';
+
+      let imageUrl = '';
+
+      try {
+        // ۱. آپلود تصویر در صورت انتخاب فایل
+        if (selectedFile) {
+          const fileExt = selectedFile.name.split('.').pop();
+          const fileName = `${Date.now()}_${Math.random().toString(36).substring(2, 9)}.${fileExt}`;
+          const filePath = `${fileName}`;
+
+          const { data: uploadData, error: uploadError } = await window.supabaseClient
+            .storage
+            .from('product-images')
+            .upload(filePath, selectedFile);
+
+          if (uploadError) {
+            throw new Error('خطا در بارگذاری عکس: ' + uploadError.message);
+          }
+
+          const { data: publicUrlData } = window.supabaseClient
+            .storage
+            .from('product-images')
+            .getPublicUrl(filePath);
+
+          imageUrl = publicUrlData.publicUrl;
+        }
+
+        // ۲. ذخیره اطلاعات در جدول محصولات
+        const { error: insertError } = await window.supabaseClient
+          .from('products')
+          .insert([{
+            name: name,
+            price: price,
+            description: description,
+            image_url: imageUrl,
+            available: true
+          }]);
+
+        if (insertError) {
+          throw new Error('خطا در ذخیره اطلاعات: ' + insertError.message);
+        }
+
+        alert('پرنده با موفقیت ثبت شد!');
+        
+        // پاکسازی فرم
+        document.getElementById('pName').value = '';
+        document.getElementById('pPrice').value = '';
+        document.getElementById('pDesc').value = '';
+        document.getElementById('pImageFile').value = '';
+        document.getElementById('imagePreviewContainer').style.display = 'none';
+        selectedFile = null;
+
+        loadAdminProducts();
+
+      } catch (err) {
+        alert(err.message);
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.innerText = '➕ ذخیره و ارسال به سایت';
+      }
+    }
+
+    async function loadAdminProducts() {
+      const list = document.getElementById('productList');
+      if (!window.supabaseClient) {
+        list.innerHTML = 'خطا در برقراری ارتباط با پایگاه‌داده.';
+        return;
+      }
+
+      const { data, error } = await window.supabaseClient
+        .from('products')
+        .select('*')
+        .order('id', { ascending: false });
+
+      if (error) {
+        list.innerHTML = 'خطا در دریافت لیست پرندگان: ' + error.message;
+        return;
+      }
+
+      if (!data || data.length === 0) {
+        list.innerHTML = 'هنوز موردی ثبت نشده است.';
+        return;
+      }
+
+      list.innerHTML = data.map(p => `
+        <div class="product-row">
+          <div>
+            <strong>${p.name}</strong> 
+            <span style="color:#ffd15c; font-size:0.85rem; margin-right:8px;">(${p.price || 'بدون قیمت'})</span>
+          </div>
+          <button class="del-btn" onclick="deleteProduct('${p.id}')">حذف</button>
+        </div>
+      `).join('');
+    }
+
+    async function deleteProduct(id) {
+      if (!confirm('آیا از حذف این پرنده اطمینان دارید؟')) return;
+      
+      const { error } = await window.supabaseClient
+        .from('products')
+        .delete()
+        .eq('id', id);
+
+      if (error) {
+        alert('خطا در حذف: ' + error.message);
+      } else {
+        loadAdminProducts();
+      }
+    }
+  </script>
+</body>
+</html>
