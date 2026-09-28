@@ -14,7 +14,7 @@
     body {
       background-color: #0b1510;
       color: #fff;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       display: flex;
       justify-content: center;
       align-items: flex-start;
@@ -24,7 +24,7 @@
     .poster-container {
       position: relative;
       width: 100%;
-      max-width: 600px;
+      max-width: 500px;
       margin: 0 auto;
       line-height: 0;
       box-shadow: 0 0 30px rgba(0,0,0,0.8);
@@ -36,17 +36,17 @@
       display: block;
     }
     
-    /* هات‌اسپات‌ها (محدوده‌های لمسی روی پوستر) */
+    /* محدوده‌های لمسی روی پوستر */
     .hotspot {
       position: absolute;
       display: block;
       z-index: 10;
       cursor: pointer;
-      background: rgba(255, 255, 255, 0); /* کاملاً شفاف */
+      background: rgba(255, 255, 255, 0);
       text-decoration: none;
     }
     .hotspot:active {
-      background: rgba(255, 215, 0, 0.25);
+      background: rgba(46, 204, 113, 0.25);
     }
 
     /* پاپ‌آپ و مودال */
@@ -72,7 +72,7 @@
     .modal-card {
       background: #12231b;
       width: 100%;
-      max-width: 550px;
+      max-width: 500px;
       max-height: 85vh;
       border-radius: 20px 20px 0 0;
       border-top: 2px solid #2ecc71;
@@ -125,11 +125,8 @@
       margin-right: 20px;
       margin-bottom: 15px;
     }
-    .modal-body li {
-      margin-bottom: 6px;
-    }
 
-    /* دکمه‌های اکشن داخل مودال */
+    /* دکمه‌های اکشن */
     .modal-actions {
       display: flex;
       gap: 10px;
@@ -138,8 +135,8 @@
     }
     .action-btn {
       flex: 1;
-      min-width: 120px;
-      padding: 10px 14px;
+      min-width: 130px;
+      padding: 11px 14px;
       border-radius: 10px;
       text-align: center;
       text-decoration: none;
@@ -150,65 +147,36 @@
       justify-content: center;
       gap: 6px;
     }
-    .btn-call {
-      background: #27ae60;
-      color: #fff;
-    }
-    .btn-insta {
-      background: #e1306c;
-      color: #fff;
-    }
-    .btn-admin {
-      background: #f39c12;
-      color: #fff;
-      margin-top: 10px;
-      width: 100%;
-    }
+    .btn-call { background: #27ae60; color: #fff; }
+    .btn-add { background: #f39c12; color: #fff; width: 100%; margin-top: 12px; }
+    .btn-insta { background: #e1306c; color: #fff; }
 
-    /* گالری تصاویر */
+    /* گالری داخل مودال */
     .gallery-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 12px;
+      gap: 10px;
       margin-top: 15px;
     }
     .gallery-item {
       background: rgba(255,255,255,0.05);
-      border-radius: 10px;
+      border-radius: 8px;
       overflow: hidden;
       border: 1px solid rgba(255,255,255,0.1);
     }
     .gallery-item img {
       width: 100%;
-      height: 140px;
+      height: 120px;
       object-fit: cover;
       display: block;
     }
     .gallery-item-title {
-      padding: 8px;
-      font-size: 0.85rem;
+      padding: 6px;
+      font-size: 0.8rem;
       text-align: center;
-      color: #fff;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-    }
-
-    /* نوار پایین برای دسترسی سریع به پنل مدیریت */
-    .admin-float-btn {
-      position: fixed;
-      bottom: 12px;
-      left: 12px;
-      background: rgba(30, 41, 35, 0.9);
-      border: 1px solid #2ecc71;
-      color: #2ecc71;
-      padding: 6px 12px;
-      border-radius: 20px;
-      font-size: 0.8rem;
-      text-decoration: none;
-      z-index: 100;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
-      backdrop-filter: blur(4px);
     }
   </style>
 </head>
@@ -217,33 +185,37 @@
   <div class="poster-container">
     <img src="hero.png" alt="پوستر طوطی آرا قزوین" class="poster-img">
 
-    <!-- هات‌اسپات‌های منوی بالای پوستر -->
-    <a href="#quick-contact" class="hotspot" style="top: 2.2%; left: 3.5%; width: 14%; height: 2.8%;" title="تماس سریع"></a>
-    <a href="#contact" class="hotspot" style="top: 2.2%; left: 18.5%; width: 15%; height: 2.8%;" title="تماس با ما"></a>
-    <a href="#care" class="hotspot" style="top: 2.2%; left: 34.5%; width: 23%; height: 2.8%;" title="نگهداری پرندگان"></a>
-    <a href="#gallery" class="hotspot" style="top: 2.2%; left: 58.5%; width: 14%; height: 2.8%;" title="گالری"></a>
-    <a href="#birds" class="hotspot" style="top: 2.2%; left: 73.5%; width: 14%; height: 2.8%;" title="پرندگان"></a>
-    <a href="#about" class="hotspot" style="top: 2.2%; left: 88.5%; width: 10%; height: 2.8%;" title="درباره ما"></a>
+    <!-- ۱. منوی بسیار بالای پوستر -->
+    <a href="#quick-contact" class="hotspot" style="top: 1.8%; left: 3%; width: 15%; height: 3.2%;" title="تماس سریع"></a>
+    <a href="#contact" class="hotspot" style="top: 1.8%; left: 18%; width: 16%; height: 3.2%;" title="تماس با ما"></a>
+    <a href="#care" class="hotspot" style="top: 1.8%; left: 34%; width: 23%; height: 3.2%;" title="نگهداری پرندگان"></a>
+    <a href="#gallery" class="hotspot" style="top: 1.8%; left: 57%; width: 15%; height: 3.2%;" title="گالری"></a>
+    <a href="#birds" class="hotspot" style="top: 1.8%; left: 72%; width: 14%; height: 3.2%;" title="پرندگان"></a>
+    <a href="#about" class="hotspot" style="top: 1.8%; left: 86%; width: 12%; height: 3.2%;" title="درباره ما"></a>
 
-    <!-- هات‌اسپات‌های عکس پرنده‌ها (گرینچیک، راهب، خورشیدی) -->
-    <a href="#bird/sun" class="hotspot" style="top: 17%; left: 6%; width: 29%; height: 21%;" title="طوطی خورشیدی (سان کانور)"></a>
-    <a href="#bird/monk" class="hotspot" style="top: 16%; left: 36%; width: 28%; height: 22%;" title="طوطی راهب (کواکر)"></a>
-    <a href="#bird/green-cheek" class="hotspot" style="top: 18%; left: 66%; width: 28%; height: 21%;" title="طوطی گرین چیک"></a>
+    <!-- ۲. سه طوطی بالای پوستر روی شاخه (عکس‌های اصلی) -->
+    <!-- طوطی خورشیدی (سمت راست) -->
+    <a href="#bird/sun" class="hotspot" style="top: 10%; left: 52%; width: 44%; height: 23%;" title="طوطی خورشیدی"></a>
+    <!-- طوطی راهب (وسط) -->
+    <a href="#bird/monk" class="hotspot" style="top: 12%; left: 24%; width: 28%; height: 21%;" title="طوطی راهب"></a>
+    <!-- طوطی گرین‌چیک (سمت چپ) -->
+    <a href="#bird/green-cheek" class="hotspot" style="top: 13%; left: 3%; width: 22%; height: 20%;" title="طوطی گرین‌چیک"></a>
 
-    <!-- هات‌اسپات بخش‌های میانی و گالری -->
-    <a href="#care" class="hotspot" style="top: 40%; left: 5%; width: 90%; height: 9%;" title="راهنمای نگهداری"></a>
-    <a href="#gallery" class="hotspot" style="top: 50%; left: 5%; width: 90%; height: 6%;" title="مشاهده گالری پرندگان"></a>
-    <a href="#about" class="hotspot" style="top: 57%; left: 5%; width: 90%; height: 16%;" title="درباره سالن پرورش آرا"></a>
+    <!-- ۳. سه کارت پرنده در بخش میانی پوستر -->
+    <a href="#bird/sun" class="hotspot" style="top: 46%; left: 5%; width: 28%; height: 12%;" title="کارت خورشیدی"></a>
+    <a href="#bird/monk" class="hotspot" style="top: 46%; left: 36%; width: 28%; height: 12%;" title="کارت راهب"></a>
+    <a href="#bird/green-cheek" class="hotspot" style="top: 46%; left: 67%; width: 28%; height: 12%;" title="کارت گرین‌چیک"></a>
 
-    <!-- هات‌اسپات‌های شبکه‌های اجتماعی و تماس پایین پوستر -->
-    <a href="tel:09107488013" class="hotspot" style="top: 78%; left: 6%; width: 42%; height: 4.5%;" title="تماس تلفنی"></a>
-    <a href="https://wa.me/989107488013" class="hotspot" style="top: 78%; left: 52%; width: 42%; height: 4.5%;" title="ارسال پیام در واتساپ"></a>
-    <a href="https://instagram.com/toti_ara" target="_blank" class="hotspot" style="top: 83.5%; left: 6%; width: 42%; height: 4.5%;" title="اینستاگرام طوطی آرا"></a>
-    <a href="https://t.me/toti_ara" target="_blank" class="hotspot" style="top: 83.5%; left: 52%; width: 42%; height: 4.5%;" title="کانال تلگرام"></a>
+    <!-- ۴. بخش‌های متنی نگهداری و درباره ما در پوستر -->
+    <a href="#care" class="hotspot" style="top: 59%; left: 5%; width: 90%; height: 7%;" title="راهنمای نگهداری"></a>
+    <a href="#about" class="hotspot" style="top: 67%; left: 5%; width: 90%; height: 9%;" title="درباره سالن آرا"></a>
+
+    <!-- ۵. دکمه‌های شبکه‌های اجتماعی و تماس پایین پوستر -->
+    <a href="tel:09107488013" class="hotspot" style="top: 78%; left: 5%; width: 43%; height: 5%;" title="تماس تلفنی"></a>
+    <a href="https://wa.me/989107488013" class="hotspot" style="top: 78%; left: 52%; width: 43%; height: 5%;" title="واتساپ"></a>
+    <a href="https://instagram.com/toti_ara" target="_blank" class="hotspot" style="top: 84%; left: 5%; width: 43%; height: 5%;" title="اینستاگرام"></a>
+    <a href="https://t.me/toti_ara" target="_blank" class="hotspot" style="top: 84%; left: 52%; width: 43%; height: 5%;" title="تلگرام"></a>
   </div>
-
-  <!-- دکمه شناور ورود به پنل مدیریت برای اضافه کردن عکس -->
-  <a href="admin.html" class="admin-float-btn">⚙️ مدیریت و افزودن عکس</a>
 
   <!-- پنجره مودال پاپ‌آپ -->
   <div class="modal-overlay" id="modalOverlay">
@@ -252,32 +224,32 @@
         <h3 id="modalTitle">عنوان</h3>
         <button class="modal-close" id="modalCloseBtn">&times;</button>
       </div>
-      <div class="modal-body" id="modalBody">
-        <!-- محتوا توسط جاوااسکریپت پر می‌شود -->
-      </div>
+      <div class="modal-body" id="modalBody"></div>
     </div>
   </div>
 
   <script>
-    // اطلاعات گونه‌ها
     const BIRDS_DATA = {
       'sun': {
         title: 'طوطی خورشیدی (سان کانور)',
-        text: 'طوطی خورشیدی پرنده‌ای با هوش فوق‌العاده، رنگ‌های بسیار درخشان و زرد و نارنجی است. این گونه بسیار وابسته، پرانرژی و مشتاق یادگیری بازی و حقه‌ها می‌باشد.',
-        points: ['رنگ‌آمیزی چشم‌نواز زرد، نارنجی و سبز', 'بسیار بازیگوش، اجتماعی و علاقه‌مند به ارتباط با صاحب خود', 'نیازمند اسباب‌بازی و قفس با ابعاد استاندارد'],
+        categoryName: 'خورشیدی',
+        text: 'طوطی خورشیدی پرنده‌ای بسیار بازیگوش، باهوش و با رنگ‌آمیزی فوق‌العاده درخشان زرد و نارنجی است.',
+        points: ['رنگ‌آمیزی جذاب و خیره‌کننده', 'بسیار اجتماعی و دستی', 'مناسب برای بازی و آموزش'],
         category: 'sun'
       },
       'monk': {
         title: 'طوطی راهب (کواکر)',
-        text: 'طوطی راهب یکی از باهوش‌ترین و بازیگوش‌ترین طوطی‌سانان با استعداد صحبت کردن عالی است. این پرنده ارتباط بسیار عاطفی و عمیقی با صاحب خود برقرار می‌کند.',
-        points: ['استعداد بالا در تقلید صدا و صحبت کردن', 'شخصیت جسور، کنجکاو، پرانرژی و دوست‌داشتنی', 'تنها طوطی که مهارت لانه‌سازی با شاخه‌ها را دارد'],
+        categoryName: 'راهب',
+        text: 'طوطی راهب از باهوش‌ترین طوطی‌ها با توانایی و استعداد بسیار عالی در سخنگویی و یادگیری است.',
+        points: ['استعداد بالا در صحبت کردن و کلمات', 'شخصیت جسور و کنجکاو', 'بسیار مهربان و وابسته به صاحب خود'],
         category: 'monk'
       },
       'green-cheek': {
-        title: 'طوطی گرین چیک',
-        text: 'طوطی گرین چیک پرنده‌ای بسیار آرام‌تر نسبت به سایر کانورها، مهربان و سازگار با محیط آپارتمان است. انواع رنگ‌های نرمال، آناناسی، یلو ساید و فیروزه‌ای موجود است.',
-        points: ['صدای بسیار آرام و مناسب برای زندگی آپارتمانی', 'آرامش، مهربانی بالا و علاقه شدید به نوازش سر', 'تنوع بسیار جذاب در جهش‌های رنگی زیبا'],
-        category: 'greencheek'
+        title: 'طوطی گرین‌چیک',
+        categoryName: 'گرین‌چیک',
+        text: 'طوطی گرین‌چیک پرنده‌ای بسیار آرام، بی‌صدا، مناسب برای آپارتمان و فوق‌العاده لوس و نوازشی است.',
+        points: ['صدای بسیار کم (ایده‌آل برای محیط آپارتمان)', 'تنوع در جهش‌های رنگی آناناسی، یلوساید و تراکویس', 'فوق‌العاده لوس و علاقه‌مند به نوازش'],
+        category: 'green-cheek'
       }
     };
 
@@ -295,11 +267,7 @@
     modalOverlay.addEventListener('click', (e) => {
       if (e.target === modalOverlay) closeModal();
     });
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') closeModal();
-    });
 
-    // مدیریت روت و باز کردن مودال بر اساس هش آدرس
     function handleRoute() {
       const hash = window.location.hash.replace('#', '').trim();
       if (!hash) {
@@ -319,7 +287,8 @@
               <a href="tel:09107488013" class="action-btn btn-call">📞 استعلام قیمت و خرید</a>
               <a href="https://instagram.com/toti_ara" target="_blank" class="action-btn btn-insta">📷 پیج اینستاگرام</a>
             </div>
-            <a href="admin.html" class="action-btn btn-admin">➕ افزودن عکس یا پرنده جدید به این دسته</a>
+            <!-- دکمه مستقیم افزودن عکس پرنده -->
+            <a href="admin.html" class="action-btn btn-add">➕ افزودن عکس یا پرنده به دسته ${bird.categoryName}</a>
             <div id="birdGallery" class="gallery-grid"></div>
           `;
           modalOverlay.classList.add('active');
@@ -330,20 +299,17 @@
         modalBody.innerHTML = `
           <p><strong>آدرس:</strong> قزوین، شهرک مینودر</p>
           <p><strong>شماره تماس / هماهنگی:</strong> ۰۹۱۰۷۴۸۸۰۱۳</p>
-          <p>ساعات پاسخگویی: ۱۰ صبح الی ۹ شب</p>
           <div class="modal-actions">
             <a href="tel:09107488013" class="action-btn btn-call">📞 تماس مستقیم</a>
             <a href="https://wa.me/989107488013" class="action-btn btn-call" style="background:#25d366;">💬 واتساپ</a>
-            <a href="https://instagram.com/toti_ara" target="_blank" class="action-btn btn-insta">📷 اینستاگرام</a>
           </div>
         `;
         modalOverlay.classList.add('active');
       } else if (hash === 'care') {
         modalTitle.textContent = 'اصول نگهداری طوطی‌سانان';
         modalBody.innerHTML = `
-          <p><strong>تغذیه مناسب:</strong> استفاده از پلت استاندارد، انواع دانه‌های تمیز، سبزیجات و میوه‌های تازه مجاز (اجتناب جدی از آووکادو، شکلات، نمک و هسته سیب).</p>
-          <p><strong>بهداشت و محیط:</strong> نظافت مرتب کفی قفس، آب تمیز و تازه روزانه، دمای متعادل بین ۲۰ تا ۲۶ درجه و دور بودن از باد مستقیم کولر یا بخاری.</p>
-          <p><strong>روابط عاطفی:</strong> پرندگان سالن آرا کاملاً دستی و پرورش خانگی هستند؛ روزانه حداقل ۲ ساعت توجه و وقت‌گذرانی برای شادابی آن‌ها ضروری است.</p>
+          <p><strong>تغذیه مناسب:</strong> استفاده از پلت معتبر، دانه‌های مقوی و سبزیجات تازه روزانه.</p>
+          <p><strong>محیط:</strong> دور بودن از باد مستقیم، دمای معتدل (۲۰ الی ۲۶ درجه) و آب تازه و تمیز.</p>
           <div class="modal-actions">
             <a href="tel:09107488013" class="action-btn btn-call">📞 مشاوره نگهداری</a>
           </div>
@@ -352,29 +318,27 @@
       } else if (hash === 'about') {
         modalTitle.textContent = 'درباره سالن پرورش طوطی آرا';
         modalBody.innerHTML = `
-          <p>مجموعه <strong>طوطی آرا قزوین</strong> تخصصی‌ترین مرکز پرورش و تکثیر طوطی‌سانان رام و دستی شامل گرین‌چیک، راهب (کواکر) و کانور خورشیدی می‌باشد.</p>
-          <p>کلیه پرندگان با بهترین مکمل‌ها و رژیم‌های غذایی پرورش یافته و با تضمین سلامت و اصالت نژاد تقدیم علاقه‌مندان می‌گردند.</p>
+          <p>مجموعه <strong>طوطی آرا قزوین</strong> تخصصی‌ترین مرکز پرورش و تکثیر طوطی‌سانان رام و دستی شامل گرین‌چیک، راهب (کواکر) و خورشیدی می‌باشد.</p>
           <div class="modal-actions">
-            <a href="https://instagram.com/toti_ara" target="_blank" class="action-btn btn-insta">مشاهده رضایت مشتریان در اینستاگرام</a>
+            <a href="https://instagram.com/toti_ara" target="_blank" class="action-btn btn-insta">مشاهده اینستاگرام</a>
           </div>
         `;
         modalOverlay.classList.add('active');
       } else if (hash === 'gallery' || hash === 'birds') {
-        modalTitle.textContent = 'گالری پرندگان سالن آرا';
+        modalTitle.textContent = 'انتخاب گونه طوطی';
         modalBody.innerHTML = `
-          <p>برای مشاهده و انتخاب هر گونه، می‌توانید روی عکس طوطی مورد نظر روی پوستر کلیک کنید:</p>
-          <div class="modal-actions" style="margin-bottom:15px;">
-            <a href="#bird/sun" class="action-btn btn-call" style="background:#e67e22;">خورشیدی</a>
-            <a href="#bird/monk" class="action-btn btn-call" style="background:#27ae60;">راهب</a>
-            <a href="#bird/green-cheek" class="action-btn btn-call" style="background:#16a085;">گرین‌چیک</a>
+          <p>برای مشاهده گالری و ثبت عکس، گونه مورد نظر را انتخاب کنید:</p>
+          <div class="modal-actions" style="flex-direction: column;">
+            <a href="#bird/sun" class="action-btn btn-call" style="background:#e67e22;">طوطی خورشیدی</a>
+            <a href="#bird/monk" class="action-btn btn-call" style="background:#27ae60;">طوطی راهب</a>
+            <a href="#bird/green-cheek" class="action-btn btn-call" style="background:#16a085;">طوطی گرین‌چیک</a>
           </div>
-          <a href="admin.html" class="action-btn btn-admin">⚙️ ورود به پنل مدیریت برای بارگذاری عکس جدید</a>
         `;
         modalOverlay.classList.add('active');
       }
     }
 
-    // بارگذاری تصاویر از ورکر یا سوبابیس
+    // لود تصاویر هر دسته
     async function loadCategoryImages(cat) {
       const container = document.getElementById('birdGallery');
       if (!container) return;
@@ -384,29 +348,23 @@
         if (res.ok) {
           const data = await res.json();
           const items = Array.isArray(data) ? data : (data.products || data.data || []);
-          const filtered = items.filter(i => {
-            const c = (i.category || '').toLowerCase();
-            return c.includes(cat) || (cat === 'greencheek' && (c.includes('green') || c.includes('گرین')));
-          });
+          const filtered = items.filter(i => (i.category || '').toLowerCase().includes(cat.replace('-', '')));
 
           if (filtered.length > 0) {
             container.innerHTML = filtered.map(item => `
               <div class="gallery-item">
-                <img src="${item.image_url || item.url || item.src || 'hero.png'}" alt="${item.title || 'طوطی'}">
-                <div class="gallery-item-title">${item.title || 'طوطی آماده واگذاری'}</div>
+                <img src="${item.image_url || item.url || 'hero.png'}" alt="${item.title || 'طوطی'}">
+                <div class="gallery-item-title">${item.title || item.name || 'طوطی آماده واگذاری'}</div>
               </div>
             `).join('');
           }
         }
-      } catch (err) {
-        console.log("Gallery fetch fallback:", err);
-      }
+      } catch (err) {}
     }
 
     window.addEventListener('hashchange', handleRoute);
     window.addEventListener('DOMContentLoaded', handleRoute);
 
-    // برای فعال‌سازی آنی کلیک روی هات‌اسپات‌ها در موبایل
     document.querySelectorAll('.hotspot').forEach(link => {
       link.addEventListener('click', function(e) {
         const targetHref = this.getAttribute('href');
