@@ -3,68 +3,77 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>پنل مدیریت فروشگاه پرندگان آرا</title>
-  <!-- کتابخانه سوپابیس و فایل تنظیمات -->
+  <title>پنل مدیریت | سالن تکثیر پرندگان آرا</title>
+  <!-- کتابخانه سوپابیس و تنظیمات اتصال -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="supabase-config.js"></script>
   <style>
     :root {
-      --bg: #0d1f18;
-      --card: #152d23;
+      --bg: #0b1a13;
+      --card: #132a20;
       --accent: #22c55e;
       --accent-hover: #16a34a;
       --text: #f0fdf4;
       --muted: #86efac;
       --danger: #ef4444;
-      --border: #234e3d;
+      --border: #1f4736;
     }
     * { box-sizing: border-box; font-family: system-ui, -apple-system, sans-serif; margin: 0; padding: 0; }
-    body { background-color: var(--bg); color: var(--text); padding: 16px; line-height: 1.6; }
-    .container { max-width: 520px; margin: 0 auto; }
-    h1, h2 { text-align: center; color: var(--accent); margin-bottom: 16px; }
-    .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 18px; margin-bottom: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
-    label { display: block; margin-top: 12px; margin-bottom: 4px; font-size: 14px; color: var(--muted); }
-    input, select, textarea { width: 100%; padding: 10px 12px; border-radius: 8px; border: 1px solid var(--border); background: #0b1813; color: #fff; font-size: 14px; outline: none; }
+    body { background-color: var(--bg); color: var(--text); padding: 16px; min-height: 100vh; display: flex; flex-direction: column; align-items: center; }
+    .container { width: 100%; max-width: 480px; }
+    .header-title { text-align: center; color: var(--accent); margin-bottom: 20px; font-size: 20px; font-weight: bold; }
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 20px; margin-bottom: 18px; box-shadow: 0 4px 15px rgba(0,0,0,0.4); }
+    h2 { font-size: 16px; color: var(--accent); margin-bottom: 14px; text-align: center; }
+    label { display: block; margin-top: 12px; margin-bottom: 5px; font-size: 13px; color: var(--muted); }
+    input, select, textarea { width: 100%; padding: 11px 14px; border-radius: 8px; border: 1px solid var(--border); background: #07130e; color: #fff; font-size: 14px; outline: none; }
     input:focus, select:focus, textarea:focus { border-color: var(--accent); }
-    button { width: 100%; padding: 12px; background: var(--accent); color: #052e16; font-weight: bold; border: none; border-radius: 8px; cursor: pointer; margin-top: 16px; font-size: 15px; transition: 0.2s; }
+    button { width: 100%; padding: 12px; background: var(--accent); color: #052e16; font-weight: bold; border: none; border-radius: 8px; cursor: pointer; margin-top: 15px; font-size: 15px; transition: 0.2s; }
     button:hover { background: var(--accent-hover); }
-    button:disabled { opacity: 0.6; cursor: not-allowed; }
-    .btn-delete { background: var(--danger); color: white; padding: 6px 12px; font-size: 12px; border-radius: 6px; width: auto; margin-top: 0; }
-    .preview-box { width: 100%; height: 160px; border: 2px dashed var(--border); border-radius: 8px; margin-top: 8px; display: flex; align-items: center; justify-content: center; overflow: hidden; background: #09140f; }
+    button:disabled { opacity: 0.5; cursor: not-allowed; }
+    .btn-logout { background: transparent; color: #9ca3af; border: 1px solid var(--border); padding: 6px 12px; font-size: 12px; width: auto; margin-top: 0; border-radius: 6px; }
+    .btn-delete { background: var(--danger); color: white; padding: 6px 10px; font-size: 12px; border-radius: 6px; width: auto; margin-top: 0; }
+    .preview-box { width: 100%; height: 160px; border: 2px dashed var(--border); border-radius: 8px; margin-top: 8px; display: flex; align-items: center; justify-content: center; overflow: hidden; background: #06100b; }
     .preview-box img { width: 100%; height: 100%; object-fit: cover; display: none; }
-    .product-item { display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border); padding: 10px 0; }
+    .product-item { display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border); padding: 12px 0; }
     .product-item:last-child { border-bottom: none; }
     .product-info { display: flex; align-items: center; gap: 10px; }
-    .product-thumb { width: 44px; height: 44px; border-radius: 6px; object-fit: cover; background: #000; }
+    .product-thumb { width: 48px; height: 48px; border-radius: 6px; object-fit: cover; background: #000; }
     .msg { padding: 10px; border-radius: 8px; margin-top: 12px; font-size: 13px; text-align: center; display: none; }
     .msg.error { background: rgba(239, 68, 68, 0.2); color: #fca5a5; border: 1px solid var(--danger); display: block; }
     .msg.success { background: rgba(34, 197, 94, 0.2); color: #86efac; border: 1px solid var(--accent); display: block; }
     .hidden { display: none !important; }
+    .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
   </style>
 </head>
 <body>
 
 <div class="container">
-  <!-- بخش ورود مدیر -->
-  <div id="authSection" class="card">
-    <h2>ورود مدیریت پرندگان آرا</h2>
-    <label>ایمیل مدیر:</label>
-    <input type="email" id="adminEmail" placeholder="admin@example.com">
-    <label>رمز عبور:</label>
-    <input type="password" id="adminPassword" placeholder="******">
-    <button id="loginBtn" onclick="handleLogin()">ورود به پنل</button>
-    <div id="loginMsg" class="msg"></div>
+  <div class="header-title">🦜 سالن تکثیر و پرورش پرندگان آرا</div>
+
+  <!-- فرم ورود فقط با رمز عبور -->
+  <div id="loginBox" class="card">
+    <h2>ورود به بخش مدیریت</h2>
+    <label>رمز عبور مدیریت:</label>
+    <input type="password" id="adminPass" placeholder="رمز عبور را وارد کنید" onkeydown="if(event.key==='Enter') checkLogin()">
+    <button onclick="checkLogin()">ورود</button>
+    <div id="loginError" class="msg error"></div>
   </div>
 
-  <!-- داشبورد اصلی بعد از ورود -->
-  <div id="dashboardSection" class="hidden">
+  <!-- داشبورد مدیریت -->
+  <div id="adminPanel" class="hidden">
+    <div class="top-bar">
+      <span style="font-size: 14px; color: var(--muted);">مدیر گرامی، خوش آمدید</span>
+      <button class="btn-logout" onclick="logout()">خروج</button>
+    </div>
+
+    <!-- فرم افزودن پرنده -->
     <div class="card">
       <h2>افزودن پرنده جدید</h2>
 
-      <label>نام یا نژاد:</label>
-      <input type="text" id="pName" placeholder="مثال: جوجه گرین‌چیک آناناسی">
+      <label>نام یا مشخصات پرنده:</label>
+      <input type="text" id="pName" placeholder="مثال: جوجه گرین‌چیک آناناسی دانخور">
 
-      <label>دسته‌بندی:</label>
+      <label>نژاد / دسته‌بندی:</label>
       <select id="pCategory">
         <option value="گرین‌چیک">گرین‌چیک</option>
         <option value="راهب">راهب</option>
@@ -72,194 +81,197 @@
       </select>
 
       <label>قیمت (تومان):</label>
-      <input type="text" id="pPrice" placeholder="مثال: ۳,۵۰۰,۰۰۰">
+      <input type="text" id="pPrice" placeholder="مثال: ۳,۵۰۰,۰۰۰ یا تماس بگیرید">
 
       <label>انتخاب عکس از گالری گوشی:</label>
-      <input type="file" id="pImgFile" accept="image/*" onchange="previewImage(event)">
+      <input type="file" id="pFile" accept="image/*" onchange="showPreview(event)">
       <div class="preview-box">
-        <span id="previewText" style="color:#6ee7b7; font-size:13px;">پیش‌نمایش تصویر</span>
-        <img id="pPreviewImg" alt="پیش‌نمایش">
+        <span id="previewPlaceholder" style="color: #6ee7b7; font-size: 12px;">پیش‌نمایش تصویر پرنده</span>
+        <img id="previewImg" alt="عکس انتخابی">
       </div>
 
-      <label>توضیحات کوتاه:</label>
-      <textarea id="pDesc" rows="3" placeholder="سن، سلامت، رام بودن یا اطلاعات تکمیلی..."></textarea>
+      <label>توضیحات:</label>
+      <textarea id="pDesc" rows="3" placeholder="سن، سلامت، میزان رام بودن و توضیحات..."></textarea>
 
-      <button id="saveBtn" onclick="handleAddProduct()">ذخیره و انتشار پرنده</button>
-      <div id="formMsg" class="msg"></div>
+      <button id="submitBtn" onclick="saveBird()">ثبت و انتشار پرنده</button>
+      <div id="statusMsg" class="msg"></div>
     </div>
 
     <!-- لیست پرندگان ثبت‌شده -->
     <div class="card">
-      <h2>پرندگان موجود در فروشگاه</h2>
-      <div id="productsList">در حال بارگذاری...</div>
+      <h2>پرندگان ثبت‌شده در سایت</h2>
+      <div id="birdsList">در حال بارگذاری...</div>
     </div>
   </div>
 </div>
 
 <script>
-  let client;
+  let sb;
 
   window.addEventListener('DOMContentLoaded', () => {
-    client = window.supabaseClient;
-    if (!client && window.supabase && window.SUPABASE_URL) {
-      client = window.supabase.createClient(window.SUPABASE_URL, window.SUPABASE_ANON_KEY);
+    // مقداردهی سوپابیس
+    sb = window.supabaseClient;
+    if (!sb && window.supabase && window.SUPABASE_URL) {
+      sb = window.supabase.createClient(window.SUPABASE_URL, window.SUPABASE_ANON_KEY);
+    }
+
+    // بررسی ورود قبلی
+    if (sessionStorage.getItem('ara_logged_in') === 'true') {
+      showDashboard();
     }
   });
 
-  function showMsg(elementId, text, isError = false) {
-    const el = document.getElementById(elementId);
+  function checkLogin() {
+    const pass = document.getElementById('adminPass').value.trim();
+    const errBox = document.getElementById('loginError');
+
+    if (pass === 'ara123') {
+      sessionStorage.setItem('ara_logged_in', 'true');
+      showDashboard();
+    } else {
+      errBox.innerText = 'رمز عبور اشتباه است.';
+      errBox.style.display = 'block';
+    }
+  }
+
+  function showDashboard() {
+    document.getElementById('loginBox').classList.add('hidden');
+    document.getElementById('adminPanel').classList.remove('hidden');
+    loadBirds();
+  }
+
+  function logout() {
+    sessionStorage.removeItem('ara_logged_in');
+    document.getElementById('adminPanel').classList.add('hidden');
+    document.getElementById('loginBox').classList.remove('hidden');
+    document.getElementById('adminPass').value = '';
+    document.getElementById('loginError').style.display = 'none';
+  }
+
+  function showPreview(e) {
+    const file = e.target.files[0];
+    const img = document.getElementById('previewImg');
+    const ph = document.getElementById('previewPlaceholder');
+    if (file) {
+      img.src = URL.createObjectURL(file);
+      img.style.display = 'block';
+      ph.style.display = 'none';
+    } else {
+      img.style.display = 'none';
+      ph.style.display = 'block';
+    }
+  }
+
+  function setMsg(text, isError = false) {
+    const el = document.getElementById('statusMsg');
     el.className = 'msg ' + (isError ? 'error' : 'success');
     el.innerText = text;
   }
 
-  function previewImage(event) {
-    const file = event.target.files[0];
-    const img = document.getElementById('pPreviewImg');
-    const txt = document.getElementById('previewText');
-    if (file) {
-      img.src = URL.createObjectURL(file);
-      img.style.display = 'block';
-      txt.style.display = 'none';
-    } else {
-      img.style.display = 'none';
-      txt.style.display = 'block';
-    }
-  }
-
-  async function handleLogin() {
-    const email = document.getElementById('adminEmail').value.trim();
-    const password = document.getElementById('adminPassword').value;
-    const btn = document.getElementById('loginBtn');
-
-    if (!email || !password) {
-      showMsg('loginMsg', 'لطفاً ایمیل و رمز عبور را وارد کنید', true);
-      return;
-    }
-
-    btn.disabled = true;
-    btn.innerText = 'در حال بررسی...';
-
-    try {
-      const { data, error } = await client.auth.signInWithPassword({ email, password });
-      if (error) throw error;
-
-      document.getElementById('authSection').classList.add('hidden');
-      document.getElementById('dashboardSection').classList.remove('hidden');
-      loadProducts();
-    } catch (err) {
-      showMsg('loginMsg', 'خطا در ورود: اطلاعات نادرست است یا ارتباط برقرار نشد', true);
-    } finally {
-      btn.disabled = false;
-      btn.innerText = 'ورود به پنل';
-    }
-  }
-
-  async function uploadImageToStorage(file) {
-    const fileExt = file.name.split('.').pop();
-    const fileName = `${Date.now()}_${Math.random().toString(36).substring(2, 8)}.${fileExt}`;
-    const filePath = `birds/${fileName}`;
-
-    // اول باکت gallery را بررسی می‌کنیم، در صورت عدم دسترسی از باکت کمکی استفاده می‌شود
-    let bucketName = 'gallery';
-    let { data, error } = await client.storage.from(bucketName).upload(filePath, file);
-
-    if (error) {
-      bucketName = 'product-images';
-      const fallbackUpload = await client.storage.from(bucketName).upload(filePath, file);
-      if (fallbackUpload.error) throw new Error('فضای باکت ذخیره تصویر در دسترس نیست');
-    }
-
-    const { data: urlData } = client.storage.from(bucketName).getPublicUrl(filePath);
-    return urlData.publicUrl;
-  }
-
-  async function handleAddProduct() {
+  async function saveBird() {
     const name = document.getElementById('pName').value.trim();
     const category = document.getElementById('pCategory').value;
     const price = document.getElementById('pPrice').value.trim();
     const desc = document.getElementById('pDesc').value.trim();
-    const fileInput = document.getElementById('pImgFile');
-    const btn = document.getElementById('saveBtn');
+    const fileInput = document.getElementById('pFile');
+    const btn = document.getElementById('submitBtn');
 
     if (!name) {
-      showMsg('formMsg', 'لطفاً نام پرنده را وارد کنید', true);
+      setMsg('لطفاً نام پرنده را وارد کنید', true);
       return;
     }
     if (!fileInput.files || fileInput.files.length === 0) {
-      showMsg('formMsg', 'لطفاً یک تصویر از پرنده انتخاب کنید', true);
+      setMsg('لطفاً عکسی برای پرنده انتخاب کنید', true);
       return;
     }
 
     btn.disabled = true;
-    btn.innerText = 'در حال آپلود عکس و ذخیره...';
+    btn.innerText = 'در حال ارسال عکس و ذخیره...';
 
     try {
-      const imageUrl = await uploadImageToStorage(fileInput.files[0]);
+      const file = fileInput.files[0];
+      const ext = file.name.split('.').pop() || 'jpg';
+      const fileName = `bird_${Date.now()}_${Math.random().toString(36).substring(2, 7)}.${ext}`;
 
-      const { error } = await client.from('products').insert([{
+      // آپلود مستقیم در باکت gallery
+      const { data: upData, error: upErr } = await sb.storage
+        .from('gallery')
+        .upload(fileName, file, { upsert: true });
+
+      if (upErr) {
+        throw new Error('خطا در آپلود عکس در باکت gallery: ' + upErr.message);
+      }
+
+      // دریافت لینک عمومی عکس
+      const { data: urlData } = sb.storage.from('gallery').getPublicUrl(fileName);
+      const imageUrl = urlData.publicUrl;
+
+      // ذخیره اطلاعات پرنده در دیتابیس
+      const fullDesc = `[نژاد: ${category}] ${desc}`.trim();
+      const { error: dbErr } = await sb.from('products').insert([{
         name: name,
         price: price || 'تماس بگیرید',
-        description: desc,
+        description: fullDesc,
         image_url: imageUrl,
         available: true
       }]);
 
-      if (error) throw error;
+      if (dbErr) throw dbErr;
 
-      showMsg('formMsg', 'پرنده با موفقیت ثبت شد!');
-      // ریست فرم
+      setMsg('پرنده با موفقیت افزوده شد!');
+      // ریست کردن فرم
       document.getElementById('pName').value = '';
       document.getElementById('pPrice').value = '';
       document.getElementById('pDesc').value = '';
       fileInput.value = '';
-      document.getElementById('pPreviewImg').style.display = 'none';
-      document.getElementById('previewText').style.display = 'block';
+      document.getElementById('previewImg').style.display = 'none';
+      document.getElementById('previewPlaceholder').style.display = 'block';
 
-      loadProducts();
+      loadBirds();
     } catch (err) {
-      showMsg('formMsg', 'خطا در ثبت: ' + (err.message || 'مشکل در ارتباط با پایگاه داده'), true);
+      setMsg('خطا: ' + (err.message || 'مشکل در ذخیره‌سازی'), true);
     } finally {
       btn.disabled = false;
-      btn.innerText = 'ذخیره و انتشار پرنده';
+      btn.innerText = 'ثبت و انتشار پرنده';
     }
   }
 
-  async function loadProducts() {
-    const listEl = document.getElementById('productsList');
-    listEl.innerHTML = 'در حال دریافت اطلاعات...';
+  async function loadBirds() {
+    const list = document.getElementById('birdsList');
+    list.innerHTML = '<p style="text-align:center; color:#86efac; font-size:13px;">در حال دریافت...</p>';
 
     try {
-      const { data, error } = await client.from('products').select('*').order('id', { ascending: false });
+      const { data, error } = await sb.from('products').select('*').order('id', { ascending: false });
       if (error) throw error;
 
       if (!data || data.length === 0) {
-        listEl.innerHTML = '<p style="text-align:center; color:#9ca3af;">هنوز پرنده‌ای اضافه نشده است.</p>';
+        list.innerHTML = '<p style="text-align:center; color:#9ca3af; font-size:13px;">هنوز پرنده‌ای ثبت نشده است.</p>';
         return;
       }
 
-      listEl.innerHTML = data.map(item => `
+      list.innerHTML = data.map(item => `
         <div class="product-item">
           <div class="product-info">
             <img class="product-thumb" src="${item.image_url || 'hero.png'}" alt="${item.name}">
             <div>
-              <div style="font-weight: bold;">${item.name}</div>
-              <div style="font-size: 12px; color: var(--muted);">${item.price || ''}</div>
+              <div style="font-size:14px; font-weight:bold;">${item.name}</div>
+              <div style="font-size:12px; color:var(--muted);">${item.price || ''}</div>
             </div>
           </div>
-          <button class="btn-delete" onclick="deleteProduct('${item.id}')">حذف</button>
+          <button class="btn-delete" onclick="deleteBird('${item.id}')">حذف</button>
         </div>
       `).join('');
     } catch (err) {
-      listEl.innerHTML = '<p style="color:var(--danger); text-align:center;">خطا در دریافت لیست پرندگان</p>';
+      list.innerHTML = '<p style="color:var(--danger); text-align:center; font-size:13px;">خطا در دریافت لیست پرندگان</p>';
     }
   }
 
-  async function deleteProduct(id) {
+  async function deleteBird(id) {
     if (!confirm('آیا از حذف این پرنده اطمینان دارید؟')) return;
     try {
-      const { error } = await client.from('products').delete().eq('id', id);
+      const { error } = await sb.from('products').delete().eq('id', id);
       if (error) throw error;
-      loadProducts();
+      loadBirds();
     } catch (err) {
       alert('خطا در حذف پرنده');
     }
