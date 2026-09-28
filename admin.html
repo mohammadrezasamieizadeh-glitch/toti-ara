@@ -3,55 +3,114 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>سالن پرورش پرندگان آرا</title>
+    <title>سالن پرورش پرندگان آرا - قزوین</title>
+    <!-- کتابخانه سوپابیس -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="supabase-config.js"></script>
-
+    
     <style>
-        * { box-sizing: border-box; font-family: Tahoma, sans-serif; }
+        * { box-sizing: border-box; font-family: system-ui, -apple-system, Tahoma, sans-serif; }
         body { background-color: #08140c; color: #eaf5ed; margin: 0; padding: 15px; text-align: center; }
         .container { max-width: 480px; margin: 0 auto; }
-        .hero-banner { width: 100%; border-radius: 16px; margin-bottom: 20px; }
-
-        /* دکمه‌های پرنده‌ها */
-        .categories-grid { display: grid; grid-template-columns: 1fr; gap: 12px; margin-bottom: 20px; }
-        .cat-card {
-            background: #12331b; border: 1px solid #1f592f; border-radius: 14px; padding: 16px;
-            cursor: pointer; display: flex; justify-content: space-between; align-items: center;
-        }
-        .cat-title { font-size: 16px; font-weight: bold; }
-
+        
+        /* پوستر اصلی */
+        .hero-banner { width: 100%; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.5); margin-bottom: 15px; display: block; }
+        
         /* دکمه اینستاگرام */
         .insta-btn {
-            display: block; background: linear-gradient(45deg, #f09433, #dc2743, #bc1888);
-            color: white; text-decoration: none; padding: 15px; border-radius: 12px; font-weight: bold;
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+            background: linear-gradient(45deg, #f09433, #dc2743, #bc1888);
+            color: #fff; text-decoration: none; font-weight: bold; font-size: 15px;
+            padding: 12px; border-radius: 12px; margin-bottom: 20px;
+            box-shadow: 0 4px 12px rgba(220, 39, 67, 0.3);
         }
 
-        /* مودال گالری */
-        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 1000; padding: 20px; overflow-y: auto; }
-        .modal.active { display: block; }
-        .close-btn { color: white; font-size: 30px; cursor: pointer; float: left; }
-        .gallery-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 50px; }
-        .gallery-item img { width: 100%; border-radius: 8px; }
+        /* کارت‌های انتخاب پرنده */
+        .categories-grid { display: grid; grid-template-columns: 1fr; gap: 12px; margin-bottom: 25px; }
+        .cat-card {
+            background: linear-gradient(135deg, #12331b, #0d2413);
+            border: 1px solid #1f592f; border-radius: 14px; padding: 16px;
+            display: flex; align-items: center; justify-content: space-between;
+            cursor: pointer; transition: 0.2s;
+        }
+        .cat-card:active { transform: scale(0.98); background: #164022; }
+        .cat-title { font-size: 17px; font-weight: bold; color: #a3f7bf; }
+        .cat-arrow { font-size: 18px; color: #6ee79c; }
+
+        /* مودال نمایش عکس‌ها */
+        .modal {
+            display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(5px); z-index: 1000; align-items: center; justify-content: center; padding: 15px;
+        }
+        .modal.active { display: flex; }
+        .modal-content {
+            background: #0f2615; border: 1px solid #236334; border-radius: 18px;
+            width: 100%; max-width: 440px; max-height: 85vh; display: flex; flex-direction: column; overflow: hidden;
+        }
+        .modal-header {
+            padding: 15px; display: flex; justify-content: space-between; align-items: center;
+            border-bottom: 1px solid #1a4524;
+        }
+        .modal-header h3 { margin: 0; font-size: 17px; color: #75f0a0; }
+        .close-btn { background: none; border: none; color: #fff; font-size: 24px; cursor: pointer; }
+        
+        /* گرید عکس‌های ارسالی ادمین */
+        .gallery-container { padding: 15px; overflow-y: auto; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .gallery-item {
+            background: #091a0e; border-radius: 10px; overflow: hidden; border: 1px solid #1a4524;
+        }
+        .gallery-item img { width: 100%; height: 140px; object-fit: cover; display: block; cursor: pointer; }
+        
+        .loading-text { grid-column: span 2; padding: 30px; color: #88cfa0; font-size: 14px; }
+        
+        /* دکمه مدیریت پایین */
+        .admin-box { margin-top: 30px; font-size: 12px; }
+        .admin-box a { color: #52a16d; text-decoration: none; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <img src="hero.png" class="hero-banner">
+    <!-- پوستر اصلی -->
+    <img src="hero.png" class="hero-banner" alt="سالن تکثیر طوطی آرا">
 
+    <!-- پیج اینستاگرام -->
+    <a href="https://instagram.com/ara_bird_qaz" class="insta-btn" target="_blank">
+        <span>📸 مشاهده پیج اینستاگرام ما (ara_bird_qaz)</span>
+    </a>
+
+    <!-- دسته‌بندی طوطی‌ها -->
     <div class="categories-grid">
-        <div class="cat-card" onclick="openGallery('راهب')"><span class="cat-title">🦜 عکس‌های طوطی راهب</span></div>
-        <div class="cat-card" onclick="openGallery('گرینچیک')"><span class="cat-title">🦜 عکس‌های طوطی گرین‌چیک</span></div>
-        <div class="cat-card" onclick="openGallery('خورشیدی')"><span class="cat-title">🦜 عکس‌های طوطی خورشیدی</span></div>
+        <div class="cat-card" onclick="openGallery('راهب', 'طوطی راهب')">
+            <span class="cat-title">🦜 طوطی راهب</span>
+            <span class="cat-arrow">مشاهده عکس‌ها ❯</span>
+        </div>
+        <div class="cat-card" onclick="openGallery('گرینچیک', 'طوطی گرین‌چیک')">
+            <span class="cat-title">🦜 طوطی گرین‌چیک</span>
+            <span class="cat-arrow">مشاهده عکس‌ها ❯</span>
+        </div>
+        <div class="cat-card" onclick="openGallery('خورشیدی', 'طوطی کانور خورشیدی')">
+            <span class="cat-title">🦜 طوطی خورشیدی</span>
+            <span class="cat-arrow">مشاهده عکس‌ها ❯</span>
+        </div>
     </div>
 
-    <a href="https://instagram.com/ara_bird_qaz" class="insta-btn">📸 مشاهده پیج اینستاگرام</a>
+    <div class="admin-box">
+        <a href="admin.html">🔒 ورود به پنل مدیریت</a>
+    </div>
 </div>
 
+<!-- پنجره پاپ‌آپ فقط برای نمایش عکس‌های ادمین -->
 <div id="galleryModal" class="modal">
-    <span class="close-btn" onclick="closeGallery()">✕</span>
-    <div id="galleryGrid" class="gallery-grid"></div>
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 id="modalTitle">گالری عکس‌ها</h3>
+            <button class="close-btn" onclick="closeGallery()">✕</button>
+        </div>
+        <div id="galleryGrid" class="gallery-container">
+            <!-- عکس‌ها بدون هیچ متن اضافه اینجا چیده می‌شوند -->
+        </div>
+    </div>
 </div>
 
 <script>
@@ -60,29 +119,76 @@
     async function fetchBirdsData() {
         if (window.supabaseClient) {
             try {
-                const { data } = await window.supabaseClient.from('products').select('*');
-                if (data) return data;
+                const { data, error } = await window.supabaseClient
+                    .from('products')
+                    .select('*')
+                    .order('id', { ascending: false });
+
+                if (!error && data && data.length > 0) {
+                    return data;
+                }
             } catch (e) {}
         }
+
         try {
             const res = await fetch(WORKER_URL);
-            return await res.json();
-        } catch (e) { return []; }
+            if (res.ok) {
+                return await res.json();
+            }
+        } catch (e) {}
+
+        return [];
     }
 
-    async function openGallery(category) {
+    async function openGallery(categoryKey, categoryName) {
         const modal = document.getElementById('galleryModal');
         const grid = document.getElementById('galleryGrid');
+        const title = document.getElementById('modalTitle');
+
+        title.innerText = 'عکس‌های ' + categoryName;
+        grid.innerHTML = '<div class="loading-text">در حال بارگذاری عکس‌ها...</div>';
         modal.classList.add('active');
-        grid.innerHTML = 'در حال بارگذاری...';
-        
-        const data = await fetchBirdsData();
-        const filtered = data.filter(b => (b.category || '').includes(category));
-        
-        grid.innerHTML = filtered.map(b => `<div class="gallery-item"><img src="${b.image_url || b.url}"></div>`).join('');
+
+        const allBirds = await fetchBirdsData();
+
+        // فیلتر فقط برای دسته‌بندی انتخاب‌شده
+        const filtered = allBirds.filter(b => {
+            const cat = (b.category || '').toLowerCase();
+            const birdTitle = (b.title || '').toLowerCase();
+            
+            if (categoryKey === 'راهب') {
+                return cat.includes('راهب') || cat.includes('monk') || birdTitle.includes('راهب');
+            } else if (categoryKey === 'گرینچیک') {
+                return cat.includes('گرین') || cat.includes('green') || birdTitle.includes('گرین');
+            } else if (categoryKey === 'خورشیدی') {
+                return cat.includes('خورشید') || cat.includes('sun') || birdTitle.includes('خورشید');
+            }
+            return cat.includes(categoryKey.toLowerCase());
+        });
+
+        if (filtered.length === 0) {
+            grid.innerHTML = '<div class="loading-text">هنوز تصویری برای این پرنده در پنل مدیریت آپلود نشده است.</div>';
+            return;
+        }
+
+        // فقط عکس‌ها را نشان می‌دهد
+        grid.innerHTML = filtered.map(bird => {
+            const src = bird.image_url || bird.url;
+            return `
+                <div class="gallery-item">
+                    <img src="${src}" alt="طوطی آرا" onclick="window.open('${src}', '_blank')">
+                </div>
+            `;
+        }).join('');
     }
 
-    function closeGallery() { document.getElementById('galleryModal').classList.remove('active'); }
+    function closeGallery() {
+        document.getElementById('galleryModal').classList.remove('active');
+    }
+
+    document.getElementById('galleryModal').addEventListener('click', function(e) {
+        if (e.target === this) closeGallery();
+    });
 </script>
 
 </body>
