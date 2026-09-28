@@ -34,22 +34,23 @@
       width: 100%;
       height: auto;
       display: block;
+      pointer-events: none; /* جلوگیری از لمس ناخواسته عکس */
     }
     
-    /* هات‌اسپات‌های لمسی دقیق */
+    /* هات‌اسپات‌های لمسی */
     .hotspot {
       position: absolute;
       cursor: pointer;
       z-index: 10;
-      background: rgba(255, 255, 255, 0.001); /* کاملاً شفاف */
+      background: rgba(255, 255, 255, 0.001);
     }
 
-    /* پاپ‌آپ / مودال اطلاعات */
+    /* پاپ‌آپ / مودال اطلاعات پرنده */
     .modal-overlay {
       position: fixed;
       inset: 0;
       background: rgba(0, 0, 0, 0.75);
-      backdrop-filter: blur(4px);
+      backdrop-filter: blur(5px);
       display: flex;
       align-items: flex-end;
       justify-content: center;
@@ -65,7 +66,7 @@
     .modal-card {
       background: #122419;
       border: 1px solid #285437;
-      border-radius: 22px 22px 0 0;
+      border-radius: 24px 24px 0 0;
       width: 100%;
       max-width: 480px;
       max-height: 85vh;
@@ -150,42 +151,30 @@
 
   <div class="main-container">
     <div class="poster-wrapper">
-      <img src="hero.png" alt="سالن پرورش طوطی آرا" class="poster-img">
+      <!-- تصویر پوستر اصلی (طوطی‌های بالای شاخه کاملاً ثابت و بدون کلیک هستند) -->
+      <img src="hero.png" alt="سالن پرورش طوطی آرا قزوین" class="poster-img">
 
-      <!-- ۱. فقط لوگوی گرد بالا برای ورود به پنل مدیریت -->
-      <a href="admin.html" class="hotspot" style="top: 1.5%; left: 38%; width: 24%; height: 8%; display: block;" title="ورود مدیریت"></a>
+      <!-- ۱. سه کارت معرفی پرندگان در پایین -->
+      <!-- کارت سمت چپ: خورشیدی (نارنجی) -->
+      <div class="hotspot" style="top: 48%; left: 3%; width: 30%; height: 18%;" onclick="openModal('sunconure')"></div>
+      <!-- کارت وسط: راهب (زرد) -->
+      <div class="hotspot" style="top: 48%; left: 35%; width: 30%; height: 18%;" onclick="openModal('monk')"></div>
+      <!-- کارت سمت راست: گرین‌چیک (سبز) -->
+      <div class="hotspot" style="top: 48%; left: 67%; width: 30%; height: 18%;" onclick="openModal('greencheek')"></div>
 
-      <!-- ۲. طوطی‌های روی شاخه بالای پوستر -->
-      <!-- گرین‌چیک (سمت چپ شاخه) -->
-      <div class="hotspot" style="top: 11%; left: 5%; width: 28%; height: 22%;" onclick="openModal('greencheek')"></div>
-      <!-- راهب (وسط شاخه) -->
-      <div class="hotspot" style="top: 11%; left: 36%; width: 28%; height: 22%;" onclick="openModal('monk')"></div>
-      <!-- خورشیدی (سمت راست شاخه) -->
-      <div class="hotspot" style="top: 11%; left: 67%; width: 28%; height: 22%;" onclick="openModal('sunconure')"></div>
+      <!-- ۲. دکمه تماس و واتساپ -->
+      <a href="tel:09107488013" class="hotspot" style="top: 72%; left: 35%; width: 62%; height: 5%; display: block;" title="تماس"></a>
+      <a href="https://wa.me/989107488013" target="_blank" class="hotspot" style="top: 72%; left: 4%; width: 30%; height: 5%; display: block;" title="واتساپ"></a>
 
-      <!-- ۳. دایره‌های چهارگانه ویژگی‌ها (اصالت، تغذیه، سلامت، مشاوره) -->
-      <div class="hotspot" style="top: 36%; left: 4%; width: 22%; height: 8%;" onclick="openModal('info_parent')"></div>
-      <div class="hotspot" style="top: 36%; left: 28%; width: 22%; height: 8%;" onclick="openModal('info_ring')"></div>
-      <div class="hotspot" style="top: 36%; left: 51%; width: 22%; height: 8%;" onclick="openModal('info_health')"></div>
-      <div class="hotspot" style="top: 36%; left: 74%; width: 22%; height: 8%;" onclick="openModal('info_feed')"></div>
+      <!-- ۳. پیج اینستاگرام (آیکون پایین چپ) -->
+      <a href="https://www.instagram.com/ara_bird_qaz/" target="_blank" rel="noopener noreferrer" class="hotspot" style="top: 77%; left: 8%; width: 12%; height: 3.5%; display: block;" title="اینستاگرام"></a>
 
-      <!-- ۴. کادرهای ۳ تایی پرندگان پایین پوستر -->
-      <!-- کارت گرین‌چیک (سمت چپ) -->
-      <div class="hotspot" style="top: 48%; left: 4%; width: 30%; height: 21%;" onclick="openModal('greencheek')"></div>
-      <!-- کارت راهب (وسط) -->
-      <div class="hotspot" style="top: 48%; left: 35%; width: 30%; height: 21%;" onclick="openModal('monk')"></div>
-      <!-- کارت خورشیدی (سمت راست) -->
-      <div class="hotspot" style="top: 48%; left: 66%; width: 30%; height: 21%;" onclick="openModal('sunconure')"></div>
-
-      <!-- ۵. نوار اینستاگرام در پایین پوستر (لمس مستقیم باز شدن اینستاگرام) -->
-      <a href="https://www.instagram.com/ara_bird_qaz/" target="_blank" rel="noopener noreferrer" class="hotspot" style="top: 86%; left: 5%; width: 90%; height: 7%; display: block;" title="اینستاگرام"></a>
-
-      <!-- ۶. نوار تماس با ما در انتهای پوستر -->
-      <a href="tel:09120000000" class="hotspot" style="top: 93%; left: 5%; width: 90%; height: 6%; display: block;" title="تماس"></a>
+      <!-- ۴. دکمه مدیریت (فقط روی کادر دکمه سبز رنگ پایین) -->
+      <a href="admin.html" class="hotspot" style="top: 88%; left: 5%; width: 45%; height: 8%; display: block;" title="ورود مدیریت"></a>
     </div>
   </div>
 
-  <!-- پنجره پاپ‌آپ محتوا -->
+  <!-- مودال مشخصات -->
   <div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
     <div class="modal-card">
       <div class="modal-header">
@@ -198,8 +187,8 @@
         <a href="https://www.instagram.com/ara_bird_qaz/" target="_blank" rel="noopener noreferrer" class="btn btn-insta">
           مشاهده پیج اینستاگرام (ara_bird_qaz)
         </a>
-        <a href="tel:09120000000" id="callBtn" class="btn btn-call">
-          تماس جهت استعلام موجودی
+        <a href="tel:09107488013" class="btn btn-call">
+          تماس جهت مشاوره: ۰۹۱۰۷۴۸۸۰۱۳
         </a>
       </div>
     </div>
@@ -210,57 +199,35 @@
       sunconure: {
         title: "طوطی سان کانور (خورشیدی)",
         desc: `
-          <p>طوطی سان کانور با: 90%; height: 6%; display: block;" title="تماس"></a>
-    </div>
-  </div>
-
-  <!-- پنجره پاپ‌آپ محتوا -->
-  <div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
-    <div class="modal-card">
-      <div class="modal-header">
-        <h3 class="modal-title" id="modalTitle">عنوان</h3>
-        <button class="close-btn" onclick="hideModal()">✕</button>
-      </div>
-      <div class="modal-body" id="modalContent"></div>
-      
-      <div class="btn-group">
-        <a href="https://www.instagram.com/ara_bird_qaz/" target="_blank" rel="noopener noreferrer" class="btn btn-insta">
-          مشاهده پیج اینستاگرام (ara_bird_qaz)
-        </a>
-        <a href="tel:09120000000" id="callBtn" class="btn btn-call">
-          تماس جهت استعلام موجودی
-        </a>
-      </div>
-    </div>
-  </div>
-
-  <script>
-    const birdData = {
-      sunconure: {
-        title: "طوطی سان کانور (خورشیدی)",
-        desc: `
-          <p>طوطی سان کانور با رنگ‌های درخشان زرد و نارنجی، پرانرژی‌ترین و باهوش‌ترین طوطی برای نگهداری است.</p>
+          <p>طوطی سان کانور با رنگ‌های درخشان و خیره‌کننده زرد و نارنجی، یکی از پرانرژی‌ترین و باهوش‌ترین طوطی‌ها برای نگهداری است.</p>
           <ul>
-            <li><strong>خصوصیات:</strong> فوق‌العاده بازیگوش، کاملاً دستی و وابسته، یادگیری ترفندهای هوشی</li>
-            <li><strong>وضعیت سالن:</strong> پرورش کاملاً بهداشتی با مکمل‌های اورجینال اروپایی</li>
-            <li><strong>موجودی:</strong> سرلاکی، دون‌خور و بالغ حلقه پا</li>
+            <li><strong>ویژگی‌ها:</strong> فوق‌العاده بازیگوش، بسیار اجتماعی، دستی و مهربان، استعداد یادگیری ترفندها</li>
+            <li><strong>کیفیت سالن:</strong> پرورش اصولی در محیط کاملاً بهداشتی با بهترین سرلاک و مکمل‌های خارجی</li>
+            <li><strong>سنین موجود:</strong> سرلاکی، نرم‌خور و دون‌خور حلقه پای سالن</li>
           </ul>
         `
       },
       monk: {
         title: "طوطی راهب (کواکر)",
         desc: `
-          <p>طوطی راهب یکی از قوی‌ترین طوطی‌های سایز متوسط در یادگیری و تقلید صدای انسان و حرکات نمایشی است.</p>
-          <ul>تغذیه و سرلاک معتبر",
-        desc: "<p>تغذیه اصولی با سرلاک‌های معتبر دنیا (A19 و A21 ورسله‌لاگا) به همراه پلت‌های غنی‌شده، جوانه‌ها و سبزیجات تازه جهت سلامت دستگاه گوارش پرندگان انجام می‌گیرد.</p>"
+          <p>طوطی راهب یکی از بااستعدادترین طوطی‌های جثه متوسط در سخنگویی و تقلید صدا با وابستگی عاطفی بسیار بالا است.</p>
+          <ul>
+            <li><strong>ویژگی‌ها:</strong> قدرت یادگیری کلمات، آرام، مهربان و فوق‌العاده باهوش</li>
+            <li><strong>تنوع رنگی:</strong> سبز، آبی، زرد و لوتینو</li>
+            <li><strong>ضمانت:</strong> سلامت کامل پرنده و حلقه پای اختصاصی سالن آرا</li>
+          </ul>
+        `
       },
-      info_ring: {
-        title: "حلقه پای اختصاصی",
-        desc: "<p>تمامی جوجه‌های مجموعه دارای حلقه پای فلزی بسته اختصاصی سالن آرا با درج کد سالن و سال تولید هستند که سند اصالت پرنده است.</p>"
-      },
-      info_parent: {
-        title: "مولدین اصیل و درشت",
-        desc: "<p>جوجه‌ها از والدینی با جثه کشیده، سینه پر و بدون نسبت فامیلی به دنیا آمده‌اند تا بیشترین مقاومت بدنی را داشته باشند.</p>"
+      greencheek: {
+        title: "طوطی گرین‌چیک (کانور گونه سبز)",
+        desc: `
+          <p>گرین‌چیک طوطی آرام، بسیار کم‌سر و صدا و به‌شدت بغلی و لوس، مناسب‌ترین انتخاب برای زندگی در آپارتمان است.</p>
+          <ul>
+            <li><strong>ویژگی‌ها:</strong> بی‌استرس، بسیار مهربان، دستی و بدون سروصدای مزاحم</li>
+            <li><strong>تنوع رنگی سالن:</strong> نرمال، آناناسی، یلوساید، تراکویس، رد فکتور و سانچیک</li>
+            <li><strong>تغذیه:</strong> پرورش با رژیم پلت، سبزیجات تازه و مکمل‌های استاندارد</li>
+          </ul>
+        `
       }
     };
 
