@@ -3,270 +3,268 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>پنل مدیریت | سالن طوطی آرا</title>
-  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <title>پنل مدیریت فروشگاه پرندگان آرا</title>
+  <!-- کتابخانه سوپابیس و فایل تنظیمات -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="supabase-config.js"></script>
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: 'Vazirmatn', sans-serif;
-      background: #081a15;
-      color: #e2f0ea;
-      padding: 20px;
+    :root {
+      --bg: #0d1f18;
+      --card: #152d23;
+      --accent: #22c55e;
+      --accent-hover: #16a34a;
+      --text: #f0fdf4;
+      --muted: #86efac;
+      --danger: #ef4444;
+      --border: #234e3d;
     }
-    .container {
-      max-width: 650px;
-      margin: 0 auto;
-      background: #0c231c;
-      border: 1px solid #1f4e3e;
-      border-radius: 16px;
-      padding: 24px;
-    }
-    h1 { color: #ffd15c; font-size: 1.4rem; margin-bottom: 20px; text-align: center; }
-    .card { background: #081a15; border: 1px solid #1a3d31; border-radius: 12px; padding: 18px; margin-bottom: 20px; }
-    label { display: block; margin-bottom: 6px; font-weight: 600; font-size: 0.9rem; color: #a3c9bb; }
-    input, textarea, select {
-      width: 100%; padding: 12px 14px; background: #05120e; border: 1px solid #1f4e3e;
-      border-radius: 8px; color: #fff; font-family: inherit; margin-bottom: 14px;
-    }
-    input[type="file"] {
-      padding: 10px;
-      background: #0d2820;
-      cursor: pointer;
-    }
-    button {
-      background: linear-gradient(135deg, #ffd15c, #f39c12); color: #0c231c; border: none;
-      padding: 12px 20px; border-radius: 8px; font-weight: 800; font-family: inherit;
-      cursor: pointer; width: 100%; font-size: 1rem; transition: opacity 0.2s;
-    }
-    button:hover { opacity: 0.9; }
+    * { box-sizing: border-box; font-family: system-ui, -apple-system, sans-serif; margin: 0; padding: 0; }
+    body { background-color: var(--bg); color: var(--text); padding: 16px; line-height: 1.6; }
+    .container { max-width: 520px; margin: 0 auto; }
+    h1, h2 { text-align: center; color: var(--accent); margin-bottom: 16px; }
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 18px; margin-bottom: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
+    label { display: block; margin-top: 12px; margin-bottom: 4px; font-size: 14px; color: var(--muted); }
+    input, select, textarea { width: 100%; padding: 10px 12px; border-radius: 8px; border: 1px solid var(--border); background: #0b1813; color: #fff; font-size: 14px; outline: none; }
+    input:focus, select:focus, textarea:focus { border-color: var(--accent); }
+    button { width: 100%; padding: 12px; background: var(--accent); color: #052e16; font-weight: bold; border: none; border-radius: 8px; cursor: pointer; margin-top: 16px; font-size: 15px; transition: 0.2s; }
+    button:hover { background: var(--accent-hover); }
     button:disabled { opacity: 0.6; cursor: not-allowed; }
-    .preview-container {
-      text-align: center;
-      margin-bottom: 14px;
-      display: none;
-    }
-    .preview-img {
-      max-width: 100%;
-      max-height: 220px;
-      border-radius: 8px;
-      border: 1px solid #ffd15c;
-    }
-    .product-list { margin-top: 15px; }
-    .product-row {
-      display: flex; justify-content: space-between; align-items: center;
-      background: #05120e; padding: 12px; border-radius: 8px; margin-bottom: 8px; border: 1px solid #1a3d31;
-    }
-    .del-btn { width: auto; background: #e74c3c; color: #fff; padding: 6px 14px; font-size: 0.85rem; }
+    .btn-delete { background: var(--danger); color: white; padding: 6px 12px; font-size: 12px; border-radius: 6px; width: auto; margin-top: 0; }
+    .preview-box { width: 100%; height: 160px; border: 2px dashed var(--border); border-radius: 8px; margin-top: 8px; display: flex; align-items: center; justify-content: center; overflow: hidden; background: #09140f; }
+    .preview-box img { width: 100%; height: 100%; object-fit: cover; display: none; }
+    .product-item { display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border); padding: 10px 0; }
+    .product-item:last-child { border-bottom: none; }
+    .product-info { display: flex; align-items: center; gap: 10px; }
+    .product-thumb { width: 44px; height: 44px; border-radius: 6px; object-fit: cover; background: #000; }
+    .msg { padding: 10px; border-radius: 8px; margin-top: 12px; font-size: 13px; text-align: center; display: none; }
+    .msg.error { background: rgba(239, 68, 68, 0.2); color: #fca5a5; border: 1px solid var(--danger); display: block; }
+    .msg.success { background: rgba(34, 197, 94, 0.2); color: #86efac; border: 1px solid var(--accent); display: block; }
+    .hidden { display: none !important; }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>پنل مدیریت سالن طوطی آرا</h1>
-    
-    <!-- فرم ورود با رمز عبور -->
-    <div id="authSection" class="card">
-      <h2 style="font-size:1.1rem;margin-bottom:12px;color:#ffd15c;">ورود مدیر</h2>
-      <label>رمز عبور پنل:</label>
-      <input type="password" id="adminPassword" placeholder="رمز عبور را وارد کنید...">
-      <button onclick="login()">ورود به پنل</button>
-    </div>
 
-    <!-- داشبورد مدیریت -->
-    <div id="dashboardSection" style="display:none;">
-      <div class="card">
-        <h2 style="font-size:1.1rem;margin-bottom:14px;color:#ffd15c;">➕ افزودن پرنده جدید</h2>
-        
-        <label>نام پرنده و مشخصات:</label>
-        <input type="text" id="pName" placeholder="مثال: جوجه گرین چیک یلو ساید">
-        
-        <label>دسته‌بندی نژاد:</label>
-        <select id="pCategory">
-          <option value="green-cheek" selected>🦜 گرین‌چیک</option>
-          <option value="monk">🦜 راهب</option>
-          <option value="sun">🦜 خورشیدی</option>
-        </select>
-        
-        <label>قیمت / وضعیت:</label>
-        <input type="text" id="pPrice" placeholder="مثال: توافقی / دون‌خور / پرورشی">
-
-        <label>انتخاب عکس پرنده از گالری:</label>
-        <input type="file" id="pImageFile" accept="image/*" onchange="handleImagePreview(event)">
-        
-        <div id="imagePreviewContainer" class="preview-container">
-          <img id="previewImage" class="preview-img" src="" alt="پیش‌نمایش">
-        </div>
-
-        <label>توضیحات تکمیلی:</label>
-        <textarea id="pDesc" rows="3" placeholder="سن، میزان رام بودن، رژیم غذایی و سلامت..."></textarea>
-        
-        <button id="submitBtn" onclick="addProduct()">➕ ذخیره و ارسال به سایت</button>
-      </div>
-
-      <div class="card">
-        <h2 style="font-size:1.1rem;margin-bottom:12px;color:#ffd15c;">📋 لیست پرندگان ثبت‌شده</h2>
-        <div id="productList" class="product-list">در حال بارگذاری لیست...</div>
-      </div>
-    </div>
+<div class="container">
+  <!-- بخش ورود مدیر -->
+  <div id="authSection" class="card">
+    <h2>ورود مدیریت پرندگان آرا</h2>
+    <label>ایمیل مدیر:</label>
+    <input type="email" id="adminEmail" placeholder="admin@example.com">
+    <label>رمز عبور:</label>
+    <input type="password" id="adminPassword" placeholder="******">
+    <button id="loginBtn" onclick="handleLogin()">ورود به پنل</button>
+    <div id="loginMsg" class="msg"></div>
   </div>
 
-  <script>
-    const ADMIN_PASS = 'ara123';
-    let selectedFile = null;
+  <!-- داشبورد اصلی بعد از ورود -->
+  <div id="dashboardSection" class="hidden">
+    <div class="card">
+      <h2>افزودن پرنده جدید</h2>
 
-    function login() {
-      const enteredPass = document.getElementById('adminPassword').value;
-      if (enteredPass === ADMIN_PASS) {
-        document.getElementById('authSection').style.display = 'none';
-        document.getElementById('dashboardSection').style.display = 'block';
-        loadAdminProducts();
-      } else {
-        alert('رمز عبور وارد شده نادرست است!');
-      }
+      <label>نام یا نژاد:</label>
+      <input type="text" id="pName" placeholder="مثال: جوجه گرین‌چیک آناناسی">
+
+      <label>دسته‌بندی:</label>
+      <select id="pCategory">
+        <option value="گرین‌چیک">گرین‌چیک</option>
+        <option value="راهب">راهب</option>
+        <option value="خورشیدی">خورشیدی (سان کانور)</option>
+      </select>
+
+      <label>قیمت (تومان):</label>
+      <input type="text" id="pPrice" placeholder="مثال: ۳,۵۰۰,۰۰۰">
+
+      <label>انتخاب عکس از گالری گوشی:</label>
+      <input type="file" id="pImgFile" accept="image/*" onchange="previewImage(event)">
+      <div class="preview-box">
+        <span id="previewText" style="color:#6ee7b7; font-size:13px;">پیش‌نمایش تصویر</span>
+        <img id="pPreviewImg" alt="پیش‌نمایش">
+      </div>
+
+      <label>توضیحات کوتاه:</label>
+      <textarea id="pDesc" rows="3" placeholder="سن، سلامت، رام بودن یا اطلاعات تکمیلی..."></textarea>
+
+      <button id="saveBtn" onclick="handleAddProduct()">ذخیره و انتشار پرنده</button>
+      <div id="formMsg" class="msg"></div>
+    </div>
+
+    <!-- لیست پرندگان ثبت‌شده -->
+    <div class="card">
+      <h2>پرندگان موجود در فروشگاه</h2>
+      <div id="productsList">در حال بارگذاری...</div>
+    </div>
+  </div>
+</div>
+
+<script>
+  let client;
+
+  window.addEventListener('DOMContentLoaded', () => {
+    client = window.supabaseClient;
+    if (!client && window.supabase && window.SUPABASE_URL) {
+      client = window.supabase.createClient(window.SUPABASE_URL, window.SUPABASE_ANON_KEY);
+    }
+  });
+
+  function showMsg(elementId, text, isError = false) {
+    const el = document.getElementById(elementId);
+    el.className = 'msg ' + (isError ? 'error' : 'success');
+    el.innerText = text;
+  }
+
+  function previewImage(event) {
+    const file = event.target.files[0];
+    const img = document.getElementById('pPreviewImg');
+    const txt = document.getElementById('previewText');
+    if (file) {
+      img.src = URL.createObjectURL(file);
+      img.style.display = 'block';
+      txt.style.display = 'none';
+    } else {
+      img.style.display = 'none';
+      txt.style.display = 'block';
+    }
+  }
+
+  async function handleLogin() {
+    const email = document.getElementById('adminEmail').value.trim();
+    const password = document.getElementById('adminPassword').value;
+    const btn = document.getElementById('loginBtn');
+
+    if (!email || !password) {
+      showMsg('loginMsg', 'لطفاً ایمیل و رمز عبور را وارد کنید', true);
+      return;
     }
 
-    function handleImagePreview(event) {
-      const file = event.target.files[0];
-      if (!file) return;
-      selectedFile = file;
+    btn.disabled = true;
+    btn.innerText = 'در حال بررسی...';
 
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        const preview = document.getElementById('previewImage');
-        preview.src = e.target.result;
-        document.getElementById('imagePreviewContainer').style.display = 'block';
-      };
-      reader.readAsDataURL(file);
+    try {
+      const { data, error } = await client.auth.signInWithPassword({ email, password });
+      if (error) throw error;
+
+      document.getElementById('authSection').classList.add('hidden');
+      document.getElementById('dashboardSection').classList.remove('hidden');
+      loadProducts();
+    } catch (err) {
+      showMsg('loginMsg', 'خطا در ورود: اطلاعات نادرست است یا ارتباط برقرار نشد', true);
+    } finally {
+      btn.disabled = false;
+      btn.innerText = 'ورود به پنل';
+    }
+  }
+
+  async function uploadImageToStorage(file) {
+    const fileExt = file.name.split('.').pop();
+    const fileName = `${Date.now()}_${Math.random().toString(36).substring(2, 8)}.${fileExt}`;
+    const filePath = `birds/${fileName}`;
+
+    // اول باکت gallery را بررسی می‌کنیم، در صورت عدم دسترسی از باکت کمکی استفاده می‌شود
+    let bucketName = 'gallery';
+    let { data, error } = await client.storage.from(bucketName).upload(filePath, file);
+
+    if (error) {
+      bucketName = 'product-images';
+      const fallbackUpload = await client.storage.from(bucketName).upload(filePath, file);
+      if (fallbackUpload.error) throw new Error('فضای باکت ذخیره تصویر در دسترس نیست');
     }
 
-    async function addProduct() {
-      const name = document.getElementById('pName').value.trim();
-      const price = document.getElementById('pPrice').value.trim();
-      const description = document.getElementById('pDesc').value.trim();
-      const submitBtn = document.getElementById('submitBtn');
+    const { data: urlData } = client.storage.from(bucketName).getPublicUrl(filePath);
+    return urlData.publicUrl;
+  }
 
-      if (!name) {
-        alert('لطفاً نام پرنده را وارد کنید.');
-        return;
-      }
+  async function handleAddProduct() {
+    const name = document.getElementById('pName').value.trim();
+    const category = document.getElementById('pCategory').value;
+    const price = document.getElementById('pPrice').value.trim();
+    const desc = document.getElementById('pDesc').value.trim();
+    const fileInput = document.getElementById('pImgFile');
+    const btn = document.getElementById('saveBtn');
 
-      if (!window.supabaseClient) {
-        alert('اتصال به سرور برقرار نشد؛ لطفاً اینترنت و تنظیمات Supabase را بررسی فرمایید.');
-        return;
-      }
-
-      submitBtn.disabled = true;
-      submitBtn.innerText = 'در حال آپلود و ذخیره...';
-
-      let imageUrl = '';
-
-      try {
-        // ۱. آپلود تصویر در صورت انتخاب فایل
-        if (selectedFile) {
-          const fileExt = selectedFile.name.split('.').pop();
-          const fileName = `${Date.now()}_${Math.random().toString(36).substring(2, 9)}.${fileExt}`;
-          const filePath = `${fileName}`;
-
-          const { data: uploadData, error: uploadError } = await window.supabaseClient
-            .storage
-            .from('product-images')
-            .upload(filePath, selectedFile);
-
-          if (uploadError) {
-            throw new Error('خطا در بارگذاری عکس: ' + uploadError.message);
-          }
-
-          const { data: publicUrlData } = window.supabaseClient
-            .storage
-            .from('product-images')
-            .getPublicUrl(filePath);
-
-          imageUrl = publicUrlData.publicUrl;
-        }
-
-        // ۲. ذخیره اطلاعات در جدول محصولات
-        const { error: insertError } = await window.supabaseClient
-          .from('products')
-          .insert([{
-            name: name,
-            price: price,
-            description: description,
-            image_url: imageUrl,
-            available: true
-          }]);
-
-        if (insertError) {
-          throw new Error('خطا در ذخیره اطلاعات: ' + insertError.message);
-        }
-
-        alert('پرنده با موفقیت ثبت شد!');
-        
-        // پاکسازی فرم
-        document.getElementById('pName').value = '';
-        document.getElementById('pPrice').value = '';
-        document.getElementById('pDesc').value = '';
-        document.getElementById('pImageFile').value = '';
-        document.getElementById('imagePreviewContainer').style.display = 'none';
-        selectedFile = null;
-
-        loadAdminProducts();
-
-      } catch (err) {
-        alert(err.message);
-      } finally {
-        submitBtn.disabled = false;
-        submitBtn.innerText = '➕ ذخیره و ارسال به سایت';
-      }
+    if (!name) {
+      showMsg('formMsg', 'لطفاً نام پرنده را وارد کنید', true);
+      return;
+    }
+    if (!fileInput.files || fileInput.files.length === 0) {
+      showMsg('formMsg', 'لطفاً یک تصویر از پرنده انتخاب کنید', true);
+      return;
     }
 
-    async function loadAdminProducts() {
-      const list = document.getElementById('productList');
-      if (!window.supabaseClient) {
-        list.innerHTML = 'خطا در برقراری ارتباط با پایگاه‌داده.';
-        return;
-      }
+    btn.disabled = true;
+    btn.innerText = 'در حال آپلود عکس و ذخیره...';
 
-      const { data, error } = await window.supabaseClient
-        .from('products')
-        .select('*')
-        .order('id', { ascending: false });
+    try {
+      const imageUrl = await uploadImageToStorage(fileInput.files[0]);
 
-      if (error) {
-        list.innerHTML = 'خطا در دریافت لیست پرندگان: ' + error.message;
-        return;
-      }
+      const { error } = await client.from('products').insert([{
+        name: name,
+        price: price || 'تماس بگیرید',
+        description: desc,
+        image_url: imageUrl,
+        available: true
+      }]);
+
+      if (error) throw error;
+
+      showMsg('formMsg', 'پرنده با موفقیت ثبت شد!');
+      // ریست فرم
+      document.getElementById('pName').value = '';
+      document.getElementById('pPrice').value = '';
+      document.getElementById('pDesc').value = '';
+      fileInput.value = '';
+      document.getElementById('pPreviewImg').style.display = 'none';
+      document.getElementById('previewText').style.display = 'block';
+
+      loadProducts();
+    } catch (err) {
+      showMsg('formMsg', 'خطا در ثبت: ' + (err.message || 'مشکل در ارتباط با پایگاه داده'), true);
+    } finally {
+      btn.disabled = false;
+      btn.innerText = 'ذخیره و انتشار پرنده';
+    }
+  }
+
+  async function loadProducts() {
+    const listEl = document.getElementById('productsList');
+    listEl.innerHTML = 'در حال دریافت اطلاعات...';
+
+    try {
+      const { data, error } = await client.from('products').select('*').order('id', { ascending: false });
+      if (error) throw error;
 
       if (!data || data.length === 0) {
-        list.innerHTML = 'هنوز موردی ثبت نشده است.';
+        listEl.innerHTML = '<p style="text-align:center; color:#9ca3af;">هنوز پرنده‌ای اضافه نشده است.</p>';
         return;
       }
 
-      list.innerHTML = data.map(p => `
-        <div class="product-row">
-          <div>
-            <strong>${p.name}</strong> 
-            <span style="color:#ffd15c; font-size:0.85rem; margin-right:8px;">(${p.price || 'بدون قیمت'})</span>
+      listEl.innerHTML = data.map(item => `
+        <div class="product-item">
+          <div class="product-info">
+            <img class="product-thumb" src="${item.image_url || 'hero.png'}" alt="${item.name}">
+            <div>
+              <div style="font-weight: bold;">${item.name}</div>
+              <div style="font-size: 12px; color: var(--muted);">${item.price || ''}</div>
+            </div>
           </div>
-          <button class="del-btn" onclick="deleteProduct('${p.id}')">حذف</button>
+          <button class="btn-delete" onclick="deleteProduct('${item.id}')">حذف</button>
         </div>
       `).join('');
+    } catch (err) {
+      listEl.innerHTML = '<p style="color:var(--danger); text-align:center;">خطا در دریافت لیست پرندگان</p>';
     }
+  }
 
-    async function deleteProduct(id) {
-      if (!confirm('آیا از حذف این پرنده اطمینان دارید؟')) return;
-      
-      const { error } = await window.supabaseClient
-        .from('products')
-        .delete()
-        .eq('id', id);
-
-      if (error) {
-        alert('خطا در حذف: ' + error.message);
-      } else {
-        loadAdminProducts();
-      }
+  async function deleteProduct(id) {
+    if (!confirm('آیا از حذف این پرنده اطمینان دارید؟')) return;
+    try {
+      const { error } = await client.from('products').delete().eq('id', id);
+      if (error) throw error;
+      loadProducts();
+    } catch (err) {
+      alert('خطا در حذف پرنده');
     }
-  </script>
+  }
+</script>
+
 </body>
 </html>
