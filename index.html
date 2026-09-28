@@ -1,197 +1,390 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>سالن پرورش پرندگان آرا - قزوین</title>
-    <!-- اتصال به Supabase -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="supabase-config.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>سالن پرورش طوطی آرا قزوین</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+    body {
+      background-color: #0b1510;
+      color: #fff;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+    .poster-container {
+      position: relative;
+      width: 100%;
+      max-width: 500px;
+      margin: 0 auto;
+      line-height: 0;
+      box-shadow: 0 0 30px rgba(0,0,0,0.8);
+      background: #0b1510;
+    }
+    .poster-img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
     
-    <style>
-        * { box-sizing: border-box; font-family: system-ui, -apple-system, Tahoma, sans-serif; }
-        body { background-color: #08140c; color: #eaf5ed; margin: 0; padding: 15px; text-align: center; }
-        .container { max-width: 480px; margin: 0 auto; }
-        
-        /* پوستر اصلی */
-        .hero-banner { width: 100%; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.5); margin-bottom: 15px; }
-        
-        /* دکمه اینستاگرام */
-        .insta-btn {
-            display: flex; align-items: center; justify-content: center; gap: 8px;
-            background: linear-gradient(45deg, #f09433, #dc2743, #bc1888);
-            color: #fff; text-decoration: none; font-weight: bold; font-size: 15px;
-            padding: 12px; border-radius: 12px; margin-bottom: 20px;
-            box-shadow: 0 4px 12px rgba(220, 39, 67, 0.3);
-        }
+    /* محدوده‌های لمسی روی پوستر */
+    .hotspot {
+      position: absolute;
+      display: block;
+      z-index: 10;
+      cursor: pointer;
+      background: rgba(255, 255, 255, 0);
+      text-decoration: none;
+    }
+    .hotspot:active {
+      background: rgba(46, 204, 113, 0.25);
+    }
 
-        /* کارت‌های دسته‌بندی پرنده‌ها */
-        .categories-grid { display: grid; grid-template-columns: 1fr; gap: 12px; margin-bottom: 25px; }
-        .cat-card {
-            background: linear-gradient(135deg, #12331b, #0d2413);
-            border: 1px solid #1f592f; border-radius: 14px; padding: 16px;
-            display: flex; align-items: center; justify-content: space-between;
-            cursor: pointer; transition: 0.2s;
-        }
-        .cat-card:active { transform: scale(0.98); background: #164022; }
-        .cat-title { font-size: 17px; font-weight: bold; color: #a3f7bf; }
-        .cat-arrow { font-size: 18px; color: #6ee79c; }
+    /* پاپ‌آپ و مودال */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(4px);
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+      z-index: 9999;
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transition: opacity 0.25s ease, visibility 0.25s ease;
+    }
+    .modal-overlay.active {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+    }
+    .modal-card {
+      background: #12231b;
+      width: 100%;
+      max-width: 500px;
+      max-height: 85vh;
+      border-radius: 20px 20px 0 0;
+      border-top: 2px solid #2ecc71;
+      box-shadow: 0 -10px 25px rgba(0,0,0,0.5);
+      display: flex;
+      flex-direction: column;
+      transform: translateY(100%);
+      transition: transform 0.3s ease;
+      color: #e0e0e0;
+      line-height: 1.6;
+    }
+    .modal-overlay.active .modal-card {
+      transform: translateY(0);
+    }
+    .modal-header {
+      padding: 16px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+    .modal-header h3 {
+      margin: 0;
+      font-size: 1.15rem;
+      color: #2ecc71;
+    }
+    .modal-close {
+      background: rgba(255,255,255,0.1);
+      border: none;
+      color: #fff;
+      font-size: 1.4rem;
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-body {
+      padding: 20px;
+      overflow-y: auto;
+      font-size: 0.95rem;
+      max-height: calc(85vh - 70px);
+    }
+    .modal-body p {
+      margin-bottom: 12px;
+    }
+    .modal-body ul {
+      margin-right: 20px;
+      margin-bottom: 15px;
+    }
 
-        /* مودال (پنجره بازشونده گالری عکس‌ها) */
-        .modal {
-            display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.85);
-            backdrop-filter: blur(5px); z-index: 1000; align-items: center; justify-content: center; padding: 15px;
-        }
-        .modal.active { display: flex; }
-        .modal-content {
-            background: #0f2615; border: 1px solid #236334; border-radius: 18px;
-            width: 100%; max-width: 440px; max-height: 85vh; display: flex; flex-direction: column; overflow: hidden;
-        }
-        .modal-header {
-            padding: 15px; display: flex; justify-content: space-between; align-items: center;
-            border-bottom: 1px solid #1a4524;
-        }
-        .modal-header h3 { margin: 0; font-size: 17px; color: #75f0a0; }
-        .close-btn { background: none; border: none; color: #fff; font-size: 24px; cursor: pointer; }
-        
-        .gallery-container { padding: 15px; overflow-y: auto; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        .gallery-item {
-            background: #091a0e; border-radius: 10px; overflow: hidden; border: 1px solid #1a4524;
-        }
-        .gallery-item img { width: 100%; height: 130px; object-fit: cover; display: block; }
-        .gallery-item .title { font-size: 12px; padding: 6px; color: #ccc; text-align: center; }
-        
-        .loading-text { grid-column: span 2; padding: 30px; color: #88cfa0; font-size: 14px; }
-        
-        /* پنل مدیریت در پایین */
-        .admin-box { margin-top: 30px; font-size: 12px; }
-        .admin-box a { color: #52a16d; text-decoration: none; }
-    </style>
+    /* دکمه‌های اکشن */
+    .modal-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 15px;
+      flex-wrap: wrap;
+    }
+    .action-btn {
+      flex: 1;
+      min-width: 130px;
+      padding: 11px 14px;
+      border-radius: 10px;
+      text-align: center;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+    .btn-call { background: #27ae60; color: #fff; }
+    .btn-add { background: #f39c12; color: #fff; width: 100%; margin-top: 12px; }
+    .btn-insta { background: #e1306c; color: #fff; }
+
+    /* گالری داخل مودال */
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin-top: 15px;
+    }
+    .gallery-item {
+      background: rgba(255,255,255,0.05);
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    .gallery-item img {
+      width: 100%;
+      height: 120px;
+      object-fit: cover;
+      display: block;
+    }
+    .gallery-item-title {
+      padding: 6px;
+      font-size: 0.8rem;
+      text-align: center;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  </style>
 </head>
 <body>
 
-<div class="container">
-    <!-- بنر سایت -->
-    <img src="hero.png" class="hero-banner" alt="سالن تکثیر طوطی آرا">
+  <div class="poster-container">
+    <img src="hero.png" alt="پوستر طوطی آرا قزوین" class="poster-img">
 
-    <!-- پیج اینستاگرام -->
-    <a href="https://instagram.com/ara_bird_qaz" class="insta-btn" target="_blank">
-        <span>📸 مشاهده پیج اینستاگرام ما (ara_bird_qaz)</span>
-    </a>
+    <!-- ۱. منوی بسیار بالای پوستر -->
+    <a href="#quick-contact" class="hotspot" style="top: 1.5%; left: 3%; width: 14%; height: 3%;" title="تماس سریع"></a>
+    <a href="#contact" class="hotspot" style="top: 1.5%; left: 18%; width: 15%; height: 3%;" title="تماس با ما"></a>
+    <a href="#care" class="hotspot" style="top: 1.5%; left: 34%; width: 22%; height: 3%;" title="نکات نگهداری"></a>
+    <a href="#gallery" class="hotspot" style="top: 1.5%; left: 57%; width: 14%; height: 3%;" title="گالری تصاویر"></a>
+    <a href="#birds" class="hotspot" style="top: 1.5%; left: 72%; width: 13%; height: 3%;" title="پرندگان"></a>
+    <a href="#about" class="hotspot" style="top: 1.5%; left: 86%; width: 12%; height: 3%;" title="درباره ما"></a>
 
-    <!-- دسته‌بندی طوطی‌ها -->
-    <div class="categories-grid">
-        <div class="cat-card" onclick="openGallery('راهب', 'طوطی راهب')">
-            <span class="cat-title">🦜 عکس‌های طوطی راهب</span>
-            <span class="cat-arrow">مشاهده ❯</span>
-        </div>
-        <div class="cat-card" onclick="openGallery('گرینچیک', 'طوطی گرین‌چیک')">
-            <span class="cat-title">🦜 عکس‌های طوطی گرین‌چیک</span>
-            <span class="cat-arrow">مشاهده ❯</span>
-        </div>
-        <div class="cat-card" onclick="openGallery('خورشیدی', 'طوطی کانور خورشیدی')">
-            <span class="cat-title">🦜 عکس‌های طوطی خورشیدی</span>
-            <span class="cat-arrow">مشاهده ❯</span>
-        </div>
+    <!-- ۲. سه طوطی بالای پوستر روی شاخه درخت -->
+    <!-- طوطی خورشیدی (راست) -->
+    <a href="#bird/sun" class="hotspot" style="top: 15%; left: 45%; width: 16%; height: 16%;" title="طوطی خورشیدی"></a>
+    <!-- طوطی راهب (وسط) -->
+    <a href="#bird/monk" class="hotspot" style="top: 16%; left: 17%; width: 27%; height: 18%;" title="طوطی راهب"></a>
+    <!-- طوطی گرین‌چیک (چپ) -->
+    <a href="#bird/green-cheek" class="hotspot" style="top: 17%; left: 1%; width: 22%; height: 18%;" title="طوطی گرین‌چیک"></a>
+
+    <!-- ۳. چهار دایره ویژگی‌ها (سلامت تضمینی، تغذیه، محیط استاندارد و...) -->
+    <a href="#care" class="hotspot" style="top: 37%; left: 3%; width: 94%; height: 7%;" title="ویژگی‌های سالن آرا"></a>
+
+    <!-- ۴. سه کارت معرفی پرندگان (پایین‌تر) -->
+    <!-- کارت گرین‌چیک (راست در چیدمان RTL) -->
+    <a href="#bird/green-cheek" class="hotspot" style="top: 47%; left: 49%; width: 22%; height: 16%;" title="کارت گرین‌چیک"></a>
+    <!-- کارت راهب (وسط) -->
+    <a href="#bird/monk" class="hotspot" style="top: 47%; left: 26%; width: 22%; height: 16%;" title="کارت راهب"></a>
+    <!-- کارت خورشیدی (چپ) -->
+    <a href="#bird/sun" class="hotspot" style="top: 47%; left: 3%; width: 22%; height: 16%;" title="کارت خورشیدی"></a>
+
+    <!-- ۵. باکس درباره سالن طوطی آرا (سمت راست متن) -->
+    <a href="#about" class="hotspot" style="top: 45%; left: 72%; width: 26%; height: 18%;" title="درباره سالن آرا"></a>
+
+    <!-- ۶. گالری تصاویر نواری -->
+    <a href="#gallery" class="hotspot" style="top: 65%; left: 3%; width: 94%; height: 6%;" title="گالری تصاویر"></a>
+
+    <!-- ۷. دکمه‌های تماس و واتساپ -->
+    <a href="tel:09107488013" class="hotspot" style="top: 71%; left: 37%; width: 25%; height: 4%;" title="تماس تلفنی"></a>
+    <a href="https://wa.me/989107488013" class="hotspot" style="top: 71%; left: 4%; width: 32%; height: 4%;" title="واتساپ"></a>
+
+    <!-- ۸. دکمه‌های شبکه‌های اجتماعی پایین صفحه -->
+    <a href="https://t.me/toti_ara" target="_blank" class="hotspot" style="top: 76%; left: 5%; width: 5%; height: 2.5%;" title="تلگرام"></a>
+    <a href="https://instagram.com/toti_ara" target="_blank" class="hotspot" style="top: 76%; left: 10%; width: 5%; height: 2.5%;" title="اینستاگرام"></a>
+    <a href="https://wa.me/989107488013" target="_blank" class="hotspot" style="top: 76%; left: 14%; width: 5%; height: 2.5%;" title="واتساپ"></a>
+  </div>
+
+  <!-- پنجره مودال پاپ‌آپ -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 id="modalTitle">عنوان</h3>
+        <button class="modal-close" id="modalCloseBtn">&times;</button>
+      </div>
+      <div class="modal-body" id="modalBody"></div>
     </div>
+  </div>
 
-    <div class="admin-box">
-        <a href="admin.html">🔒 ورود به بخش مدیریت سالن</a>
-    </div>
-</div>
+  <script>
+    const BIRDS_DATA = {
+      'sun': {
+        title: 'طوطی خورشیدی (سان کانور)',
+        categoryName: 'خورشیدی',
+        text: 'طوطی خورشیدی پرنده‌ای بسیار بازیگوش، باهوش و با رنگ‌آمیزی فوق‌العاده درخشان زرد و نارنجی است.',
+        points: ['رنگ‌آمیزی جذاب و خیره‌کننده', 'بسیار اجتماعی و دستی', 'مناسب برای بازی و آموزش'],
+        category: 'sun'
+      },
+      'monk': {
+        title: 'طوطی راهب (کواکر)',
+        categoryName: 'راهب',
+        text: 'طوطی راهب از باهوش‌ترین طوطی‌ها با توانایی و استعداد بسیار عالی در سخنگویی و یادگیری است.',
+        points: ['استعداد بالا در صحبت کردن و کلمات', 'شخصیت جسور و کنجکاو', 'بسیار مهربان و وابسته به صاحب خود'],
+        category: 'monk'
+      },
+      'green-cheek': {
+        title: 'طوطی گرین‌چیک',
+        categoryName: 'گرین‌چیک',
+        text: 'طوطی گرین‌چیک پرنده‌ای بسیار آرام، بی‌صدا، مناسب برای آپارتمان و فوق‌العاده لوس و نوازشی است.',
+        points: ['صدای بسیار کم (ایده‌آل برای محیط آپارتمان)', 'تنوع در جهش‌های رنگی آناناسی، یلوساید و تراکویس', 'فوق‌العاده لوس و علاقه‌مند به نوازش'],
+        category: 'green-cheek'
+      }
+    };
 
-<!-- پنجره نمایش گالری پرنده انتخابی -->
-<div id="galleryModal" class="modal">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h3 id="modalTitle">گالری عکس‌ها</h3>
-            <button class="close-btn" onclick="closeGallery()">✕</button>
-        </div>
-        <div id="galleryGrid" class="gallery-container">
-            <!-- تصاویر به صورت خودکار اینجا قرار می‌گیرند -->
-        </div>
-    </div>
-</div>
+    const modalOverlay = document.getElementById('modalOverlay');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalBody = document.getElementById('modalBody');
+    const modalCloseBtn = document.getElementById('modalCloseBtn');
 
-<script>
-    // آدرس ورکر کلودفلر به عنوان بک‌آپ
-    const WORKER_URL = 'https://toti-ara-gallery.mohammadrezasamieizadeh.workers.dev/api/gallery';
-
-    // عملکرد دوگانه (Dual-Fetch): اول Supabase، در صورت بروز خطا سوئیچ روی Cloudflare
-    async function fetchBirdsData() {
-        // ۱. تلاش اول: Supabase مستقیم
-        if (window.supabaseClient) {
-            try {
-                const { data, error } = await window.supabaseClient
-                    .from('products')
-                    .select('*')
-                    .order('id', { ascending: false });
-
-                if (!error && data && data.length > 0) {
-                    console.log('داده‌ها با موفقیت مستقیم از دیتابیس خوانده شدند.');
-                    return data;
-                }
-            } catch (e) {
-                console.warn('تلاش سوپابیس ناموفق بود، سوئیچ به Cloudflare Worker...');
-            }
-        }
-
-        // ۲. تلاش دوم (بک‌آپ): Cloudflare Worker
-        try {
-            const res = await fetch(WORKER_URL);
-            if (res.ok) {
-                const workerData = await res.json();
-                console.log('داده‌ها از طریق Cloudflare Worker دریافت شدند.');
-                return workerData;
-            }
-        } catch (e) {
-            console.error('هر دو مسیر در دسترس نبودند.');
-        }
-
-        return [];
+    function closeModal() {
+      modalOverlay.classList.remove('active');
+      history.replaceState(null, null, ' ');
     }
 
-    // باز کردن گالری و فقط نمایش تصاویر
-    async function openGallery(categoryKey, categoryName) {
-        const modal = document.getElementById('galleryModal');
-        const grid = document.getElementById('galleryGrid');
-        const title = document.getElementById('modalTitle');
-
-        title.innerText = 'عکس‌های ' + categoryName;
-        grid.innerHTML = '<div class="loading-text">در حال بارگذاری تصاویر...</div>';
-        modal.classList.add('active');
-
-        const allBirds = await fetchBirdsData();
-
-        // فیلتر کردن پرنده‌ها بر اساس دسته‌بندی
-        const filtered = allBirds.filter(b => {
-            const cat = (b.category || b.title || '').toLowerCase();
-            return cat.includes(categoryKey.toLowerCase());
-        });
-
-        if (filtered.length === 0) {
-            grid.innerHTML = '<div class="loading-text">هنوز تصویری برای این پرنده ثبت نشده است.</div>';
-            return;
-        }
-
-        // رندر کردن فقط عکس‌ها بدون توضیحات اضافه
-        grid.innerHTML = filtered.map(bird => `
-            <div class="gallery-item">
-                <img src="${bird.image_url || bird.url}" alt="${bird.title || 'طوطی آرا'}" onclick="window.open(this.src, '_blank')">
-                ${bird.title ? `<div class="title">${bird.title}</div>` : ''}
-            </div>
-        `).join('');
-    }
-
-    function closeGallery() {
-        document.getElementById('galleryModal').classList.remove('active');
-    }
-
-    // بستن پنجره با کلیک خارج از کادر
-    document.getElementById('galleryModal').addEventListener('click', function(e) {
-        if (e.target === this) closeGallery();
+    modalCloseBtn.addEventListener('click', closeModal);
+    modalOverlay.addEventListener('click', (e) => {
+      if (e.target === modalOverlay) closeModal();
     });
-</script>
 
+    function handleRoute() {
+      const hash = window.location.hash.replace('#', '').trim();
+      if (!hash) {
+        modalOverlay.classList.remove('active');
+        return;
+      }
+
+      if (hash.startsWith('bird/')) {
+        const type = hash.replace('bird/', '');
+        const bird = BIRDS_DATA[type];
+        if (bird) {
+          modalTitle.textContent = bird.title;
+          modalBody.innerHTML = `
+            <p>${bird.text}</p>
+            <ul>${bird.points.map(p => `<li>${p}</li>`).join('')}</ul>
+            <div class="modal-actions">
+              <a href="tel:09107488013" class="action-btn btn-call">📞 استعلام قیمت و خرید</a>
+              <a href="https://instagram.com/toti_ara" target="_blank" class="action-btn btn-insta">📷 پیج اینستاگرام</a>
+            </div>
+            <a href="admin.html" class="action-btn btn-add">➕ افزودن عکس یا پرنده به دسته ${bird.categoryName}</a>
+            <div id="birdGallery" class="gallery-grid"></div>
+          `;
+          modalOverlay.classList.add('active');
+          loadCategoryImages(bird.category);
+        }
+      } else if (hash === 'contact' || hash === 'quick-contact') {
+        modalTitle.textContent = 'ارتباط با سالن طوطی آرا';
+        modalBody.innerHTML = `
+          <p><strong>آدرس:</strong> قزوین، محله مینودر</p>
+          <p><strong>شماره تماس / هماهنگی:</strong> ۰۹۱۰۷۴۸۸۰۱۳</p>
+          <div class="modal-actions">
+            <a href="tel:09107488013" class="action-btn btn-call">📞 تماس مستقیم</a>
+            <a href="https://wa.me/989107488013" class="action-btn btn-call" style="background:#25d366;">💬 واتساپ</a>
+          </div>
+        `;
+        modalOverlay.classList.add('active');
+      } else if (hash === 'care') {
+        modalTitle.textContent = 'اصول و نکات نگهداری طوطی‌سانان';
+        modalBody.innerHTML = `
+          <p><strong>تغذیه اصولی:</strong> استفاده از پلت‌های استاندارد، انواع میوه‌ها و سبزیجات مجاز تازه.</p>
+          <p><strong>سلامت تضمینی:</strong> تمامی پرندگان در شرایط استاندارد بهداشتی، واکسینه و کاملاً سلامت تحویل داده می‌شوند.</p>
+          <div class="modal-actions">
+            <a href="tel:09107488013" class="action-btn btn-call">📞 مشاوره رایگان نگهداری</a>
+          </div>
+        `;
+        modalOverlay.classList.add('active');
+      } else if (hash === 'about') {
+        modalTitle.textContent = 'درباره سالن پرورش طوطی آرا';
+        modalBody.innerHTML = `
+          <p>سالن پرورش <strong>طوطی آرا</strong> واقع در قزوین (مینودر)، مرکز تخصصی پرورش با عشق و کیفیت پرندگان زینتی شامل گرین‌چیک، راهب و خورشیدی است.</p>
+          <div class="modal-actions">
+            <a href="https://instagram.com/toti_ara" target="_blank" class="action-btn btn-insta">📷 پیج اینستاگرام</a>
+            <a href="tel:09107488013" class="action-btn btn-call">📞 تماس با سالن</a>
+          </div>
+        `;
+        modalOverlay.classList.add('active');
+      } else if (hash === 'gallery' || hash === 'birds') {
+        modalTitle.textContent = 'انتخاب گونه طوطی';
+        modalBody.innerHTML = `
+          <p>برای مشاهده گالری و ثبت پرنده، گونه مورد نظر را انتخاب کنید:</p>
+          <div class="modal-actions" style="flex-direction: column;">
+            <a href="#bird/sun" class="action-btn btn-call" style="background:#e67e22;">طوطی خورشیدی (سان کانور)</a>
+            <a href="#bird/monk" class="action-btn btn-call" style="background:#27ae60;">طوطی راهب (کواکر)</a>
+            <a href="#bird/green-cheek" class="action-btn btn-call" style="background:#16a085;">طوطی گرین‌چیک</a>
+          </div>
+        `;
+        modalOverlay.classList.add('active');
+      }
+    }
+
+    async function loadCategoryImages(cat) {
+      const container = document.getElementById('birdGallery');
+      if (!container) return;
+      
+      try {
+        const res = await fetch("https://toti-ara-gallery.mohammadrezasamieizadeh.workers.dev/api/gallery");
+        if (res.ok) {
+          const data = await res.json();
+          const items = Array.isArray(data) ? data : (data.products || data.data || []);
+          const filtered = items.filter(i => (i.category || '').toLowerCase().includes(cat.replace('-', '')));
+
+          if (filtered.length > 0) {
+            container.innerHTML = filtered.map(item => `
+              <div class="gallery-item">
+                <img src="${item.image_url || item.url || 'hero.png'}" alt="${item.title || 'طوطی'}">
+                <div class="gallery-item-title">${item.title || item.name || 'طوطی آماده واگذاری'}</div>
+              </div>
+            `).join('');
+          }
+        }
+      } catch (err) {}
+    }
+
+    window.addEventListener('hashchange', handleRoute);
+    window.addEventListener('DOMContentLoaded', handleRoute);
+
+    document.querySelectorAll('.hotspot').forEach(link => {
+      link.addEventListener('click', function(e) {
+        const targetHref = this.getAttribute('href');
+        if (targetHref && targetHref.startsWith('#')) {
+          e.preventDefault();
+          window.location.hash = targetHref;
+          handleRoute();
+        }
+      });
+    });
+  </script>
 </body>
 </html>
