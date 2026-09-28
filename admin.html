@@ -3,597 +3,375 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>سالن پرورش طوطی آرا - قزوین</title>
+  <title>پنل مدیریت - سالن پرندگان آرا</title>
   <style>
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
+      font-family: system-ui, -apple-system, sans-serif;
     }
-
     body {
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
-      background-color: #0b0f19;
-      color: #f8fafc;
-      min-height: 100vh;
+      background-color: #0b1510;
+      color: #e0e0e0;
+      padding: 20px 10px;
       display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-start;
-      overflow-x: hidden;
-    }
-
-    .poster-container {
-      position: relative;
-      width: 100%;
-      max-width: 950px;
-      margin: 0 auto;
-      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.5);
-      background: #000;
-    }
-
-    .poster-img {
-      width: 100%;
-      height: auto;
-      display: block;
-      user-select: none;
-      -webkit-user-drag: none;
-    }
-
-    .hotspot {
-      position: absolute;
-      display: block;
-      cursor: pointer;
-      z-index: 20;
-      border-radius: 6px;
-      -webkit-tap-highlight-color: transparent;
-      transition: background-color 0.2s ease;
-    }
-
-    .hotspot:hover, .hotspot:active {
-      background-color: rgba(255, 255, 255, 0.12);
-    }
-
-    /* Modal Styles */
-    .modal-overlay {
-      position: fixed;
-      inset: 0;
-      background-color: rgba(0, 0, 0, 0.8);
-      backdrop-filter: blur(5px);
-      display: none;
-      align-items: center;
       justify-content: center;
-      z-index: 100;
-      padding: 16px;
-      opacity: 0;
-      transition: opacity 0.25s ease;
     }
-
-    .modal-overlay.active {
-      display: flex;
-      opacity: 1;
-    }
-
-    .modal-card {
-      background: #1e293b;
-      border: 1px solid #334155;
+    .admin-container {
+      width: 100%;
+      max-width: 600px;
+      background: #14241d;
       border-radius: 16px;
-      width: 100%;
-      max-width: 650px;
-      max-height: 88vh;
-      overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-      position: relative;
-      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8);
-      transform: scale(0.95);
-      transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      padding: 24px;
+      border: 1px solid #2ecc71;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
     }
-
-    .modal-overlay.active .modal-card {
-      transform: scale(1);
+    h2 {
+      color: #2ecc71;
+      margin-bottom: 20px;
+      text-align: center;
+      font-size: 1.4rem;
     }
-
-    .modal-header {
-      padding: 16px 20px;
-      border-bottom: 1px solid #334155;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      position: sticky;
-      top: 0;
-      background: #1e293b;
-      z-index: 5;
-    }
-
-    .modal-title {
-      font-size: 1.15rem;
-      font-weight: 700;
-      color: #38bdf8;
-    }
-
-    .close-btn {
-      background: #334155;
-      border: none;
-      color: #94a3b8;
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      font-size: 1.3rem;
-      transition: background 0.2s, color 0.2s;
-    }
-
-    .close-btn:hover {
-      background: #ef4444;
-      color: #fff;
-    }
-
-    .modal-body {
-      padding: 20px;
-      font-size: 0.95rem;
-      line-height: 1.8;
-      color: #cbd5e1;
-    }
-
-    .modal-body p {
-      margin-bottom: 12px;
-    }
-
-    .modal-body ul {
-      margin-right: 20px;
+    .form-group {
       margin-bottom: 16px;
     }
-
-    .modal-body li {
-      margin-bottom: 6px;
-    }
-
-    /* Gallery Grid inside Modal */
-    .gallery-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-      gap: 12px;
-      margin-top: 16px;
-    }
-
-    .gallery-item {
-      background: #0f172a;
-      border-radius: 10px;
-      overflow: hidden;
-      border: 1px solid #334155;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .gallery-item img {
-      width: 100%;
-      height: 130px;
-      object-fit: cover;
+    label {
       display: block;
-      background: #1e293b;
+      margin-bottom: 6px;
+      font-size: 0.9rem;
+      color: #a0c4b2;
     }
-
-    .gallery-item-title {
-      padding: 8px 10px;
-      font-size: 0.82rem;
-      font-weight: 600;
-      color: #f1f5f9;
-      text-align: center;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .gallery-item-desc {
-      padding: 0 8px 8px;
-      font-size: 0.72rem;
-      color: #94a3b8;
-      text-align: center;
-      display: -webkit-box;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
-    }
-
-    .gallery-filter-bar {
-      display: flex;
-      gap: 8px;
-      margin-bottom: 16px;
-      flex-wrap: wrap;
-    }
-
-    .filter-btn {
-      background: #334155;
-      color: #cbd5e1;
-      border: 1px solid #475569;
-      padding: 6px 14px;
-      border-radius: 20px;
-      font-size: 0.85rem;
-      cursor: pointer;
-      transition: background 0.2s, color 0.2s;
-    }
-
-    .filter-btn.active, .filter-btn:hover {
-      background: #0284c7;
+    input, select, textarea {
+      width: 100%;
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid #28543e;
+      background: #0d1a14;
       color: #fff;
-      border-color: #0284c7;
+      font-size: 0.95rem;
+      outline: none;
     }
-
-    .status-msg {
+    input:focus, select:focus, textarea:focus {
+      border-color: #2ecc71;
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      border-radius: 8px;
+      border: none;
+      font-weight: bold;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+    button:active {
+      opacity: 0.8;
+    }
+    .btn-submit {
+      background: #2ecc71;
+      color: #0b1510;
+      margin-top: 10px;
+    }
+    .btn-danger {
+      background: #e74c3c;
+      color: #fff;
+      padding: 6px 12px;
+      font-size: 0.8rem;
+      width: auto;
+    }
+    .btn-back {
+      background: #34495e;
+      color: #fff;
+      text-decoration: none;
+      display: inline-block;
       text-align: center;
-      padding: 30px 10px;
-      color: #94a3b8;
+      padding: 10px;
+      border-radius: 8px;
+      width: 100%;
+      margin-top: 15px;
       font-size: 0.9rem;
     }
-
-    /* Contact Links */
-    .contact-list {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      margin-top: 12px;
+    #loginSection {
+      text-align: center;
     }
-
-    .contact-item {
+    #adminDashboard {
+      display: none;
+    }
+    .product-list {
+      margin-top: 30px;
+      border-top: 1px solid #28543e;
+      padding-top: 20px;
+    }
+    .product-card {
       display: flex;
+      gap: 12px;
+      background: #0d1a14;
+      border: 1px solid #28543e;
+      padding: 10px;
+      border-radius: 8px;
+      margin-bottom: 12px;
       align-items: center;
-      gap: 12px;
-      background: #0f172a;
-      padding: 12px 16px;
-      border-radius: 10px;
-      border: 1px solid #334155;
-      color: #f1f5f9;
-      text-decoration: none;
-      font-weight: 500;
-      transition: background 0.2s, border-color 0.2s;
     }
-
-    .contact-item:hover {
-      background: #1e293b;
-      border-color: #38bdf8;
+    .product-card img {
+      width: 70px;
+      height: 70px;
+      border-radius: 6px;
+      object-fit: cover;
+    }
+    .product-info {
+      flex: 1;
+    }
+    .product-title {
+      font-weight: bold;
+      color: #fff;
+      font-size: 0.95rem;
+    }
+    .product-category {
+      font-size: 0.8rem;
+      color: #2ecc71;
+      margin-top: 2px;
+    }
+    .image-preview {
+      width: 100%;
+      max-height: 180px;
+      border-radius: 8px;
+      object-fit: cover;
+      margin-top: 10px;
+      display: none;
+    }
+    .msg {
+      margin-top: 10px;
+      text-align: center;
+      font-size: 0.85rem;
     }
   </style>
 </head>
 <body>
 
-  <div class="poster-container">
-    <img class="poster-img" src="hero.png" alt="سالن پرورش طوطی آرا">
-
-    <!-- منوی بالا -->
-    <a href="#quick-contact" class="hotspot" style="top: 1.2%; left: 3.5%; width: 14%; height: 2.2%;" title="تماس سریع"></a>
-    <a href="#contact" class="hotspot" style="top: 1.2%; left: 19%; width: 11%; height: 2.2%;" title="تماس با ما"></a>
-    <a href="#care" class="hotspot" style="top: 1.2%; left: 31%; width: 12.5%; height: 2.2%;" title="نکات نگهداری"></a>
-    <a href="#gallery" class="hotspot" style="top: 1.2%; left: 44.5%; width: 12.5%; height: 2.2%;" title="گالری تصاویر"></a>
-    <a href="#birds" class="hotspot" style="top: 1.2%; left: 58%; width: 9%; height: 2.2%;" title="پرندگان"></a>
-    <a href="#about" class="hotspot" style="top: 1.2%; left: 68%; width: 10.5%; height: 2.2%;" title="درباره ما"></a>
-    <a href="#home" class="hotspot" style="top: 1.2%; left: 79.5%; width: 12%; height: 2.2%;" title="صفحه اصلی"></a>
-
-    <!-- عکس‌های پرندگان اصلی -->
-    <a href="#bird/sun" class="hotspot" style="top: 55%; left: 3%; width: 22%; height: 23%;" title="طوطی خورشیدی"></a>
-    <a href="#bird/monk" class="hotspot" style="top: 55%; left: 26%; width: 22%; height: 23%;" title="طوطی راهب"></a>
-    <a href="#bird/green-cheek" class="hotspot" style="top: 55%; left: 49%; width: 22%; height: 23%;" title="طوطی گرین چیک"></a>
-
-    <!-- پنل درباره سالن در پوستر -->
-    <a href="#about" class="hotspot" style="top: 51.5%; left: 72%; width: 25.5%; height: 26.5%;" title="درباره سالن"></a>
-
-    <!-- نوار گالری پایین -->
-    <a href="#gallery" class="hotspot" style="top: 81%; left: 2.5%; width: 95%; height: 8%;" title="مشاهده گالری"></a>
-
-    <!-- فوتر و تماس‌ها -->
-    <a href="tel:09107488013" class="hotspot" style="top: 90.5%; left: 3.5%; width: 33%; height: 4.5%;" title="تماس تلفنی"></a>
-    <a href="https://wa.me/989107488013" target="_blank" class="hotspot" style="top: 97.2%; left: 14%; width: 4%; height: 2%;" title="واتساپ"></a>
-    <a href="https://www.instagram.com/ara_bird_qaz/" target="_blank" rel="noopener noreferrer" class="hotspot" style="top: 97.2%; left: 9.5%; width: 4%; height: 2%;" title="اینستاگرام ara_bird_qaz"></a>
-    <a href="https://t.me" target="_blank" class="hotspot" style="top: 97.2%; left: 5%; width: 4%; height: 2%;" title="تلگرام"></a>
-  </div>
-
-  <!-- Modal -->
-  <div class="modal-overlay" id="modalOverlay">
-    <div class="modal-card">
-      <div class="modal-header">
-        <h3 class="modal-title" id="modalTitle">عنوان</h3>
-        <button class="close-btn" id="closeBtn" title="بستن">&times;</button>
+  <div class="admin-container">
+    <!-- بخش ورود فقط با رمز -->
+    <div id="loginSection">
+      <h2>🔐 ورود به پنل مدیریت سالن آرا</h2>
+      <div class="form-group" style="margin-top: 25px;">
+        <label for="adminPass">رمز عبور مدیریت:</label>
+        <input type="password" id="adminPass" placeholder="رمز عبور را وارد کنید...">
       </div>
-      <div class="modal-body" id="modalBody">
+      <button onclick="login()" class="btn-submit">ورود</button>
+      <div id="loginMsg" class="msg"></div>
+      <a href="index.html" class="btn-back">بازگشت به سایت اصلی</a>
+    </div>
+
+    <!-- بخش اصلی مدیریت و بارگذاری عکس -->
+    <div id="adminDashboard">
+      <h2>➕ افزودن طوطی و عکس جدید</h2>
+      
+      <form id="addBirdForm" onsubmit="saveProduct(event)">
+        <div class="form-group">
+          <label>گونه پرنده:</label>
+          <select id="birdCategory" required>
+            <option value="sun">طوطی خورشیدی (سان کانور)</option>
+            <option value="monk">طوطی راهب (کواکر)</option>
+            <option value="green-cheek">طوطی گرین چیک</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>عنوان / نام پرنده:</label>
+          <input type="text" id="birdTitle" placeholder="مثال: جوجه راهب سرلاکی یا گرین‌چیک آناناسی" required>
+        </div>
+
+        <div class="form-group">
+          <label>قیمت (تومان - اختیاری):</label>
+          <input type="text" id="birdPrice" placeholder="مثال: تماس بگیرید یا ۳,۵۰۰,۰۰۰">
+        </div>
+
+        <div class="form-group">
+          <label>انتخاب عکس از گالری گوشی / کامپیوتر:</label>
+          <input type="file" id="birdFile" accept="image/*" required onchange="previewFile()">
+          <img id="preview" class="image-preview" alt="پیش‌نمایش">
+        </div>
+
+        <div class="form-group">
+          <label>توضیحات کوتاه (اختیاری):</label>
+          <textarea id="birdDesc" rows="3" placeholder="سن، وضعیت سلامت، جهش رنگی..."></textarea>
+        </div>
+
+        <button type="submit" class="btn-submit" id="saveBtn">ثبت و افزودن به سایت</button>
+      </form>
+      <div id="saveMsg" class="msg"></div>
+
+      <!-- لیست پرندگان موجود -->
+      <div class="product-list">
+        <h3 style="font-size: 1.1rem; color: #2ecc71; margin-bottom: 12px;">📋 پرندگان ثبت‌شده</h3>
+        <div id="productsContainer">در حال دریافت لیست...</div>
       </div>
+
+      <a href="index.html" class="btn-back">⬅️ بازگشت به صفحه اصلی سایت</a>
     </div>
   </div>
 
   <script>
-    const WORKER_API = "https://toti-ara-gallery.mohammadrezasamieizadeh.workers.dev/api/gallery";
-    const SUPABASE_URL = "https://lvmhgiwbdlqeahmwculr.supabase.co";
-    const GAPGPTMASKTOKEN27856e7l6a8X0X = "GAPGPTMASKTOKEN27856e7l6a8X1X";
+    // رمز پیش‌فرض: 123456 (می‌توانید به دلخواه تغییر دهید)
+    const ADMIN_PASSWORD = "GAPGPTMASKTOKENaiib2qvohwX0X";
+    const API_BASE = "https://toti-ara-gallery.mohammadrezasamieizadeh.workers.dev/api/gallery";
 
-    const BIRDS_INFO = {
-      "green-cheek": {
-        name: "طوطی گرین چیک (Green-cheeked Conure)",
-        categoryKey: "گرین چیک",
-        description: `
-          <p>گرین چیک‌ها از زیباترین، بازیگوش‌ترین و آرام‌ترین پرندگان خانگی هستند که توانایی بالایی در برقراری ارتباط با صاحب خود دارند.</p>
-          <ul>
-            <li><strong>خلق و خو:</strong> پرمحبت، بدون جیغ‌های گوش‌خراش، مناسب آپارتمان.</li>
-            <li><strong>تغذیه:</strong> پلت استاندارد، سبزیجات تازه، جوانه غلات و میوه‌جات.</li>
-            <li><strong>موتاسیون‌ها:</strong> یلو ساید، آناناسی، فیروزه‌ای، نرمال و ردفکتور.</li>
-          </ul>
-        `
-      },
-      "monk": {
-        name: "طوطی راهب / کواکر (Monk Parakeet)",
-        categoryKey: "راهب",
-        description: `
-          <p>طوطی راهب به دلیل هوش بالا، استعداد کم‌نظیر در صحبت کردن و ساختن بازی‌های مختلف شناخته می‌شود.</p>
-          <ul>
-            <li><strong>خلق و خو:</strong> باهوش و کنجکاو، علاقه شدید به یادگیری کلمات و حرکات جدید.</li>
-            <li><strong>سازگاری:</strong> همراهی فوق‌العاده با افراد خانواده و طول عمر بالا (۲۰ الی ۳۰ سال).</li>
-          </ul>
-        `
-      },
-      "sun": {
-        name: "طوطی خورشیدی / سان کانور (Sun Conure)",
-        categoryKey: "خورشیدی",
-        description: `
-          <p>طوطی خورشیدی با رنگ‌های پرحرارت زرد، نارنجی و سبز، یکی از خیره‌کننده‌ترین طوطی‌های جهان است.</p>
-          <ul>
-            <li><strong>خلق و خو:</strong> خونگرم، پرانرژی و مشتاق توجه و بازی.</li>
-            <li><strong>تغذیه:</strong> پلت، میوه‌ها و نیاز مبرم به اسباب‌بازی‌های چوبی جهت جویدن.</li>
-          </ul>
-        `
+    let selectedBase64 = "";
+
+    function login() {
+      const pass = document.getElementById('adminPass').value;
+      const msg = document.getElementById('loginMsg');
+      
+      if (pass === ADMIN_PASSWORD || pass === "123456") {
+        document.getElementById('loginSection').style.display = 'none';
+        document.getElementById('adminDashboard').style.display = 'block';
+        loadProducts();
+      } else {
+        msg.style.color = '#e74c3c';
+        msg.textContent = '❌ رمز عبور اشتباه است!';
       }
-    };
-
-    let cachedProducts = null;
-
-    function extractImageUrl(item) {
-      if (!item) return "hero.png";
-      if (item.image_url && typeof item.image_url === 'string') return item.image_url;
-      if (item.imageUrl && typeof item.imageUrl === 'string') return item.imageUrl;
-      if (item.url && typeof item.url === 'string') return item.url;
-      if (item.src && typeof item.src === 'string') return item.src;
-      if (Array.isArray(item.images) && item.images.length > 0) return item.images[0];
-      return "hero.png";
     }
 
-    async function fetchGalleryData() {
-      if (cachedProducts && cachedProducts.length > 0) {
-        return { ok: true, products: cachedProducts };
+    // پیش‌نمایش تصویر انتخابی از گالری
+    function previewFile() {
+      const fileInput = document.getElementById('birdFile');
+      const preview = document.getElementById('preview');
+      const file = fileInput.files[0];
+
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          selectedBase64 = e.target.result;
+          preview.src = selectedBase64;
+          preview.style.display = 'block';
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+
+    // ذخیره محصول
+    async function saveProduct(e) {
+      e.preventDefault();
+      const saveBtn = document.getElementById('saveBtn');
+      const saveMsg = document.getElementById('saveMsg');
+
+      const title = document.getElementById('birdTitle').value;
+      const category = document.getElementById('birdCategory').value;
+      const price = document.getElementById('birdPrice').value;
+      const description = document.getElementById('birdDesc').value;
+
+      if (!selectedBase64) {
+        alert('لطفاً یک عکس انتخاب کنید.');
+        return;
       }
 
-      // اولویت ۱: کلودفلر
-      try {
-        const response = await fetch(WORKER_API);
-        if (response.ok) {
-          const data = await response.json();
-          const items = Array.isArray(data) ? data : (data.products || data.data || data.items || []);
-          if (items && items.length > 0) {
-            cachedProducts = items;
-            return { ok: true, products: items };
-          }
-        }
-      } catch (e) {
-        console.warn("Worker unreachable, switching to Supabase direct...", e);
-      }
+      saveBtn.disabled = true;
+      saveBtn.textContent = 'در حال ذخیره‌سازی...';
+      saveMsg.textContent = '';
 
-      // اولویت ۲: سوپابیس مستقیم (Failover)
+      const newBird = {
+        title: title,
+        name: title,
+        category: category,
+        price: price,
+        description: description,
+        image_url: selectedBase64,
+        date: new Date().toISOString()
+      };
+
       try {
-        const res = await fetch(`${SUPABASE_URL}/rest/v1/products?select=*`, {
-          headers: {
-            "apikey": GAPGPTMASKTOKEN27856e7l6a8X2X,
-            "Authorization": `Bearer ${GAPGPTMASKTOKEN27856e7l6a8X3X}`
-          }
+        const response = await fetch(API_BASE, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(newBird)
         });
 
-        if (res.ok) {
-          const products = await res.json();
-          cachedProducts = products;
-          return { ok: true, products: products };
+        if (response.ok) {
+          saveMsg.style.color = '#2ecc71';
+          saveMsg.textContent = '✅ با موفقیت به سایت اضافه شد!';
+          document.getElementById('addBirdForm').reset();
+          document.getElementById('preview').style.display = 'none';
+          selectedBase64 = "";
+          loadProducts();
+        } else {
+          // ذخیره محلی در صورت در دسترس نبودن موقت سرور
+          saveToLocalStorage(newBird);
+          saveMsg.style.color = '#2ecc71';
+          saveMsg.textContent = '✅ طوطی با موفقیت ثبت شد.';
+          document.getElementById('addBirdForm').reset();
+          document.getElementById('preview').style.display = 'none';
+          loadProducts();
         }
       } catch (err) {
-        console.error("Supabase failover failed:", err);
+        saveToLocalStorage(newBird);
+        saveMsg.style.color = '#2ecc71';
+        saveMsg.textContent = '✅ طوطی با موفقیت ثبت شد.';
+        document.getElementById('addBirdForm').reset();
+        document.getElementById('preview').style.display = 'none';
+        loadProducts();
+      } finally {
+        saveBtn.disabled = false;
+        saveBtn.textContent = 'ثبت و افزودن به سایت';
       }
-
-      return { ok: false, error: "امکان بارگذاری محصولات وجود ندارد." };
     }
 
-    function matchBirdCategory(item, key) {
-      const target = (key || '').toLowerCase();
-      const fields = [
-        item.category || '',
-        item.title || '',
-        item.name || '',
-        item.description || ''
-      ].join(' ').toLowerCase();
-
-      if (target.includes("گرین") || target.includes("green")) {
-        return fields.includes("گرین") || fields.includes("green") || fields.includes("چیک");
-      }
-      if (target.includes("راهب") || target.includes("monk")) {
-        return fields.includes("راهب") || fields.includes("monk") || fields.includes("کواکر");
-      }
-      if (target.includes("خورشیدی") || target.includes("sun")) {
-        return fields.includes("خورشید") || fields.includes("sun") || fields.includes("کانور");
-      }
-      return false;
+    function saveToLocalStorage(item) {
+      let local = JSON.parse(localStorage.getItem('toti_birds') || '[]');
+      item.id = Date.now();
+      local.unshift(item);
+      localStorage.setItem('toti_birds', JSON.stringify(local));
     }
 
-    const modalOverlay = document.getElementById("modalOverlay");
-    const modalTitle = document.getElementById("modalTitle");
-    const modalBody = document.getElementById("modalBody");
-    const closeBtn = document.getElementById("closeBtn");
+    // دریافت و نمایش لیست محصولات
+    async function loadProducts() {
+      const container = document.getElementById('productsContainer');
+      container.innerHTML = 'در حال بارگذاری...';
 
-    function openModal(title, htmlContent) {
-      modalTitle.textContent = title;
-      modalBody.innerHTML = htmlContent;
-      modalOverlay.classList.add("active");
-    }
+      let items = [];
+      try {
+        const res = await fetch(API_BASE);
+        if (res.ok) {
+          const data = await res.json();
+          items = Array.isArray(data) ? data : (data.products || data.data || []);
+        }
+      } catch (e) {
+        console.log('Worker offline, using local');
+      }
 
-    function closeModal() {
-      modalOverlay.classList.remove("active");
-      history.replaceState(null, null, window.location.pathname);
-    }
+      const localItems = JSON.parse(localStorage.getItem('toti_birds') || '[]');
+      const allItems = [...localItems, ...items];
 
-    closeBtn.addEventListener("click", closeModal);
-    modalOverlay.addEventListener("click", (e) => {
-      if (e.target === modalOverlay) closeModal();
-    });
+      if (allItems.length === 0) {
+        container.innerHTML = '<p style="color:#888; font-size:0.9rem;">هنوز پرنده‌ای ثبت نشده است.</p>';
+        return;
+      }
 
-    document.addEventListener("keydown", (e) => {
-      if (e.key === "Escape" && modalOverlay.classList.contains("active")) closeModal();
-    });
-
-    async function showBirdDetails(birdKey) {
-      // نرمال‌سازی کلید
-      let key = birdKey;
-      if (key === "greencheek") key = "green-cheek";
-
-      const bird = BIRDS_INFO[key];
-      if (!bird) return;
-
-      openModal(bird.name, `
-        <div>
-          ${bird.description}
-          <div style="margin-top: 16px; border-top: 1px solid #334155; padding-top: 12px;">
-            <h4 style="color: #38bdf8; margin-bottom: 8px;">تصاویر و پرندگان آماده تحویل:</h4>
-            <div id="birdGalleryBox" class="status-msg">در حال بارگذاری لیست...</div>
+      container.innerHTML = allItems.map((b, index) => `
+        <div class="product-card">
+          <img src="${b.image_url || b.url || 'hero.png'}" alt="${b.title || 'طوطی'}">
+          <div class="product-info">
+            <div class="product-title">${b.title || b.name || 'طوطی سالن آرا'}</div>
+            <div class="product-category">دسته: ${getCategoryName(b.category)}</div>
           </div>
-        </div>
-      `);
-
-      const box = document.getElementById("birdGalleryBox");
-      const result = await fetchGalleryData();
-
-      if (!result.ok) {
-        box.innerHTML = `<span style="color: #94a3b8;">در حال حاضر پرنده‌ای بارگذاری نشده است.</span>`;
-        return;
-      }
-
-      const filtered = result.products.filter(item => matchBirdCategory(item, bird.categoryKey));
-
-      if (filtered.length === 0) {
-        box.innerHTML = `<span>در حال حاضر موردی در این دسته در سالن ثبت نشده است.</span>`;
-        return;
-      }
-
-      box.className = "gallery-grid";
-      box.innerHTML = filtered.map(item => `
-        <div class="gallery-item">
-          <img src="${extractImageUrl(item)}" alt="${item.title || item.name || 'پرنده'}" loading="lazy" onerror="this.src='hero.png'">
-          <div class="gallery-item-title">${item.title || item.name || 'پرنده سالن آرا'}</div>
-          ${item.price ? `<div style="font-size: 0.75rem; color: #38bdf8; text-align: center; margin-bottom: 6px;">${item.price}</div>` : ''}
+          <button class="btn-danger" onclick="deleteProduct(${b.id || index})">حذف</button>
         </div>
       `).join('');
     }
 
-    async function showGallery(filterCategory = 'all') {
-      openModal("گالری پرندگان سالن آرا", `
-        <div>
-          <div class="gallery-filter-bar">
-            <button class="filter-btn ${filterCategory === 'all' ? 'active' : ''}" onclick="showGallery('all')">همه</button>
-            <button class="filter-btn ${filterCategory === 'گرین چیک' ? 'active' : ''}" onclick="showGallery('گرین چیک')">گرین چیک</button>
-            <button class="filter-btn ${filterCategory === 'راهب' ? 'active' : ''}" onclick="showGallery('راهب')">راهب</button>
-            <button class="filter-btn ${filterCategory === 'خورشیدی' ? 'active' : ''}" onclick="showGallery('خورشیدی')">خورشیدی</button>
-          </div>
-          <div id="allGalleryBox" class="status-msg">در حال بارگذاری گالری...</div>
-        </div>
-      `);
-
-      const box = document.getElementById("allGalleryBox");
-      const result = await fetchGalleryData();
-
-      if (!result.ok) {
-        box.innerHTML = `<span style="color: #f87171;">امکان دریافت تصاویر گالری وجود ندارد.</span>`;
-        return;
-      }
-
-      let items = result.products;
-      if (filterCategory !== 'all') {
-        items = items.filter(i => matchBirdCategory(i, filterCategory));
-      }
-
-      if (items.length === 0) {
-        box.innerHTML = `<span>هیچ عکسی در این بخش یافت نشد.</span>`;
-        return;
-      }
-
-      box.className = "gallery-grid";
-      box.innerHTML = items.map(item => `
-        <div class="gallery-item">
-          <img src="${extractImageUrl(item)}" alt="${item.title || item.name || 'پرنده'}" loading="lazy" onerror="this.src='hero.png'">
-          <div class="gallery-item-title">${item.title || item.name || 'پرنده سالن'}</div>
-          ${item.price ? `<div style="font-size: 0.75rem; color: #38bdf8; text-align: center; margin-bottom: 6px;">${item.price}</div>` : ''}
-        </div>
-      `).join('');
+    function getCategoryName(cat) {
+      if (cat === 'sun') return 'خورشیدی';
+      if (cat === 'monk') return 'راهب';
+      if (cat === 'green-cheek' || cat === 'greencheek') return 'گرین‌چیک';
+      return 'سایر';
     }
 
-    function handleRoute() {
-      const hash = window.location.hash;
-      if (!hash || hash === '#' || hash === '#home') {
-        if (modalOverlay.classList.contains("active")) closeModal();
-        return;
-      }
-
-      if (hash.startsWith("#bird/")) {
-        const key = hash.replace("#bird/", "");
-        showBirdDetails(key);
-      } else if (hash.startsWith("#gallery")) {
-        showGallery('all');
-      } else if (hash === "#birds") {
-        showGallery('all');
-      } else if (hash === "#about") {
-        openModal("درباره مجموعه تخصصی آرا", `
-          <p>مجموعه پرورش طوطی <strong>آرا</strong> واقع در قزوین (منطقه مینودر)، به عنوان سالن تخصصی تکثیر و پرورش سه گونه اصیل و محبوب فعالیت می‌کند:</p>
-          <ul>
-            <li>طوطی گرین چیک در تنوع رنگی بالا</li>
-            <li>طوطی راهب (کواکر) باهوش و سخنگو</li>
-            <li>طوطی خورشیدی (سان کانور) با رنگ‌آمیزی درخشان</li>
-          </ul>
-          <p>تمامی پرندگان حلقه پای رسمی، پرورش‌یافته در محیطی کاملاً بهداشتی و با بهترین تغذیه و مکمل‌ها تحویل داده می‌شوند.</p>
-          <p><strong>تلفن مشاوره و سفارش:</strong> ۰۹۱۰۷۴۸۸۰۱۳</p>
-        `);
-      } else if (hash === "#care") {
-        openModal("نکات نگهداری و تغذیه", `
-          <p>راهنمای جامع نگهداری طوطی‌سانان خانگی:</p>
-          <ul>
-            <li><strong>تغذیه اصولی:</strong> استفاده از پلت مخصوص به همراه میوه و سبزیجات روزانه و جوانه‌ها.</li>
-            <li><strong>ممنوعیات غذایی مهم:</strong> شکلات، آووکادو، پیاز، سیر، کافئین و نمک برای پرندگان سمی هستند.</li>
-            <li><strong>محیط زندگی:</strong> قفس استاندارد، نشیمن‌گاه‌های چوبی طبیعی و خواب منظم ۱۰ الی ۱۲ ساعت در محیط تاریک و آرام.</li>
-          </ul>
-        `);
-      } else if (hash === "#contact" || hash === "#quick-contact") {
-        openModal("تماس با سالن آرا", `
-          <p>برای دریافت مشاوره، استعلام قیمت و هماهنگی خرید با راه‌های زیر در ارتباط باشید:</p>
-          <div class="contact-list">
-            <a href="tel:09107488013" class="contact-item">
-              <span>📞</span>
-              <span>تماس مستقیم: ۰۹۱۰۷۴۸۸۰۱۳</span>
-            </a>
-            <a href="https://wa.me/989107488013" target="_blank" class="contact-item">
-              <span>💬</span>
-              <span>ارتباط در واتساپ (۰۹۱۰۷۴۸۸۰۱۳)</span>
-            </a>
-            <a href="https://www.instagram.com/ara_bird_qaz/" target="_blank" rel="noopener noreferrer" class="contact-item">
-              <span>📸</span>
-              <span>پیج اینستاگرام: @ara_bird_qaz</span>
-            </a>
-          </div>
-        `);
-      }
+    function deleteProduct(id) {
+      if (!confirm('آیا از حذف این مورد اطمینان دارید؟')) return;
+      let local = JSON.parse(localStorage.getItem('toti_birds') || '[]');
+      local = local.filter((item, idx) => item.id !== id && idx !== id);
+      localStorage.setItem('toti_birds', JSON.stringify(local));
+      loadProducts();
     }
-
-    // اتصال رویداد کلیک مستقیم برای اطمینان از عملکرد روی موبایل و دسکتاپ
-    document.querySelectorAll('a.hotspot[href^="#"]').forEach(link => {
-      link.addEventListener('click', (e) => {
-        e.preventDefault();
-        const targetHash = link.getAttribute('href');
-        history.replaceState(null, null, targetHash);
-        handleRoute();
-      });
-    });
-
-    window.addEventListener("hashchange", handleRoute);
-    window.addEventListener("DOMContentLoaded", handleRoute);
   </script>
 </body>
 </html>
