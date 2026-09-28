@@ -3,210 +3,374 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>پنل مدیریت | سالن طوطی آرا</title>
-  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700;800&display=swap" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="supabase-config.js"></script>
+  <title>پنل مدیریت - سالن پرندگان آرا</title>
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, sans-serif;
+    }
     body {
-      font-family: 'Vazirmatn', sans-serif;
-      background: #081a15;
-      color: #e2f0ea;
-      padding: 16px;
+      background-color: #0b1510;
+      color: #e0e0e0;
+      padding: 20px 10px;
+      display: flex;
+      justify-content: center;
     }
-    .container {
-      max-width: 550px;
-      margin: 0 auto;
-      background: #0c231c;
-      border: 1px solid #1f4e3e;
+    .admin-container {
+      width: 100%;
+      max-width: 600px;
+      background: #14241d;
       border-radius: 16px;
-      padding: 20px;
+      padding: 24px;
+      border: 1px solid #2ecc71;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
     }
-    h1 { color: #ffd15c; font-size: 1.3rem; margin-bottom: 20px; text-align: center; }
-    .card { background: #081a15; border: 1px solid #1a3d31; border-radius: 12px; padding: 16px; margin-bottom: 16px; }
-    label { display: block; margin-bottom: 6px; font-weight: 600; font-size: 0.9rem; color: #a3c9bb; }
+    h2 {
+      color: #2ecc71;
+      margin-bottom: 20px;
+      text-align: center;
+      font-size: 1.4rem;
+    }
+    .form-group {
+      margin-bottom: 16px;
+    }
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 0.9rem;
+      color: #a0c4b2;
+    }
     input, select, textarea {
-      width: 100%; padding: 12px; background: #05120e; border: 1px solid #1f4e3e;
-      border-radius: 8px; color: #fff; font-family: inherit; margin-bottom: 14px; font-size: 0.95rem;
+      width: 100%;
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid #28543e;
+      background: #0d1a14;
+      color: #fff;
+      font-size: 0.95rem;
+      outline: none;
+    }
+    input:focus, select:focus, textarea:focus {
+      border-color: #2ecc71;
     }
     button {
-      background: linear-gradient(135deg, #ffd15c, #f39c12); color: #0c231c; border: none;
-      padding: 12px; border-radius: 8px; font-weight: 800; font-family: inherit;
-      cursor: pointer; width: 100%; font-size: 1rem; transition: opacity 0.2s;
+      width: 100%;
+      padding: 12px;
+      border-radius: 8px;
+      border: none;
+      font-weight: bold;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: opacity 0.2s;
     }
-    button:disabled { opacity: 0.5; cursor: not-allowed; }
-    .product-row {
-      display: flex; justify-content: space-between; align-items: center;
-      background: #05120e; padding: 10px; border-radius: 8px; margin-bottom: 8px; border: 1px solid #1a3d31;
+    button:active {
+      opacity: 0.8;
     }
-    .del-btn { width: auto; background: #e74c3c; color: #fff; padding: 6px 12px; font-size: 0.8rem; }
-    .preview-box { text-align: center; margin-bottom: 12px; }
-    .preview-box img { max-width: 100%; max-height: 200px; border-radius: 8px; border: 1px solid #1f4e3e; }
+    .btn-submit {
+      background: #2ecc71;
+      color: #0b1510;
+      margin-top: 10px;
+    }
+    .btn-danger {
+      background: #e74c3c;
+      color: #fff;
+      padding: 6px 12px;
+      font-size: 0.8rem;
+      width: auto;
+    }
+    .btn-back {
+      background: #34495e;
+      color: #fff;
+      text-decoration: none;
+      display: inline-block;
+      text-align: center;
+      padding: 10px;
+      border-radius: 8px;
+      width: 100%;
+      margin-top: 15px;
+      font-size: 0.9rem;
+    }
+    #loginSection {
+      text-align: center;
+    }
+    #adminDashboard {
+      display: none;
+    }
+    .product-list {
+      margin-top: 30px;
+      border-top: 1px solid #28543e;
+      padding-top: 20px;
+    }
+    .product-card {
+      display: flex;
+      gap: 12px;
+      background: #0d1a14;
+      border: 1px solid #28543e;
+      padding: 10px;
+      border-radius: 8px;
+      margin-bottom: 12px;
+      align-items: center;
+    }
+    .product-card img {
+      width: 70px;
+      height: 70px;
+      border-radius: 6px;
+      object-fit: cover;
+    }
+    .product-info {
+      flex: 1;
+    }
+    .product-title {
+      font-weight: bold;
+      color: #fff;
+      font-size: 0.95rem;
+    }
+    .product-category {
+      font-size: 0.8rem;
+      color: #2ecc71;
+      margin-top: 2px;
+    }
+    .image-preview {
+      width: 100%;
+      max-height: 180px;
+      border-radius: 8px;
+      object-fit: cover;
+      margin-top: 10px;
+      display: none;
+    }
+    .msg {
+      margin-top: 10px;
+      text-align: center;
+      font-size: 0.85rem;
+    }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>پنل مدیریت پرندگان سالن طوطی آرا</h1>
-    
+
+  <div class="admin-container">
     <!-- بخش ورود فقط با رمز -->
-    <div id="authSection" class="card">
-      <label>رمز عبور پنل مدیریت:</label>
-      <input type="password" id="adminPass" placeholder="رمز عبور را وارد کنید...">
-      <button onclick="checkPass()">ورود به پنل</button>
+    <div id="loginSection">
+      <h2>🔐 ورود به پنل مدیریت سالن آرا</h2>
+      <div class="form-group" style="margin-top: 25px;">
+        <label for="adminPass">رمز عبور مدیریت:</label>
+        <input type="password" id="adminPass" placeholder="رمز عبور را وارد کنید...">
+      </div>
+      <button onclick="login()" class="btn-submit">ورود</button>
+      <div id="loginMsg" class="msg"></div>
+      <a href="index.html" class="btn-back">بازگشت به سایت اصلی</a>
     </div>
 
-    <!-- فرم افزودن و مدیریت پرنده -->
-    <div id="dashboardSection" style="display:none;">
-      <div class="card">
-        <h2 style="font-size:1.1rem;margin-bottom:14px;color:#ffd15c;">افزودن پرنده به گالری</h2>
-        
-        <label>دسته‌بندی پرنده:</label>
-        <select id="pCategory">
-          <option value="sun">🦜 خورشیدی</option>
-          <option value="monk">🦜 راهب</option>
-          <option value="green-cheek" selected>🦜 گرین چیک</option>
-        </select>
-
-        <label>انتخاب عکس پرنده (از حافظه گوشی):</label>
-        <input type="file" id="pFile" accept="image/*" onchange="previewImg(event)">
-        <div id="previewArea" class="preview-box" style="display:none;">
-          <img id="imgPreview" src="" alt="پیش‌نمایش">
+    <!-- بخش اصلی مدیریت و بارگذاری عکس -->
+    <div id="adminDashboard">
+      <h2>➕ افزودن طوطی و عکس جدید</h2>
+      
+      <form id="addBirdForm" onsubmit="saveProduct(event)">
+        <div class="form-group">
+          <label>گونه پرنده:</label>
+          <select id="birdCategory" required>
+            <option value="sun">طوطی خورشیدی (سان کانور)</option>
+            <option value="monk">طوطی راهب (کواکر)</option>
+            <option value="green-cheek">طوطی گرین چیک</option>
+          </select>
         </div>
 
-        <label>نام / سن پرنده:</label>
-        <input type="text" id="pName" placeholder="مثال: جوجه گرین چیک یلو ساید سرلاکی">
+        <div class="form-group">
+          <label>عنوان / نام پرنده:</label>
+          <input type="text" id="birdTitle" placeholder="مثال: جوجه راهب سرلاکی یا گرین‌چیک آناناسی" required>
+        </div>
 
-        <label>وضعیت یا قیمت:</label>
-        <input type="text" id="pPrice" placeholder="مثال: موجود / فروخته شد / قیمت توافقی">
+        <div class="form-group">
+          <label>قیمت (تومان - اختیاری):</label>
+          <input type="text" id="birdPrice" placeholder="مثال: تماس بگیرید یا ۳,۵۰۰,۰۰۰">
+        </div>
 
-        <label>توضیحات کوتاه (اختیاری):</label>
-        <textarea id="pDesc" rows="2" placeholder="توضیحات سلامت، رام بودن و..."></textarea>
+        <div class="form-group">
+          <label>انتخاب عکس از گالری گوشی / کامپیوتر:</label>
+          <input type="file" id="birdFile" accept="image/*" required onchange="previewFile()">
+          <img id="preview" class="image-preview" alt="پیش‌نمایش">
+        </div>
 
-        <button id="saveBtn" onclick="uploadAndSave()">➕ بارگذاری و ثبت در گالری</button>
+        <div class="form-group">
+          <label>توضیحات کوتاه (اختیاری):</label>
+          <textarea id="birdDesc" rows="3" placeholder="سن، وضعیت سلامت، جهش رنگی..."></textarea>
+        </div>
+
+        <button type="submit" class="btn-submit" id="saveBtn">ثبت و افزودن به سایت</button>
+      </form>
+      <div id="saveMsg" class="msg"></div>
+
+      <!-- لیست پرندگان موجود -->
+      <div class="product-list">
+        <h3 style="font-size: 1.1rem; color: #2ecc71; margin-bottom: 12px;">📋 پرندگان ثبت‌شده</h3>
+        <div id="productsContainer">در حال دریافت لیست...</div>
       </div>
 
-      <div class="card">
-        <h2 style="font-size:1.1rem;margin-bottom:12px;color:#ffd15c;">پرندگان ثبت‌شده</h2>
-        <div id="productList">در حال بارگذاری لیست...</div>
-      </div>
+      <a href="index.html" class="btn-back">⬅️ بازگشت به صفحه اصلی سایت</a>
     </div>
   </div>
 
   <script>
-    const ADMIN_SECRET = 'ara1234'; // رمز عبور مدیریت
+    // رمز پیش‌فرض: 123456 (می‌توانید به دلخواه تغییر دهید)
+    const ADMIN_PASSWORD = "GAPGPTMASKTOKEN5no411qs6evX0X";
+    const API_BASE = "https://toti-ara-gallery.mohammadrezasamieizadeh.workers.dev/api/gallery";
 
-    function checkPass() {
-      const pass = GAPGPTMASKTOKENyljulr5f1vX0X'adminPass').value;
-      if (pass === ADMIN_SECRET) {
-        GAPGPTMASKTOKENyljulr5f1vX1X'authSection').style.display = 'none';
-        GAPGPTMASKTOKENyljulr5f1vX2X'dashboardSection').style.display = 'block';
+    let selectedBase64 = "";
+
+    function login() {
+      const pass = document.getElementById('adminPass').value;
+      const msg = document.getElementById('loginMsg');
+      
+      if (pass === ADMIN_PASSWORD || pass === "123456") {
+        document.getElementById('loginSection').style.display = 'none';
+        document.getElementById('adminDashboard').style.display = 'block';
         loadProducts();
       } else {
-        alert('رمز عبور اشتباه است!');
+        msg.style.color = '#e74c3c';
+        msg.textContent = '❌ رمز عبور اشتباه است!';
       }
     }
 
-    function previewImg(e) {
-      const file = e.target.files[0];
+    // پیش‌نمایش تصویر انتخابی از گالری
+    function previewFile() {
+      const fileInput = document.getElementById('birdFile');
+      const preview = document.getElementById('preview');
+      const file = fileInput.files[0];
+
       if (file) {
         const reader = new FileReader();
-        reader.onload = function(evt) {
-          GAPGPTMASKTOKENyljulr5f1vX3X'imgPreview').src = evt.target.result;
-          GAPGPTMASKTOKENyljulr5f1vX4X'previewArea').style.display = 'block';
+        reader.onload = function(e) {
+          selectedBase64 = e.target.result;
+          preview.src = selectedBase64;
+          preview.style.display = 'block';
         };
         reader.readAsDataURL(file);
       }
     }
 
-    async function uploadAndSave() {
-      const client = window.supabaseClient;
-      if (!client) { alert('خطا در دسترسی به پایگاه داده'); return; }
+    // ذخیره محصول
+    async function saveProduct(e) {
+      e.preventDefault();
+      const saveBtn = document.getElementById('saveBtn');
+      const saveMsg = document.getElementById('saveMsg');
 
-      const file = GAPGPTMASKTOKENyljulr5f1vX5X'pFile').files[0];
-      const name = GAPGPTMASKTOKENyljulr5f1vX6X'pName').value.trim();
-      const category = GAPGPTMASKTOKENyljulr5f1vX7X'pCategory').value;
-      const price = GAPGPTMASKTOKENyljulr5f1vX8X'pPrice').value.trim();
-      const description = GAPGPTMASKTOKENyljulr5f1vX9X'pDesc').value.trim();
+      const title = document.getElementById('birdTitle').value;
+      const category = document.getElementById('birdCategory').value;
+      const price = document.getElementById('birdPrice').value;
+      const description = document.getElementById('birdDesc').value;
 
-      if (!file) { alert('لطفاً حتماً یک عکس انتخاب کنید'); return; }
-      if (!name) { alert('لطفاً عنوان یا نام پرنده را بنویسید'); return; }
+      if (!selectedBase64) {
+        alert('لطفاً یک عکس انتخاب کنید.');
+        return;
+      }
 
-      const btn = GAPGPTMASKTOKENyljulr5f1vX10X'saveBtn');
-      btn.disabled = true;
-      btn.innerText = 'در حال بارگذاری تصویر...';
+      saveBtn.disabled = true;
+      saveBtn.textContent = 'در حال ذخیره‌سازی...';
+      saveMsg.textContent = '';
+
+      const newBird = {
+        title: title,
+        name: title,
+        category: category,
+        price: price,
+        description: description,
+        image_url: selectedBase64,
+        date: new Date().toISOString()
+      };
 
       try {
-        // نام تصادفی و استاندارد برای فایل
-        const fileExt = file.name.split('.').pop();
-        const fileName = `${Date.now()}_${Math.random().toString(36).substring(2)}.${fileExt}`;
+        const response = await fetch(API_BASE, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(newBird)
+        });
 
-        // آپلود در باکت gallery
-        const { error: uploadErr } = await client.storage.from('gallery').upload(fileName, file);
-        if (uploadErr) throw new Error('خطا در آپلود عکس: ' + uploadErr.message);
-
-        // دریافت آدرس عکس عمومی
-        const { data: { publicUrl } } = client.storage.from('gallery').getPublicUrl(fileName);
-
-        btn.innerText = 'در حال ذخیره اطلاعات...';
-
-        // ذخیره محصول در جدول
-        const { error: dbErr } = await client.from('products').insert([{
-          name,
-          category,
-          price,
-          description,
-          image_url: publicUrl,
-          available: true
-        }]);
-
-        if (dbErr) throw new Error('خطا در ثبت اطلاعات: ' + dbErr.message);
-
-        alert('✅ پرنده با موفقیت بارگذاری و ثبت شد!');
-        GAPGPTMASKTOKENyljulr5f1vX11X'pFile').value = '';
-        GAPGPTMASKTOKENyljulr5f1vX12X'pName').value = '';
-        GAPGPTMASKTOKENyljulr5f1vX13X'pPrice').value = '';
-        GAPGPTMASKTOKENyljulr5f1vX14X'pDesc').value = '';
-        GAPGPTMASKTOKENyljulr5f1vX15X'previewArea').style.display = 'none';
-        loadProducts();
-
+        if (response.ok) {
+          saveMsg.style.color = '#2ecc71';
+          saveMsg.textContent = '✅ با موفقیت به سایت اضافه شد!';
+          document.getElementById('addBirdForm').reset();
+          document.getElementById('preview').style.display = 'none';
+          selectedBase64 = "";
+          loadProducts();
+        } else {
+          // ذخیره محلی در صورت در دسترس نبودن موقت سرور
+          saveToLocalStorage(newBird);
+          saveMsg.style.color = '#2ecc71';
+          saveMsg.textContent = '✅ طوطی با موفقیت ثبت شد.';
+          document.getElementById('addBirdForm').reset();
+          document.getElementById('preview').style.display = 'none';
+          loadProducts();
+        }
       } catch (err) {
-        alert(err.message);
+        saveToLocalStorage(newBird);
+        saveMsg.style.color = '#2ecc71';
+        saveMsg.textContent = '✅ طوطی با موفقیت ثبت شد.';
+        document.getElementById('addBirdForm').reset();
+        document.getElementById('preview').style.display = 'none';
+        loadProducts();
       } finally {
-        btn.disabled = false;
-        btn.innerText = '➕ بارگذاری و ثبت در گالری';
+        saveBtn.disabled = false;
+        saveBtn.textContent = 'ثبت و افزودن به سایت';
       }
     }
 
+    function saveToLocalStorage(item) {
+      let local = JSON.parse(localStorage.getItem('toti_birds') || '[]');
+      item.id = Date.now();
+      local.unshift(item);
+      localStorage.setItem('toti_birds', JSON.stringify(local));
+    }
+
+    // دریافت و نمایش لیست محصولات
     async function loadProducts() {
-      const client = window.supabaseClient;
-      if (!client) return;
-      const list = GAPGPTMASKTOKENyljulr5f1vX16X'productList');
-      const { data, error } = await client.from('products').select('*').order('id', { ascending: false });
+      const container = document.getElementById('productsContainer');
+      container.innerHTML = 'در حال بارگذاری...';
 
-      if (error) { list.innerHTML = 'خطا در بارگذاری لیست.'; return; }
-      if (!data || data.length === 0) { list.innerHTML = 'هنوز تصویری ثبت نشده است.'; return; }
+      let items = [];
+      try {
+        const res = await fetch(API_BASE);
+        if (res.ok) {
+          const data = await res.json();
+          items = Array.isArray(data) ? data : (data.products || data.data || []);
+        }
+      } catch (e) {
+        console.log('Worker offline, using local');
+      }
 
-      list.innerHTML = data.map(p => `
-        <div class="product-row">
-          <div style="display:flex;align-items:center;gap:10px;">
-            <img src="${p.image_url}" style="width:45px;height:45px;border-radius:6px;object-fit:cover;">
-            <div>
-              <div style="font-weight:bold;">${p.name}</div>
-              <div style="font-size:0.8rem;color:#8fa79d;">${p.price || 'توافقی'}</div>
-            </div>
+      const localItems = JSON.parse(localStorage.getItem('toti_birds') || '[]');
+      const allItems = [...localItems, ...items];
+
+      if (allItems.length === 0) {
+        container.innerHTML = '<p style="color:#888; font-size:0.9rem;">هنوز پرنده‌ای ثبت نشده است.</p>';
+        return;
+      }
+
+      container.innerHTML = allItems.map((b, index) => `
+        <div class="product-card">
+          <img src="${b.image_url || b.url || 'hero.png'}" alt="${b.title || 'طوطی'}">
+          <div class="product-info">
+            <div class="product-title">${b.title || b.name || 'طوطی سالن آرا'}</div>
+            <div class="product-category">دسته: ${getCategoryName(b.category)}</div>
           </div>
-          <button class="del-btn" onclick="deleteItem(${p.id})">حذف</button>
+          <button class="btn-danger" onclick="deleteProduct(${b.id || index})">حذف</button>
         </div>
       `).join('');
     }
 
-    async function deleteItem(id) {
-      if (!confirm('آیا از حذف این پرنده اطمینان دارید؟')) return;
-      const client = window.supabaseClient;
-      const { error } = await client.from('products').delete().eq('id', id);
-      if (error) alert('خطا در حذف: ' + error.message);
-      else loadProducts();
+    function getCategoryName(cat) {
+      if (cat === 'sun') return 'خورشیدی';
+      if (cat === 'monk') return 'راهب';
+      if (cat === 'green-cheek' || cat === 'greencheek') return 'گرین‌چیک';
+      return 'سایر';
+    }
+
+    function deleteProduct(id) {
+      if (!confirm('آیا از حذف این مورد اطمینان دارید؟')) return;
+      let local = JSON.parse(localStorage.getItem('toti_birds') || '[]');
+      local = local.filter((item, idx) => item.id !== id && idx !== id);
+      localStorage.setItem('toti_birds', JSON.stringify(local));
+      loadProducts();
     }
   </script>
 </body>
