@@ -152,6 +152,13 @@
       white-space: pre-line;
     }
 
+    .info-content {
+      line-height: 1.8;
+      font-size: 0.95rem;
+      color: #e2e8f0;
+      margin-bottom: 20px;
+    }
+
     .loading-text, .empty-text {
       text-align: center;
       padding: 25px 10px;
@@ -191,37 +198,51 @@
     <div class="poster-wrapper">
       <img src="hero.png" alt="سالن پرورش طوطی آرا قزوین" class="poster-img">
 
-      <!-- ۱. سه کارت معرفی پرندگان -->
-      <!-- کارت سمت چپ پوستر: خورشیدی -->
+      <!-- ==================== منوی نوار ابزار بالا ==================== -->
+      <!-- ۱. لوگوی بالا سمت راست (ورود به پنل مدیریت) -->
+      <a href="admin.html" class="hotspot" style="top: 0.8%; left: 74%; width: 24%; height: 6.5%;" title="پنل مدیریت"></a>
+
+      <!-- ۲. دکمه خانه / صفحه اصلی -->
+      <div class="hotspot" style="top: 1.5%; left: 56%; width: 17%; height: 5%;" onclick="scrollToTop()" title="صفحه اصلی"></div>
+
+      <!-- ۳. دکمه گالری -->
+      <div class="hotspot" style="top: 1.5%; left: 38%; width: 17%; height: 5%;" onclick="openAllGallery()" title="گالری تصاویر"></div>
+
+      <!-- ۴. دکمه درباره ما -->
+      <div class="hotspot" style="top: 1.5%; left: 20%; width: 17%; height: 5%;" onclick="openAboutUs()" title="درباره ما"></div>
+
+      <!-- ۵. دکمه تماس با ما (سمت چپ منو) -->
+      <div class="hotspot" style="top: 1.5%; left: 2%; width: 17%; height: 5%;" onclick="openContactModal()" title="تماس با ما"></div>
+
+      <!-- ==================== کارت‌های معرفی پرندگان ==================== -->
+      <!-- کارت سمت چپ: خورشیدی -->
       <div class="hotspot" style="top: 55%; left: 3%; width: 28%; height: 23%;" onclick="openBirdCategory('sun', 'طوطی خورشیدی (سان کانور)')" title="طوطی خورشیدی"></div>
-      <!-- کارت وسط پوستر: راهب -->
+      <!-- کارت وسط: راهب -->
       <div class="hotspot" style="top: 55%; left: 36%; width: 28%; height: 23%;" onclick="openBirdCategory('monk', 'طوطی راهب (کواکر)')" title="طوطی راهب"></div>
-      <!-- کارت سمت راست پوستر: گرین‌چیک -->
+      <!-- کارت سمت راست: گرین‌چیک -->
       <div class="hotspot" style="top: 55%; left: 69%; width: 28%; height: 23%;" onclick="openBirdCategory('green-cheek', 'طوطی گرین‌چیک')" title="طوطی گرین‌چیک"></div>
 
-      <!-- ۲. دکمه‌های تماس و واتساپ پایین پوستر -->
-      <a href="tel:09107488013" class="hotspot" style="top: 90.5%; left: 35%; width: 62%; height: 5%; display: block;" title="تماس"></a>
-      <a href="https://wa.me/989107488013" target="_blank" class="hotspot" style="top: 90.5%; left: 4%; width: 30%; height: 5%; display: block;" title="واتساپ"></a>
-
-      <!-- ۳. آیکون اینستاگرام پایین -->
-      <a href="https://www.instagram.com/ara_bird_qaz/" target="_blank" rel="noopener noreferrer" class="hotspot" style="top: 97.2%; left: 9%; width: 8%; height: 2.2%; display: block;" title="اینستاگرام"></a>
-
-      <!-- ۴. دکمه مخفی ورود مدیریت (لوگوی بالا سمت راست) -->
-      <a href="admin.html" class="hotspot" style="top: 1%; left: 74%; width: 24%; height: 14%; display: block;" title="ورود مدیریت"></a>
+      <!-- ==================== بخش پایین پوستر ==================== -->
+      <!-- دکمه تماس مستقیم -->
+      <a href="tel:09107488013" class="hotspot" style="top: 90.5%; left: 35%; width: 62%; height: 5%;" title="تماس مستقیم"></a>
+      <!-- دکمه واتساپ -->
+      <a href="https://wa.me/989107488013" target="_blank" class="hotspot" style="top: 90.5%; left: 4%; width: 30%; height: 5%;" title="واتساپ"></a>
+      <!-- آیکون اینستاگرام -->
+      <a href="https://www.instagram.com/ara_bird_qaz/" target="_blank" rel="noopener noreferrer" class="hotspot" style="top: 97.2%; left: 9%; width: 8%; height: 2.2%;" title="اینستاگرام"></a>
     </div>
   </div>
 
-  <!-- پاپ‌آپ نمایش تصاویر پرندگان -->
+  <!-- پاپ‌آپ عمومی / مودال -->
   <div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
     <div class="modal-card">
       <div class="modal-header">
-        <h3 class="modal-title" id="modalTitle">پرندگان موجود</h3>
+        <h3 class="modal-title" id="modalTitle">سالن آرا</h3>
         <button class="close-btn" onclick="hideModal()">✕</button>
       </div>
       
-      <!-- محفظه نمایش لیست پرندگان -->
+      <!-- محفظه محتوا -->
       <div id="birdsContainer">
-        <div class="loading-text">در حال دریافت تصاویر...</div>
+        <div class="loading-text">در حال بارگذاری...</div>
       </div>
       
       <div class="btn-group">
@@ -238,75 +259,9 @@
   <script>
     const API_BASE = "https://toti-ara-gallery.mohammadrezasamieizadeh.workers.dev/api/gallery";
 
-    async function openBirdCategory(catKey, displayTitle) {
-      document.getElementById('modalTitle').innerText = displayTitle;
-      const container = document.getElementById('birdsContainer');
-      container.innerHTML = '<div class="loading-text">در حال بارگذاری تصاویر...</div>';
-      
-      const overlay = document.getElementById('modalOverlay');
-      overlay.classList.add('active');
-
-      let allBirds = [];
-
-      // ۱. تلاش برای دریافت از Cloudflare Worker
-      try {
-        const res = await fetch(API_BASE);
-        if (res.ok) {
-          const data = await res.json();
-          allBirds = Array.isArray(data) ? data : (data.products || data.data || []);
-        }
-      } catch (err) {
-        console.warn('Worker API offline, falling back to local');
-      }
-
-      // ۲. دریافت از حافظه مرورگر
-      const localBirds = JSON.parse(localStorage.getItem('toti_birds') || '[]');
-      
-      // ادغام موارد بدون تکرار
-      const combined = [...localBirds, ...allBirds];
-
-      // ۳. فیلتر کردن براساس گونه پرنده انتخاب شده
-      const filtered = combined.filter(b => {
-        if (!b.category) return false;
-        const c = b.category.toLowerCase();
-        if (catKey === 'sun') return c.includes('sun') || c.includes('خورشیدی') || c.includes('کانور');
-        if (catKey === 'monk') return c.includes('monk') || c.includes('راهب') || c.includes('کواکر');
-        if (catKey === 'green-cheek') return c.includes('green') || c.includes('گرین') || c.includes('cheek');
-        return false;
-      });
-
-      if (filtered.length === 0) {
-        container.innerHTML = `
-          <div class="empty-text">
-            <p>در حال حاضر تصویری برای <strong>${displayTitle}</strong> ثبت نشده است.</p>
-            <p style="font-size:0.8rem; margin-top:8px; color:#64748b;">(از طریق پنل مدیریت می‌توانید عکس‌های جدید اضافه کنید)</p>
-          </div>
-        `;
-        return;
-      }
-
-      // ۴. ساخت کارت‌های عکس و مشخصات
-      let html = '<div class="bird-gallery-grid">';
-      filtered.forEach(bird => {
-        const img = bird.image_url || bird.url || 'hero.png';
-        const title = bird.title || bird.name || displayTitle;
-        const price = bird.price ? (bird.price.includes('تومان') ? bird.price : bird.price + ' تومان') : 'تماس بگیرید';
-        const desc = bird.description || '';
-
-        html += `
-          <div class="bird-item-card">
-            <img src="${img}" alt="${title}" class="bird-item-img" onerror="this.src='hero.png'">
-            <div class="bird-item-info">
-              <span class="bird-item-title">${title}</span>
-              <span class="bird-item-price">${price}</span>
-            </div>
-            ${desc ? `<div class="bird-item-desc">${desc}</div>` : ''}
-          </div>
-        `;
-      });
-      html += '</div>';
-
-      container.innerHTML = html;
+    function showModal(title) {
+      document.getElementById('modalTitle').innerText = title;
+      document.getElementById('modalOverlay').classList.add('active');
     }
 
     function hideModal() {
@@ -317,6 +272,125 @@
       if (e.target.id === 'modalOverlay') {
         hideModal();
       }
+    }
+
+    function scrollToTop() {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // باز کردن درباره ما
+    function openAboutUs() {
+      showModal('درباره سالن پرندگان آرا');
+      const container = document.getElementById('birdsContainer');
+      container.innerHTML = `
+        <div class="info-content">
+          <p><strong>سالن پرورش و تکثیر تخصصی پرندگان آرا (قزوین)</strong></p>
+          <br>
+          <p>مرکز تخصصی پرورش و تکثیر انواع نژادهای باکیفیت طوطی‌سانان شامل:</p>
+          <p style="margin-top: 6px;">• <strong>طوطی خورشیدی (سان کانور)</strong> در رنگ‌ها و کیفیت بالا</p>
+          <p>• <strong>طوطی راهب (کواکر)</strong> در موتاسیون‌های خاص</p>
+          <p>• <strong>طوطی گرین‌چیک</strong> در انواع رد فکتور، یلو ساید، آناناسی و پر نرمال</p>
+          <br>
+          <p>تمام پرندگان دارای سلامت کامل، پرورش‌یافته با بهترین تغذیه و مکمل‌های روز دنیا هستند.</p>
+        </div>
+      `;
+    }
+
+    // باز کردن تماس با ما
+    function openContactModal() {
+      showModal('تماس و مشاوره تخصصی');
+      const container = document.getElementById('birdsContainer');
+      container.innerHTML = `
+        <div class="info-content">
+          <p>برای دریافت قیمت روز، موجودی جوجه‌ها و پرندگان بالغ و همچنین مشاوره قبل از خرید می‌توانید با ما در ارتباط باشید:</p>
+          <br>
+          <p>📍 <strong>موقعیت:</strong> قزوین</p>
+          <p>📞 <strong>شماره تماس:</strong> ۰۹۱۰۷۴۸۸۰۱۳</p>
+          <p>📷 <strong>اینستاگرام:</strong> ara_bird_qaz@</p>
+          <p>💬 <strong>واتساپ:</strong> ارتباط مستقیم از طریق کلیدهای زیر</p>
+        </div>
+      `;
+    }
+
+    // دریافت داده‌ها از سرور و لوکال
+    async function fetchAllBirds() {
+      let allBirds = [];
+      try {
+        const res = await fetch(API_BASE);
+        if (res.ok) {
+          const data = await res.json();
+          allBirds = Array.isArray(data) ? data : (data.products || data.data || []);
+        }
+      } catch (err) {
+        console.warn('Worker offline, using local storage');
+      }
+
+      const localBirds = JSON.parse(localStorage.getItem('toti_birds') || '[]');
+      return [...localBirds, ...allBirds];
+    }
+
+    function renderBirdsList(birds, title) {
+      const container = document.getElementById('birdsContainer');
+      if (!birds || birds.length === 0) {
+        container.innerHTML = `
+          <div class="empty-text">
+            <p>در حال حاضر تصویری در این بخش ثبت نشده است.</p>
+            <p style="font-size:0.8rem; margin-top:8px; color:#64748b;">(از طریق پنل مدیریت می‌توانید عکس‌های جدید اضافه کنید)</p>
+          </div>
+        `;
+        return;
+      }
+
+      let html = '<div class="bird-gallery-grid">';
+      birds.forEach(bird => {
+        const img = bird.image_url || bird.url || 'hero.png';
+        const name = bird.title || bird.name || title;
+        const price = bird.price ? (bird.price.includes('تومان') ? bird.price : bird.price + ' تومان') : 'تماس بگیرید';
+        const desc = bird.description || '';
+
+        html += `
+          <div class="bird-item-card">
+            <img src="${img}" alt="${name}" class="bird-item-img" onerror="this.src='hero.png'">
+            <div class="bird-item-info">
+              <span class="bird-item-title">${name}</span>
+              <span class="bird-item-price">${price}</span>
+            </div>
+            ${desc ? `<div class="bird-item-desc">${desc}</div>` : ''}
+          </div>
+        `;
+      });
+      html += '</div>';
+      container.innerHTML = html;
+    }
+
+    // باز کردن گالری کامل
+    async function openAllGallery() {
+      showModal('گالری تمام پرندگان');
+      const container = document.getElementById('birdsContainer');
+      container.innerHTML = '<div class="loading-text">در حال بارگذاری تصاویر...</div>';
+      
+      const birds = await fetchAllBirds();
+      renderBirdsList(birds, 'پرنده سالن آرا');
+    }
+
+    // باز کردن دسته خاص
+    async function openBirdCategory(catKey, displayTitle) {
+      showModal(displayTitle);
+      const container = document.getElementById('birdsContainer');
+      container.innerHTML = '<div class="loading-text">در حال بارگذاری تصاویر...</div>';
+
+      const combined = await fetchAllBirds();
+
+      const filtered = combined.filter(b => {
+        if (!b.category) return false;
+        const c = b.category.toLowerCase();
+        if (catKey === 'sun') return c.includes('sun') || c.includes('خورشیدی') || c.includes('کانور');
+        if (catKey === 'monk') return c.includes('monk') || c.includes('راهب') || c.includes('کواکر');
+        if (catKey === 'green-cheek') return c.includes('green') || c.includes('گرین') || c.includes('cheek');
+        return false;
+      });
+
+      renderBirdsList(filtered, displayTitle);
     }
   </script>
 </body>
