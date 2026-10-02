@@ -4,9 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>سالن پرورش طوطی آرا قزوین</title>
-  <!-- کتابخانه اتصال به دیتابیس Supabase -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="supabase-config.js"></script>
   <style>
     * {
       box-sizing: border-box;
@@ -52,7 +49,7 @@
     .modal-overlay {
       position: fixed;
       inset: 0;
-      background: rgba(0, 0, 0, 0.8);
+      background: rgba(0, 0, 0, 0.85);
       backdrop-filter: blur(6px);
       display: flex;
       align-items: flex-end;
@@ -152,6 +149,7 @@
       font-size: 0.85rem;
       color: #cbd5e1;
       line-height: 1.6;
+      white-space: pre-line;
     }
 
     .loading-text, .empty-text {
@@ -194,26 +192,26 @@
       <img src="hero.png" alt="سالن پرورش طوطی آرا قزوین" class="poster-img">
 
       <!-- ۱. سه کارت معرفی پرندگان -->
-      <!-- کارت سمت چپ: خورشیدی -->
-      <div class="hotspot" style="top: 48%; left: 3%; width: 30%; height: 18%;" onclick="openBirdCategory('خورشیدی')"></div>
-      <!-- کارت وسط: راهب -->
-      <div class="hotspot" style="top: 48%; left: 35%; width: 30%; height: 18%;" onclick="openBirdCategory('راهب')"></div>
-      <!-- کارت سمت راست: گرین‌چیک -->
-      <div class="hotspot" style="top: 48%; left: 67%; width: 30%; height: 18%;" onclick="openBirdCategory('گرینچیک')"></div>
+      <!-- کارت سمت چپ پوستر: خورشیدی -->
+      <div class="hotspot" style="top: 55%; left: 3%; width: 28%; height: 23%;" onclick="openBirdCategory('sun', 'طوطی خورشیدی (سان کانور)')" title="طوطی خورشیدی"></div>
+      <!-- کارت وسط پوستر: راهب -->
+      <div class="hotspot" style="top: 55%; left: 36%; width: 28%; height: 23%;" onclick="openBirdCategory('monk', 'طوطی راهب (کواکر)')" title="طوطی راهب"></div>
+      <!-- کارت سمت راست پوستر: گرین‌چیک -->
+      <div class="hotspot" style="top: 55%; left: 69%; width: 28%; height: 23%;" onclick="openBirdCategory('green-cheek', 'طوطی گرین‌چیک')" title="طوطی گرین‌چیک"></div>
 
       <!-- ۲. دکمه‌های تماس و واتساپ پایین پوستر -->
-      <a href="tel:09107488013" class="hotspot" style="top: 72%; left: 35%; width: 62%; height: 5%; display: block;" title="تماس"></a>
-      <a href="https://wa.me/989107488013" target="_blank" class="hotspot" style="top: 72%; left: 4%; width: 30%; height: 5%; display: block;" title="واتساپ"></a>
+      <a href="tel:09107488013" class="hotspot" style="top: 90.5%; left: 35%; width: 62%; height: 5%; display: block;" title="تماس"></a>
+      <a href="https://wa.me/989107488013" target="_blank" class="hotspot" style="top: 90.5%; left: 4%; width: 30%; height: 5%; display: block;" title="واتساپ"></a>
 
-      <!-- ۳. آیکون اینستاگرام -->
-      <a href="https://www.instagram.com/ara_bird_qaz/" target="_blank" rel="noopener noreferrer" class="hotspot" style="top: 77%; left: 8%; width: 12%; height: 3.5%; display: block;" title="اینستاگرام"></a>
+      <!-- ۳. آیکون اینستاگرام پایین -->
+      <a href="https://www.instagram.com/ara_bird_qaz/" target="_blank" rel="noopener noreferrer" class="hotspot" style="top: 97.2%; left: 9%; width: 8%; height: 2.2%; display: block;" title="اینستاگرام"></a>
 
-      <!-- ۴. دکمه ورود مدیریت -->
-      <a href="admin.html" class="hotspot" style="top: 88%; left: 5%; width: 45%; height: 8%; display: block;" title="ورود مدیریت"></a>
+      <!-- ۴. دکمه مخفی ورود مدیریت (لوگوی بالا سمت راست) -->
+      <a href="admin.html" class="hotspot" style="top: 1%; left: 74%; width: 24%; height: 14%; display: block;" title="ورود مدیریت"></a>
     </div>
   </div>
 
-  <!-- پاپ‌آپ نمایش تصاویر پرندگان پنل ادمین -->
+  <!-- پاپ‌آپ نمایش تصاویر پرندگان -->
   <div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
     <div class="modal-card">
       <div class="modal-header">
@@ -221,9 +219,9 @@
         <button class="close-btn" onclick="hideModal()">✕</button>
       </div>
       
-      <!-- محفظه لود شدن پرنده‌ها از Supabase -->
+      <!-- محفظه نمایش لیست پرندگان -->
       <div id="birdsContainer">
-        <div class="loading-text">در حال بارگذاری تصاویر و پرندگان...</div>
+        <div class="loading-text">در حال دریافت تصاویر...</div>
       </div>
       
       <div class="btn-group">
@@ -238,59 +236,77 @@
   </div>
 
   <script>
-    // راه‌اندازی کلاینت دیتابیس
-    const client = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    const API_BASE = "https://toti-ara-gallery.mohammadrezasamieizadeh.workers.dev/api/gallery";
 
-    async function openBirdCategory(categoryName) {
-      document.getElementById('modalTitle').innerText = 'طوطی‌های ' + categoryName + ' سالن آرا';
+    async function openBirdCategory(catKey, displayTitle) {
+      document.getElementById('modalTitle').innerText = displayTitle;
       const container = document.getElementById('birdsContainer');
       container.innerHTML = '<div class="loading-text">در حال بارگذاری تصاویر...</div>';
       
       const overlay = document.getElementById('modalOverlay');
       overlay.classList.add('active');
 
+      let allBirds = [];
+
+      // ۱. تلاش برای دریافت از Cloudflare Worker
       try {
-        // خواندن پرنده‌های مربوط به این دسته از دیتابیس
-        const { data, error } = await client
-          .from('birds')
-          .select('*')
-          .ilike('category', `%${categoryName}%`)
-          .order('id', { ascending: false });
-
-        if (error) throw error;
-
-        if (!data || data.length === 0) {
-          container.innerHTML = `
-            <div class="empty-text">
-              <p>در حال حاضر عکسی برای طوطی <strong>${categoryName}</strong> ثبت نشده است.</p>
-              <p style="font-size:0.8rem; margin-top:8px; color:#64748b;">(از طریق پنل مدیریت می‌توانید عکس‌های جدید اضافه کنید)</p>
-            </div>
-          `;
-          return;
+        const res = await fetch(API_BASE);
+        if (res.ok) {
+          const data = await res.json();
+          allBirds = Array.isArray(data) ? data : (data.products || data.data || []);
         }
-
-        // ایجاد کارت برای هر عکس ثبت شده
-        let html = '<div class="bird-gallery-grid">';
-        data.forEach(bird => {
-          html += `
-            <div class="bird-item-card">
-              <img src="${bird.image_url}" alt="${bird.title || categoryName}" class="bird-item-img" onerror="this.src='hero.png'">
-              <div class="bird-item-info">
-                <span class="bird-item-title">${bird.title || bird.category}</span>
-                <span class="bird-item-price">${bird.price ? bird.price + ' تومان' : 'تماس بگیرید'}</span>
-              </div>
-              ${bird.description ? `<div class="bird-item-desc">${bird.description}</div>` : ''}
-            </div>
-          `;
-        });
-        html += '</div>';
-
-        container.innerHTML = html;
-
       } catch (err) {
-        console.error(err);
-        container.innerHTML = '<div class="empty-text" style="color:#ef4444;">خطا در دریافت اطلاعات. لطفاً اینترنت خود را بررسی کنید.</div>';
+        console.warn('Worker API offline, falling back to local');
       }
+
+      // ۲. دریافت از حافظه مرورگر
+      const localBirds = JSON.parse(localStorage.getItem('toti_birds') || '[]');
+      
+      // ادغام موارد بدون تکرار
+      const combined = [...localBirds, ...allBirds];
+
+      // ۳. فیلتر کردن براساس گونه پرنده انتخاب شده
+      const filtered = combined.filter(b => {
+        if (!b.category) return false;
+        const c = b.category.toLowerCase();
+        if (catKey === 'sun') return c.includes('sun') || c.includes('خورشیدی') || c.includes('کانور');
+        if (catKey === 'monk') return c.includes('monk') || c.includes('راهب') || c.includes('کواکر');
+        if (catKey === 'green-cheek') return c.includes('green') || c.includes('گرین') || c.includes('cheek');
+        return false;
+      });
+
+      if (filtered.length === 0) {
+        container.innerHTML = `
+          <div class="empty-text">
+            <p>در حال حاضر تصویری برای <strong>${displayTitle}</strong> ثبت نشده است.</p>
+            <p style="font-size:0.8rem; margin-top:8px; color:#64748b;">(از طریق پنل مدیریت می‌توانید عکس‌های جدید اضافه کنید)</p>
+          </div>
+        `;
+        return;
+      }
+
+      // ۴. ساخت کارت‌های عکس و مشخصات
+      let html = '<div class="bird-gallery-grid">';
+      filtered.forEach(bird => {
+        const img = bird.image_url || bird.url || 'hero.png';
+        const title = bird.title || bird.name || displayTitle;
+        const price = bird.price ? (bird.price.includes('تومان') ? bird.price : bird.price + ' تومان') : 'تماس بگیرید';
+        const desc = bird.description || '';
+
+        html += `
+          <div class="bird-item-card">
+            <img src="${img}" alt="${title}" class="bird-item-img" onerror="this.src='hero.png'">
+            <div class="bird-item-info">
+              <span class="bird-item-title">${title}</span>
+              <span class="bird-item-price">${price}</span>
+            </div>
+            ${desc ? `<div class="bird-item-desc">${desc}</div>` : ''}
+          </div>
+        `;
+      });
+      html += '</div>';
+
+      container.innerHTML = html;
     }
 
     function hideModal() {
