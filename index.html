@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+  <!-- SEO -->
+  <title>سالن پرورش طوطی آرا قزوین | خرید و فروش طوطی، جوجه و لوازم طوطی</title>
+  <meta name="description" content="سالن پرورش طوطی آرا قزوین، مرجع خرید و فروش انواع طوطی، جوجه طوطی، کاسکو و عروس هلندی با سلامت تضمینی، مشاوره تخصصی و ارسال به سراسر کشور.">
+  <meta name="keywords" content="طوطی, پرورش طوطی, خرید طوطی, طوطی قزوین, جوجه طوطی, کاسکو, طوطی سانز, عروس هلندی, سالن پرورش طوطی آرا, فروش طوطی">
+  <meta name="robots" content="index, follow">
+  <meta name="author" content="سالن پرورش طوطی آرا قزوین">
+  <meta name="theme-color" content="#0b150f">
+  <link rel="canonical" href="https://toti-ara.ir/">
+  <link rel="icon" href="hero.png">
+  <meta name="geo.region" content="IR-26">
+  <meta name="geo.placename" content="قزوین">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="سالن پرورش طوطی آرا قزوین">
+  <meta property="og:title" content="سالن پرورش طوطی آرا قزوین">
+  <meta property="og:description" content="خرید و فروش انواع طوطی و جوجه طوطی با سلامت تضمینی از سالن پرورش طوطی آرا قزوین.">
+  <meta property="og:url" content="https://toti-ara.ir/">
+  <meta property="og:image" content="https://toti-ara.ir/hero.png">
+  <meta property="og:locale" content="fa_IR">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="سالن پرورش طوطی آرا قزوین">
+  <meta name="twitter:description" content="خرید و فروش انواع طوطی و جوجه طوطی با سلامت تضمینی از سالن پرورش طوطی آرا قزوین.">
+  <meta name="twitter:image" content="https://toti-ara.ir/hero.png">
+
+  <!-- Schema.org JSON-LD -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "PetStore",
+    "name": "سالن پرورش طوطی آرا قزوین",
+    "url": "https://toti-ara.ir/",
+    "image": "https://toti-ara.ir/hero.png",
+    "description": "سالن پرورش طوطی آرا قزوین؛ خرید و فروش انواع طوطی، جوجه طوطی و لوازم جانبی با سلامت تضمینی.",
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "قزوین",
+      "addressRegion": "قزوین",
+      "addressCountry": "IR"
+    },
+    "telephone": "+98-910-748-8013",
+    "priceRange": "$$",
+    "areaServed": "قزوین"
+  }
+  </script>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+    body {
+      background-color: #0b150f;
+      color: #fff;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      display: flex;
+      justify-content: center;
+      min-height: 100vh;
+    }
+    .main-container {
+      width: 100%;
+      max-width: 480px;
+      position: relative;
+      background-color: #0b150f;
+    }
+    .poster-wrapper {
+      position: relative;
+      width: 100%;
+      line-height: 0;
+    }
+    .poster-img {
+      width: 100%;
+      height: auto;
+      display: block;
+      pointer-events: none;
+    }
+    
+    /* هات‌اسپات‌های لمسی */
+    .hotspot {
+      position: absolute;
+      cursor: pointer;
+      z-index: 10;
+      background: rgba(255, 255, 255, 0.001);
+    }
+
+    /* پاپ‌آپ / مودال اطلاعات و گالری */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(6px);
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      z-index: 1000;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+    }
+    .modal-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .modal-card {
+      background: #122419;
+      border: 1px solid #285437;
+      border-radius: 24px 24px 0 0;
+      width: 100%;
+      max-width: 480px;
+      max-height: 88vh;
+      overflow-y: auto;
+      padding: 20px;
+      transform: translateY(100%);
+      transition: transform 0.28s cubic-bezier(0.1, 0.9, 0.2, 1);
+      box-shadow: 0 -10px 30px rgba(0,0,0,0.6);
+    }
+    .modal-overlay.active .modal-card {
+      transform: translateY(0);
+    }
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+      border-bottom: 1px solid #1c3826;
+      padding-bottom: 10px;
+    }
+    .modal-title {
+      font-size: 1.15rem;
+      font-weight: bold;
+      color: #4ade80;
+    }
+    .close-btn {
+      background: #203e2a;
+      border: none;
+      color: #fff;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      font-size: 1.2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+    
+    /* گالری پرندگان ثبت شده */
+    .bird-gallery-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      margin-top: 15px;
+      margin-bottom: 20px;
+    }
+    .bird-item-card {
+      background: #183323;
+      border: 1px solid #285437;
+      border-radius: 16px;
+      overflow: hidden;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .bird-item-img {
+      width: 100%;
+      height: 240px;
+      object-fit: cover;
+      border-radius: 12px;
+      background-color: #0b150f;
+    }
+    .bird-item-info {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.95rem;
+    }
+    .bird-item-title {
+      font-weight: bold;
+      color: #fff;
+    }
+    .bird-item-price {
+      color: #facc15;
+      font-weight: bold;
+    }
+    .bird-item-desc {
+      font-size: 0.85rem;
+      color: #cbd5e1;
+      line-height: 1.6;
+      white-space: pre-line;
+    }
+
+    .info-content {
+      line-height: 1.8;
+      font-size: 0.95rem;
+      color: #e2e8f0;
+      margin-bottom: 20px;
+    }
+
+    .loading-text, .empty-text {
+      text-align: center;
+      padding: 25px 10px;
+      color: #94a3b8;
+      font-size: 0.95rem;
+    }
+
+    .btn-group {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .btn {
+      display: block;
+      width: 100%;
+      padding: 12px;
+      text-align: center;
+      text-decoration: none;
+      border-radius: 12px;
+      font-weight: bold;
+      font-size: 0.95rem;
+    }
+    .btn-insta {
+      background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+      color: #fff;
+    }
+    .btn-call {
+      background: #16a34a;
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="main-container">
+    <div class="poster-wrapper">
+      <img src="hero.png" alt="سالن پرورش طوطی آرا قزوین" class="poster-img">
+
+      <!-- ==================== منوی نوار ابزار بالا ==================== -->
+      <!-- ۱. لوگوی بالا سمت راست (ورود به پنل مدیریت) -->
+      <a href="admin.html" class="hotspot" style="top: 0.8%; left: 74%; width: 24%; height: 6.5%;" title="پنل مدیریت"></a>
+
+      <!-- ۲. دکمه خانه / صفحه اصلی -->
+      <div class="hotspot" style="top: 1.5%; left: 56%; width: 17%; height: 5%;" onclick="scrollToTop()" title="صفحه اصلی"></div>
+
+      <!-- ۳. دکمه گالری -->
+      <div class="hotspot" style="top: 1.5%; left: 38%; width: 17%; height: 5%;" onclick="openAllGallery()" title="گالری تصاویر"></div>
+
+      <!-- ۴. دکمه درباره ما -->
+      <div class="hotspot" style="top: 1.5%; left: 20%; width: 17%; height: 5%;" onclick="openAboutUs()" title="درباره ما"></div>
+
+      <!-- ۵. دکمه تماس با ما (سمت چپ منو) -->
+      <div class="hotspot" style="top: 1.5%; left: 2%; width: 17%; height: 5%;" onclick="openContactModal()" title="تماس با ما"></div>
+
+      <!-- ==================== کارت‌های معرفی پرندگان ==================== -->
+      <!-- کارت سمت چپ: خورشیدی -->
+      <div class="hotspot" style="top: 55%; left: 3%; width: 28%; height: 23%;" onclick="openBirdCategory('sun', 'طوطی خورشیدی (سان کانور)')" title="طوطی خورشیدی"></div>
+      <!-- کارت وسط: راهب -->
+      <div class="hotspot" style="top: 55%; left: 36%; width: 28%; height: 23%;" onclick="openBirdCategory('monk', 'طوطی راهب (کواکر)')" title="طوطی راهب"></div>
+      <!-- کارت سمت راست: گرین‌چیک -->
+      <div class="hotspot" style="top: 55%; left: 69%; width: 28%; height: 23%;" onclick="openBirdCategory('green-cheek', 'طوطی گرین‌چیک')" title="طوطی گرین‌چیک"></div>
+
+      <!-- ==================== بخش پایین پوستر ==================== -->
+      <!-- دکمه تماس مستقیم -->
+      <a href="tel:09107488013" class="hotspot" style="top: 90.5%; left: 35%; width: 62%; height: 5%;" title="تماس مستقیم"></a>
+      <!-- دکمه واتساپ -->
+      <a href="https://wa.me/989107488013" target="_blank" class="hotspot" style="top: 90.5%; left: 4%; width: 30%; height: 5%;" title="واتساپ"></a>
+      <!-- آیکون اینستاگرام -->
+      <a href="https://www.instagram.com/ara_bird_qaz/" target="_blank" rel="noopener noreferrer" class="hotspot" style="top: 97.2%; left: 9%; width: 8%; height: 2.2%;" title="اینستاگرام"></a>
+    </div>
+  </div>
+
+  <!-- پاپ‌آپ عمومی / مودال -->
+  <div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title" id="modalTitle">سالن آرا</h3>
+        <button class="close-btn" onclick="hideModal()">✕</button>
+      </div>
+      
+      <!-- محفظه محتوا -->
+      <div id="birdsContainer">
+        <div class="loading-text">در حال بارگذاری...</div>
+      </div>
+      
+      <div class="btn-group">
+        <a href="https://www.instagram.com/ara_bird_qaz/" target="_blank" rel="noopener noreferrer" class="btn btn-insta">
+          مشاهده پیج اینستاگرام (ara_bird_qaz)
+        </a>
+        <a href="tel:09107488013" class="btn btn-call">
+          تماس جهت خرید و مشاوره: ۰۹۱۰۷۴۸۸۰۱۳
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const API_BASE = "https://toti-ara-gallery.mohammadrezasamieizadeh.workers.dev/api/gallery";
+
+    function showModal(title) {
+      document.getElementById('modalTitle').innerText = title;
+      document.getElementById('modalOverlay').classList.add('active');
+    }
+
+    function hideModal() {
+      document.getElementById('modalOverlay').classList.remove('active');
+    }
+
+    function closeModal(e) {
+      if (e.target.id === 'modalOverlay') {
+        hideModal();
+      }
+    }
+
+    function scrollToTop() {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // باز کردن درباره ما
+    function openAboutUs() {
+      showModal('درباره سالن پرندگان آرا');
+      const container = document.getElementById('birdsContainer');
+      container.innerHTML = `
+        <div class="info-content">
+          <p><strong>سالن پرورش و تکثیر تخصصی پرندگان آرا (قزوین)</strong></p>
+          <br>
+          <p>مرکز تخصصی پرورش و تکثیر انواع نژادهای باکیفیت طوطی‌سانان شامل:</p>
+          <p style="margin-top: 6px;">• <strong>طوطی خورشیدی (سان کانور)</strong> در رنگ‌ها و کیفیت بالا</p>
+          <p>• <strong>طوطی راهب (کواکر)</strong> در موتاسیون‌های خاص</p>
+          <p>• <strong>طوطی گرین‌چیک</strong> در انواع رد فکتور، یلو ساید، آناناسی و پر نرمال</p>
+          <br>
+          <p>تمام پرندگان دارای سلامت کامل، پرورش‌یافته با بهترین تغذیه و مکمل‌های روز دنیا هستند.</p>
+        </div>
+      `;
+    }
+
+    // باز کردن تماس با ما
+    function openContactModal() {
+      showModal('تماس و مشاوره تخصصی');
+      const container = document.getElementById('birdsContainer');
+      container.innerHTML = `
+        <div class="info-content">
+          <p>برای دریافت قیمت روز، موجودی جوجه‌ها و پرندگان بالغ و همچنین مشاوره قبل از خرید می‌توانید با ما در ارتباط باشید:</p>
+          <br>
+          <p>📍 <strong>موقعیت:</strong> قزوین</p>
+          <p>📞 <strong>شماره تماس:</strong> ۰۹۱۰۷۴۸۸۰۱۳</p>
+          <p>📷 <strong>اینستاگرام:</strong> ara_bird_qaz@</p>
+          <p>💬 <strong>واتساپ:</strong> ارتباط مستقیم از طریق کلیدهای زیر</p>
+        </div>
+      `;
+    }
+
+    // دریافت داده‌ها از سرور و لوکال
+    async function fetchAllBirds() {
+      let allBirds = [];
+      try {
+        const res = await fetch(API_BASE);
+        if (res.ok) {
+          const data = await res.json();
+          allBirds = Array.isArray(data) ? data : (data.products || data.data || []);
+        }
+      } catch (err) {
+        console.warn('Worker offline, using local storage');
+      }
+
+      const localBirds = JSON.parse(localStorage.getItem('toti_birds') || '[]');
+      return [...localBirds, ...allBirds];
+    }
+
+    function renderBirdsList(birds, title) {
+      const container = document.getElementById('birdsContainer');
+      if (!birds || birds.length === 0) {
+        container.innerHTML = `
+          <div class="empty-text">
+            <p>در حال حاضر تصویری در این بخش ثبت نشده است.</p>
+            <p style="font-size:0.8rem; margin-top:8px; color:#64748b;">(از طریق پنل مدیریت می‌توانید عکس‌های جدید اضافه کنید)</p>
+          </div>
+        `;
+        return;
+      }
+
+      let html = '<div class="bird-gallery-grid">';
+      birds.forEach(bird => {
+        const img = bird.image_url || bird.url || 'hero.png';
+        const name = bird.title || bird.name || title;
+        const price = bird.price ? (bird.price.includes('تومان') ? bird.price : bird.price + ' تومان') : 'تماس بگیرید';
+        const desc = bird.description || '';
+
+        html += `
+          <div class="bird-item-card">
+            <img src="${img}" alt="${name}" class="bird-item-img" onerror="this.src='hero.png'">
+            <div class="bird-item-info">
+              <span class="bird-item-title">${name}</span>
+              <span class="bird-item-price">${price}</span>
+            </div>
+            ${desc ? `<div class="bird-item-desc">${desc}</div>` : ''}
+          </div>
+        `;
+      });
+      html += '</div>';
+      container.innerHTML = html;
+    }
+
+    // باز کردن گالری کامل
+    async function openAllGallery() {
+      showModal('گالری تمام پرندگان');
+      const container = document.getElementById('birdsContainer');
+      container.innerHTML = '<div class="loading-text">در حال بارگذاری تصاویر...</div>';
+      
+      const birds = await fetchAllBirds();
+      renderBirdsList(birds, 'پرنده سالن آرا');
+    }
+
+    // باز کردن دسته خاص
+    async function openBirdCategory(catKey, displayTitle) {
+      showModal(displayTitle);
+      const container = document.getElementById('birdsContainer');
+      container.innerHTML = '<div class="loading-text">در حال بارگذاری تصاویر...</div>';
+
+      const combined = await fetchAllBirds();
+
+      const filtered = combined.filter(b => {
+        if (!b.category) return false;
+        const c = b.category.toLowerCase();
+        if (catKey === 'sun') return c.includes('sun') || c.includes('خورشیدی') || c.includes('کانور');
+        if (catKey === 'monk') return c.includes('monk') || c.includes('راهب') || c.includes('کواکر');
+        if (catKey === 'green-cheek') return c.includes('green') || c.includes('گرین') || c.includes('cheek');
+        return false;
+      });
+
+      renderBirdsList(filtered, displayTitle);
+    }
+  </script>
+</body>
+</html>
